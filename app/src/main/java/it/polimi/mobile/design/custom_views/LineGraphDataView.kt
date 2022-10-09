@@ -30,7 +30,7 @@ class LineGraphDataView(context: Context, attrs: AttributeSet? = null) : View(co
     private fun drawCircle(canvas: Canvas) {
 
         val pointPaint = Paint()
-        pointPaint.strokeWidth = dataPointSize.toFloat() / 10
+        pointPaint.strokeWidth = dataPointSize.toFloat() / 12
         pointPaint.strokeCap = Paint.Cap.ROUND
 
         pointPaint.color = Color.WHITE
@@ -38,7 +38,7 @@ class LineGraphDataView(context: Context, attrs: AttributeSet? = null) : View(co
         canvas.drawCircle((dataPointSize / 2f), (dataPointSize / 2f),
             pointPaint.strokeWidth * sqrt(2f), pointPaint)
 
-        pointPaint.color = Color.BLACK
+        pointPaint.color = Color.WHITE
         pointPaint.style = Paint.Style.FILL
         canvas.drawCircle((dataPointSize / 2f), (dataPointSize / 2f),
             pointPaint.strokeWidth * sqrt(2f), pointPaint)

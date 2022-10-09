@@ -42,10 +42,12 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
         setWillNotDraw(false)
         // TODO: testing
         dataPoints = listOf(DataPoint(LocalDateTime.of(2022, 10, 6, 12, 0), 60.3f),
-            DataPoint(LocalDateTime.of(2022, 10, 7, 12, 0), 57.3f),
-            DataPoint(LocalDateTime.of(2022, 10, 8, 12, 0), 62.3f),
-            DataPoint(LocalDateTime.of(2022, 10, 9, 12, 0), 55.3f))
+            DataPoint(LocalDateTime.of(2022, 10, 7, 12, 0), 57.4f),
+            DataPoint(LocalDateTime.of(2022, 10, 8, 12, 0), 52.1f),
+            DataPoint(LocalDateTime.of(2022, 10, 9, 12, 0), 55.9f),
+            DataPoint(LocalDateTime.of(2022, 10, 10, 12, 0), 58.6f))
         post{drawName()}
+        post{drawDifference()}
         post{drawDataPoints()}
     }
 
@@ -68,15 +70,36 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
 
         val nameView = TextView(context)
 
-        nameView.text = "TITLE"
+        nameView.text = "Body Weight"
         nameView.setTextColor(Color.WHITE)
-        nameView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26f)
+        nameView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24f)
         nameView.typeface = Typeface.create("Lato Bold", Typeface.BOLD)
 
         val params = LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT,
             ConstraintLayout.LayoutParams.WRAP_CONTENT)
         params.leftMargin = fakePadding
-        params.topMargin = fakePadding
+        params.topMargin = fakePadding / 2
+
+        addView(nameView, params)
+    }
+
+    private fun drawDifference() {
+
+        val nameView = TextView(context)
+
+        nameView.text =
+            if (dataPoints.size == 1) "0"
+            else String.format("%.1f", ((dataPoints[dataPoints.size - 1].yCoordinate -
+                    dataPoints[dataPoints.size - 2].yCoordinate))) + " Kg"  // TODO
+
+        nameView.setTextColor(Color.WHITE)
+        nameView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
+        nameView.typeface = Typeface.create("Lato Bold", Typeface.BOLD)
+
+        val params = LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT,
+            ConstraintLayout.LayoutParams.WRAP_CONTENT)
+        params.leftMargin = fakePadding
+        params.topMargin = (fakePadding * 1.35).toInt()
 
         addView(nameView, params)
     }
@@ -132,7 +155,7 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
         linesPaint.style = Paint.Style.STROKE
         linesPaint.strokeCap = Paint.Cap.ROUND
 
-        val positions = floatArrayOf(0f, 0.5f, 1f)
+        val positions = floatArrayOf(0.05f, 0.5f, 0.95f)
         val fadedWhite = Color.parseColor("#AAFFFFFF")
         val transparentWhite = Color.parseColor("#11FFFFFF")
         val colors = intArrayOf(transparentWhite, fadedWhite, transparentWhite)
@@ -144,8 +167,9 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
                 width.toFloat(), index * (height.toFloat() / n), colors, positions,
                 Shader.TileMode.REPEAT)
             canvas.drawLine(
-                0f, index * (height.toFloat() / n),
-                width.toFloat(), index * (height.toFloat() / n), linesPaint
+                0f, index * ((height - titleStrip).toFloat() / n) + titleStrip,
+                width.toFloat(), index * ((height - titleStrip).toFloat() / n) + titleStrip,
+                linesPaint
             )
 
             // Y Lines
@@ -153,7 +177,7 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
                 index * (width.toFloat() / n), height.toFloat(), colors, positions,
                 Shader.TileMode.CLAMP)
             canvas.drawLine(
-                index * (width.toFloat() / n), 0f,
+                index * (width.toFloat() / n), titleStrip.toFloat(),
                 index * (width.toFloat() / n), height.toFloat(), linesPaint
             )
         }
