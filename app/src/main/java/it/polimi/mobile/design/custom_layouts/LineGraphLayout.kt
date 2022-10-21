@@ -6,11 +6,9 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
-import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
 import it.polimi.mobile.design.custom_objects.DataPoint
 import it.polimi.mobile.design.custom_views.LineGraphDataView
 import it.polimi.mobile.design.helpers.Constant
