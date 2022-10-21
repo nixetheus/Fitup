@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "66420086103",
+    "project_id": "mobileappproject-805af",
+    "storage_bucket": "mobileappproject-805af.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:66420086103:android:2693de563d5e5810db5a12",
+        "android_client_info": {
+          "package_name": "it.polimi.mobile.design"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "66420086103-gp51e7lnonikh0fsmi6m1jgdeou8nfci.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZ1dWRmsOWJ1fynDyq_HQDrXxOqIfnxr0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "66420086103-gp51e7lnonikh0fsmi6m1jgdeou8nfci.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
