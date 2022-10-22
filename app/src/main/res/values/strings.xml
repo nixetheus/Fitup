@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">FitUp</string>
     <string name="none">none</string>
+    <string name="back_btn">Back</string>
 
     <!-- LOGIN -->
     <string name="welcome_title">Welcome</string>
@@ -8,6 +9,10 @@
     <string name="welcome_image">Welcome Image</string>
     <string name="login_btn">Login</string>
     <string name="signup_btn">Sign Up</string>
+
+    <!-- FIELDS -->
+    <string name="email">Email</string>
+    <string name="password">Password</string>
 
 
 </resources>
