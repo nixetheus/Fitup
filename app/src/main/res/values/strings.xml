@@ -9,10 +9,13 @@
     <string name="welcome_image">Welcome Image</string>
     <string name="login_btn">Login</string>
     <string name="signup_btn">Sign Up</string>
+    <string name="login_btn_back">Or Login</string>
+    <string name="signup_btn_back">Or Sign Up</string>
 
     <!-- FIELDS -->
     <string name="email">Email</string>
     <string name="password">Password</string>
+    <string name="repeat_password">Repeat Password</string>
 
 
 </resources>

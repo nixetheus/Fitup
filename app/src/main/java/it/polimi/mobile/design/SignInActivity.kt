@@ -3,6 +3,7 @@ package it.polimi.mobile.design
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import it.polimi.mobile.design.databinding.ActivitySignInBinding
@@ -20,10 +21,10 @@ class SignInActivity : AppCompatActivity() {
 
 
         firebaseAuth = FirebaseAuth.getInstance()
-        /*binding.textView.setOnClickListener {
+        findViewById<TextView>(R.id.signup_login).setOnClickListener {
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
-        }*/
+        }
 
         binding.button.setOnClickListener{
                 val email = binding.Email.text.toString()
