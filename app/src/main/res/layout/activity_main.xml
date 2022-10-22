@@ -4,51 +4,110 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="15dp"
+    android:background="@drawable/gradient_1"
     tools:context=".MainActivity">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="75dp"
+        android:layout_marginEnd="16dp"
+        android:contentDescription="@string/none"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/undraw_fitness_stats_sht6" />
+
+    <TextView
+        android:id="@+id/welcometitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        app:cardCornerRadius="30dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="75dp"
+        android:layout_weight="1"
+        android:fontFamily="@font/open_sans_bold"
+        android:letterSpacing="0.2"
+        android:text="@string/app_name"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="?colorOnPrimary"
+        android:textSize="60sp"
+        android:textStyle="bold|italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <it.polimi.mobile.design.custom_layouts.LineGraphLayout
+    <TextView
+        android:id="@+id/welcomesub"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/open_sans"
+        android:text="@string/welcome_sub"
+        android:textAlignment="center"
+        android:textColor="?colorOnPrimary"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/welcometitle" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:orientation="vertical"
+        android:paddingStart="25dp"
+        android:paddingEnd="25dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/SignInBtn"
+            style="@null"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:background="@drawable/gradient_0" />
-    </androidx.cardview.widget.CardView>
+            android:layout_height="wrap_content"
+            android:backgroundTint="?colorPrimary"
+            android:fontFamily="@font/lato"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:minHeight="53dp"
+            android:text="@string/login_btn"
+            android:textAlignment="center"
+            android:textColor="?colorOnSecondary"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            app:cornerRadius="5dp"
+            app:rippleColor="@null"
+            tools:ignore="TextContrastCheck" />
 
-    <Button
-        android:id="@+id/SignInBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="24dp"
-        android:text="Sign In"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView" />
-
-    <Button
-        android:id="@+id/signUpbtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="32dp"
-        android:text="Sign Up"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/SignInBtn" />
+        <Button
+            android:id="@+id/SignUpbtn"
+            style="@null"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:backgroundTint="?colorPrimary"
+            android:fontFamily="@font/lato"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:minHeight="53dp"
+            android:paddingLeft="0dp"
+            android:paddingTop="10dp"
+            android:paddingRight="0dp"
+            android:paddingBottom="10dp"
+            android:text="@string/signup_btn"
+            android:textAlignment="center"
+            android:textColor="?colorOnSecondary"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            app:cornerRadius="5dp"
+            app:rippleColor="@null"
+            tools:ignore="TextContrastCheck" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

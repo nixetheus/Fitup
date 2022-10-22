@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Widget.Theme.MobileProject.ActionBar.Fullscreen" parent="Widget.AppCompat.ActionBar">
+    </style>
+
+    <style name="Widget.Theme.MobileProject.ButtonBar.Fullscreen" parent="">
+        <item name="android:buttonBarStyle">?android:attr/buttonBarStyle</item>
+    </style>
+</resources>

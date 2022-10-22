@@ -7,4 +7,10 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="strong_willed_yellow">#FFFFD600</color>
+    <color name="charcoal_graphite">#1E1E1E</color>
+    <color name="dreamy_blue"> #FF4C56F7</color>
+    <color name="dark_night"> #FF0C0E29</color>
+    <color name="deep_ocean"> #FF01020E</color>
 </resources>
