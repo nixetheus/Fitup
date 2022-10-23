@@ -16,6 +16,9 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="repeat_password">Repeat Password</string>
+    <string name="weight">Weight</string>
+    <string name="username">Username</string>
+    <string name="age">Age</string>
 
 
 </resources>
