@@ -2,6 +2,7 @@
     <string name="app_name">FitUp</string>
     <string name="none">none</string>
     <string name="back_btn">Back</string>
+    <string name="next_btn">Next</string>
 
     <!-- LOGIN -->
     <string name="welcome_title">Welcome</string>
@@ -11,6 +12,7 @@
     <string name="signup_btn">Sign Up</string>
     <string name="login_btn_back">Or Login</string>
     <string name="signup_btn_back">Or Sign Up</string>
+    <string name="data_please">Please insert your data for a better in-app experience</string>
 
     <!-- FIELDS -->
     <string name="email">Email</string>
