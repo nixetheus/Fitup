@@ -43,7 +43,7 @@
             android:id="@+id/Email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+
             android:autofillHints=""
             android:ems="15"
             android:fontFamily="@font/lato"
@@ -58,7 +58,7 @@
             android:id="@+id/Pass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+
             android:layout_marginTop="25dp"
             android:autofillHints=""
             android:ems="15"

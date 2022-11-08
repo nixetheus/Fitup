@@ -3,7 +3,10 @@
     <string name="none">none</string>
     <string name="back_btn">Back</string>
     <string name="next_btn">Next</string>
-
+    <string-array name="gender">
+        <item>male</item>
+        <item>female</item>
+    </string-array>
     <!-- LOGIN -->
     <string name="welcome_title">Welcome</string>
     <string name="welcome_sub">Your fitness journey\n starts here</string>
