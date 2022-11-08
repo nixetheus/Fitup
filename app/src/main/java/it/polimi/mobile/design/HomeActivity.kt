@@ -11,7 +11,6 @@ import it.polimi.mobile.design.entities.User
 import it.polimi.mobile.design.databinding.ActivityHomeBinding
 import it.polimi.mobile.design.enum.Gender
 import java.time.LocalDateTime
-import java.util.Date
 
 class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
