@@ -23,11 +23,11 @@ class HomeActivity : AppCompatActivity() {
         firebaseAuth = FirebaseAuth.getInstance()
         binding.nextBtn.setOnClickListener {
             val gender:Gender
-            val uid = firebaseAuth.uid
-            val username= binding.username.toString()
-            val age= binding.age.toString()
-            val weight= binding.weight.toString()
-            val g=binding.gender.toString()
+            val uid = firebaseAuth.uid.toString()
+            val username= binding.username.editText?.text.toString()
+            val age= binding.age.editText?.text.toString()
+            val weight= binding.weight.editText?.text.toString()
+            val g=binding.gender.selectedItem.toString()
             val date=LocalDateTime.now()
             gender = if (g=="male")
                 Gender.MALE
@@ -35,12 +35,16 @@ class HomeActivity : AppCompatActivity() {
                 Gender.FEMALE
 
             database= FirebaseDatabase.getInstance().getReference("Users")
-            val user=User(uid,username,weight, age,gender, date )
-            database.child(username).setValue(user).addOnSuccessListener {
+            val user=User(uid,username,weight, age ,gender )
+            database.child(uid).setValue(user).addOnSuccessListener {
                 Toast.makeText(this, "Successfully saved!!", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, HomeActivity::class.java)
+                val intent = Intent(this, CentralActivity::class.java)
                 startActivity(intent)
             }
+        }
+        binding.skipbtn.setOnClickListener {
+            val intent = Intent(this, CentralActivity::class.java)
+            startActivity(intent)
         }
     }
 }

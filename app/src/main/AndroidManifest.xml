@@ -15,6 +15,13 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".LoginActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".CentralActivity"
             android:exported="false"
             tools:ignore="Instantiatable">
@@ -50,7 +57,6 @@
             android:name=".MainActivity"
             android:exported="true"
             tools:ignore="Instantiatable">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

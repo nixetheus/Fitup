@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "66420086103",
-    "project_id": "mobileappproject-805af",
-    "storage_bucket": "mobileappproject-805af.appspot.com"
+    "project_number": "925709693638",
+    "project_id": "mobileproject-276e1",
+    "storage_bucket": "mobileproject-276e1.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:66420086103:android:2693de563d5e5810db5a12",
+        "mobilesdk_app_id": "1:925709693638:android:a3223de843139bb4cc1dc7",
         "android_client_info": {
           "package_name": "it.polimi.mobile.design"
         }
       },
       "oauth_client": [
         {
-          "client_id": "66420086103-gp51e7lnonikh0fsmi6m1jgdeou8nfci.apps.googleusercontent.com",
+          "client_id": "925709693638-fvp2ftken5uvoncci57mqjeei2ti5u54.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBZ1dWRmsOWJ1fynDyq_HQDrXxOqIfnxr0"
+          "current_key": "AIzaSyC5yvboCrJ5M7IqN9dbnEsylTxeUX3rovw"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "66420086103-gp51e7lnonikh0fsmi6m1jgdeou8nfci.apps.googleusercontent.com",
+              "client_id": "925709693638-fvp2ftken5uvoncci57mqjeei2ti5u54.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

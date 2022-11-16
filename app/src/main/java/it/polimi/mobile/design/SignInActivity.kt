@@ -6,12 +6,14 @@ import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import it.polimi.mobile.design.databinding.ActivitySignInBinding
 
 class SignInActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySignInBinding
-
+    private lateinit var database: DatabaseReference
     private lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,8 +36,19 @@ class SignInActivity : AppCompatActivity() {
 
                     firebaseAuth.signInWithEmailAndPassword(email, pass).addOnCompleteListener {
                         if (it.isSuccessful) {
-                            val intent = Intent(this, MainActivity::class.java)
-                            startActivity(intent)
+                            val uid = firebaseAuth.uid.toString()
+                            database = FirebaseDatabase.getInstance().getReference("Users")
+                            database.child(uid).get().addOnSuccessListener {
+                                if (it.exists())
+                                {
+                                    val intent = Intent(this, CentralActivity::class.java)
+                                    startActivity(intent)
+                                }
+                                else{
+                                    val intent = Intent(this, HomeActivity::class.java)
+                                    startActivity(intent)
+                                }
+                            }
                         } else {
                             Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
 
@@ -48,7 +61,7 @@ class SignInActivity : AppCompatActivity() {
             }
     }
 
-    override fun onStart() {
+   /* override fun onStart() {
         super.onStart()
 
         if(firebaseAuth.currentUser != null){
@@ -56,5 +69,5 @@ class SignInActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
-
+*/
 }
