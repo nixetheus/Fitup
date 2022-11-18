@@ -42,9 +42,5 @@ class HomeActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
-        binding.skipbtn.setOnClickListener {
-            val intent = Intent(this, CentralActivity::class.java)
-            startActivity(intent)
-        }
     }
 }
