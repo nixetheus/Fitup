@@ -1,11 +1,11 @@
-package it.polimi.mobile.design.helpers
+package it.polimi.mobile.design
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
-class SettingsActivity : AppCompatActivity() {
+class StatsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
+        setContentView(R.layout.activity_stats)
     }
 }

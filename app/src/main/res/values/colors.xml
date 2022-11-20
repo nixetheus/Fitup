@@ -13,4 +13,9 @@
     <color name="dreamy_blue"> #FF4C56F7</color>
     <color name="dark_night"> #FF0C0E29</color>
     <color name="deep_ocean"> #FF01020E</color>
+
+    <color name="red_arms">#B60000</color>
+    <color name="yellow_core">#FFD500</color>
+    <color name="blue_legs">#126CCC</color>
+    <color name="green_spirit">#39CF5F</color>
 </resources>

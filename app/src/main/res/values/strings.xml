@@ -26,5 +26,10 @@
     <string name="age">Age</string>
     <string name="sex">Sex</string>
 
+    <!-- HOME -->
+    <string name="stats_link">Stats</string>
+    <string name="workouts_link">Workouts</string>
+    <string name="exercises_link">Exercises</string>
+
 
 </resources>
