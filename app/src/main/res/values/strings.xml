@@ -31,5 +31,10 @@
     <string name="workouts_link">Workouts</string>
     <string name="exercises_link">Exercises</string>
 
+    <!-- LISTS -->
+    <string name="search_workouts">Search Workouts…</string>
+    <string name="search_exercises">Search Exercises…</string>
+    <string name="list_workouts_title">Workouts</string>
+    <string name="lsit_exercises_title">Exercises</string>
 
 </resources>
