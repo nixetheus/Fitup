@@ -35,6 +35,6 @@
     <string name="search_workouts">Search Workouts…</string>
     <string name="search_exercises">Search Exercises…</string>
     <string name="list_workouts_title">Workouts</string>
-    <string name="lsit_exercises_title">Exercises</string>
+    <string name="list_exercises_title">Exercises</string>
 
 </resources>
