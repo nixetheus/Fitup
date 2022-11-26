@@ -37,4 +37,13 @@
     <string name="list_workouts_title">Workouts</string>
     <string name="list_exercises_title">Exercises</string>
 
+    <!-- WORKOUT DETAIL -->
+    <string name="missing">--</string>
+    <string name="number_exercises_label">Exercises</string>
+    <string name="calories_data_label">Kcal</string>
+    <string name="bpm_data_label">BPM</string>
+    <string name="sets_label">Sets</string>
+    <string name="reps_label">Reps</string>
+    <string name="rest_label">Rest</string>
+
 </resources>

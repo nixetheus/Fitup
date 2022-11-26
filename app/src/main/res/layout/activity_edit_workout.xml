@@ -25,13 +25,116 @@
                 android:id="@+id/workoutName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
+                android:layout_marginTop="75dp"
+                android:layout_marginBottom="100dp"
                 android:fontFamily="@font/lato"
-                android:text="@string/none"
+                android:text="@string/missing"
                 android:textAlignment="center"
                 android:textColor="?colorOnPrimary"
                 android:textSize="34sp"
                 android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/workoutDataBox"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="50dp"
+                android:baselineAligned="false"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/exercisesNumberBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/numberOfExercises"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/lato"
+                        android:text="@string/missing"
+                        android:textAlignment="center"
+                        android:textAllCaps="false"
+                        android:textColor="?colorOnPrimary"
+                        android:textSize="26sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView6"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/number_exercises_label"
+                        android:textAlignment="center"
+                        android:textAllCaps="true"
+                        android:textColor="?colorOnPrimary"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/caloriesDataBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView13"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/lato"
+                        android:text="@string/missing"
+                        android:textAlignment="center"
+                        android:textAllCaps="false"
+                        android:textColor="?colorOnPrimary"
+                        android:textSize="26sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView14"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/calories_data_label"
+                        android:textAlignment="center"
+                        android:textAllCaps="true"
+                        android:textColor="?colorOnPrimary"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/BpmDataBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView15"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/lato"
+                        android:text="@string/missing"
+                        android:textAlignment="center"
+                        android:textAllCaps="false"
+                        android:textColor="?colorOnPrimary"
+                        android:textSize="26sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView16"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/bpm_data_label"
+                        android:textAlignment="center"
+                        android:textAllCaps="true"
+                        android:textColor="?colorOnPrimary"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -55,18 +158,19 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@null"
+                    android:contentDescription="@string/none"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/gradient_0"
-                    tools:ignore="SpeakableTextPresentCheck" />
+                    tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck,DuplicateSpeakableTextCheck" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/workoutExercisesCard"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="25dp"
                 app:cardBackgroundColor="@color/red_arms"
                 app:cardCornerRadius="10dp">
 
@@ -82,7 +186,10 @@
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
-                        android:padding="12.5dp">
+                        android:paddingStart="12.5dp"
+                        android:paddingTop="15dp"
+                        android:paddingEnd="12.5dp"
+                        android:paddingBottom="15dp">
 
                         <TextView
                             android:id="@+id/exerciseNameExampleWorkout"
@@ -108,7 +215,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/lato_bold"
-                                android:text="3"
+                                android:text="@string/missing"
                                 android:textAlignment="center"
                                 android:textColor="?colorOnSecondary"
                                 android:textSize="24sp" />
@@ -118,7 +225,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/lato_bold"
-                                android:text="Sets"
+                                android:text="@string/sets_label"
                                 android:textAlignment="center"
                                 android:textAllCaps="true"
                                 android:textColor="?colorOnSecondary"
@@ -139,7 +246,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/lato_bold"
-                                android:text="7"
+                                android:text="@string/missing"
                                 android:textAlignment="center"
                                 android:textColor="?colorOnSecondary"
                                 android:textSize="24sp" />
@@ -149,7 +256,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/lato_bold"
-                                android:text="reps"
+                                android:text="@string/reps_label"
                                 android:textAlignment="center"
                                 android:textAllCaps="true"
                                 android:textColor="?colorOnSecondary"
@@ -168,7 +275,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/lato_bold"
-                                android:text="90''/180''"
+                                android:text="@string/missing"
                                 android:textAlignment="center"
                                 android:textColor="?colorOnSecondary"
                                 android:textSize="18sp" />
@@ -178,7 +285,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/lato_bold"
-                                android:text="rest"
+                                android:text="@string/rest_label"
                                 android:textAlignment="center"
                                 android:textAllCaps="true"
                                 android:textColor="?colorOnSecondary"
