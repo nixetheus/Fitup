@@ -19,7 +19,7 @@
         android:text="@string/app_name"
         android:textAlignment="center"
         android:textAllCaps="true"
-        android:textColor="?colorOnPrimary"
+        android:textColor="#82B1FF"
         android:textSize="60sp"
         android:textStyle="bold|italic"
         app:layout_constraintEnd_toEndOf="parent"
@@ -52,7 +52,8 @@
             android:maxEms="15"
             android:minHeight="48dp"
             android:textAlignment="viewStart"
-            android:textColor="?colorOnPrimary" />
+            android:textColor="?colorOnPrimary"
+            android:textColorHint="#536DFE" />
 
         <EditText
             android:id="@+id/Pass"
@@ -68,7 +69,8 @@
             android:maxEms="15"
             android:minHeight="48dp"
             android:textAlignment="viewStart"
-            android:textColor="?colorOnPrimary" />
+            android:textColor="?colorOnPrimary"
+            android:textColorHint="#607D8B" />
 
     </LinearLayout>
 
@@ -95,9 +97,10 @@
             android:insetBottom="0dp"
             android:minHeight="53dp"
             android:text="@string/login_btn"
+            android:textColor="#7CB342"
             android:textSize="17sp"
-            app:rippleColor="@null"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:rippleColor="@null" />
 
         <Button
             android:id="@+id/signup_login"
@@ -112,6 +115,7 @@
             android:insetBottom="0dp"
             android:minHeight="53dp"
             android:text="@string/signup_btn_back"
+            android:textColor="#757575"
             android:textSize="17sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"

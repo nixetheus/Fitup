@@ -47,7 +47,7 @@
         android:fontFamily="@font/open_sans"
         android:text="@string/welcome_sub"
         android:textAlignment="center"
-        android:textColor="?colorOnPrimary"
+        android:textColor="#82B1FF"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -110,18 +110,22 @@
             tools:ignore="TextContrastCheck" />
     </LinearLayout>
 
-    <Button
+    <ImageButton
         android:id="@+id/buttonGoogle"
-        android:layout_width="137dp"
-        android:layout_height="233dp"
-        android:layout_marginStart="35dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="282dp"
-        android:layout_marginBottom="2dp"
-        android:drawableTop="@drawable/google"
+        android:layout_width="58dp"
+        android:layout_height="62dp"
+        android:layout_marginStart="99dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="241dp"
+        android:layout_marginBottom="1dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
         app:layout_constraintBottom_toTopOf="@+id/welcometitle"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/google" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -59,9 +59,8 @@
                     <Button
                         android:id="@+id/signoutbtn"
                         android:layout_width="87dp"
-                        android:layout_height="43dp"
+                        android:layout_height="48dp"
                         android:layout_marginStart="83dp"
-                        android:layout_marginTop="26dp"
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="31dp"
                         android:text="Sign Out"
@@ -89,7 +88,8 @@
                         android:layout_width="500dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="TextView" />
+                        android:text="TextView"
+                        android:textColor="#B388FF" />
                 </LinearLayout>
             </HorizontalScrollView>
 

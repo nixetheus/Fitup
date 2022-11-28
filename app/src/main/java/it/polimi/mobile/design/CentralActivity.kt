@@ -40,6 +40,10 @@ class CentralActivity : AppCompatActivity() {
         binding.statsLinkText.setOnClickListener{
 
         }
+        binding.workoutLinkText.setOnClickListener{
+            val intent = Intent(this, WorkoutListActivity::class.java)
+            startActivity(intent)
+        }
         binding.signoutbtn.setOnClickListener{
 
             val intent = Intent(this, LogoutPopUp::class.java)
