@@ -110,4 +110,18 @@
             tools:ignore="TextContrastCheck" />
     </LinearLayout>
 
+    <Button
+        android:id="@+id/buttonGoogle"
+        android:layout_width="137dp"
+        android:layout_height="233dp"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="282dp"
+        android:layout_marginBottom="2dp"
+        android:drawableTop="@drawable/google"
+        app:layout_constraintBottom_toTopOf="@+id/welcometitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

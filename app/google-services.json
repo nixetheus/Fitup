@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "925709693638",
+    "firebase_url": "https://mobileproject-276e1-default-rtdb.firebaseio.com",
     "project_id": "mobileproject-276e1",
     "storage_bucket": "mobileproject-276e1.appspot.com"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "925709693638-nm3agj53a3frj6invj8ob7tu63ot5f7r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "it.polimi.mobile.design",
+            "certificate_hash": "10db00624a11328a003e1bd03625e42994cebb97"
+          }
+        },
         {
           "client_id": "925709693638-fvp2ftken5uvoncci57mqjeei2ti5u54.apps.googleusercontent.com",
           "client_type": 3

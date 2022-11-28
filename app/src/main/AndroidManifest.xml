@@ -14,6 +14,14 @@
         android:theme="@style/Theme.MobileProject"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
+        <activity
+            android:name=".GoogleSignIn"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name=".EditWorkoutActivity"
             android:exported="false">

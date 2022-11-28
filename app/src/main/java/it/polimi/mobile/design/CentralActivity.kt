@@ -25,6 +25,9 @@ class CentralActivity : AppCompatActivity() {
             if(it.exists()){
                 val username=it.child("username").value
                 binding.textView4.text="Welcome "+username.toString()
+                binding.textView2.text="Age="+it.child("age").value.toString()+
+                "/n Weight="+it.child("weight").value.toString()+
+                "/n Gender="+it.child("gender").value.toString()
             }
         }
     }
