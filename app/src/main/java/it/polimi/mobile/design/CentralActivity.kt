@@ -1,13 +1,16 @@
 package it.polimi.mobile.design
 
-import androidx.appcompat.app.AppCompatActivity
+
+import android.content.Intent
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import it.polimi.mobile.design.databinding.ActivityCentralBinding
-import it.polimi.mobile.design.databinding.ActivityHomeBinding
-import it.polimi.mobile.design.databinding.ActivityMainBinding
+
 
 class CentralActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCentralBinding
@@ -29,6 +32,18 @@ class CentralActivity : AppCompatActivity() {
                 "/n Weight="+it.child("weight").value.toString()+
                 "/n Gender="+it.child("gender").value.toString()
             }
+        }
+        binding.exercisesLink.setOnClickListener{
+            val intent = Intent(this, ExerciseListActivity::class.java)
+            startActivity(intent)
+        }
+        binding.statsLinkText.setOnClickListener{
+
+        }
+        binding.signoutbtn.setOnClickListener{
+
+            val intent = Intent(this, LogoutPopUp::class.java)
+            startActivity(intent)
         }
     }
 }

@@ -55,6 +55,20 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/imageView"
                         app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/signoutbtn"
+                        android:layout_width="87dp"
+                        android:layout_height="43dp"
+                        android:layout_marginStart="83dp"
+                        android:layout_marginTop="26dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="31dp"
+                        android:text="Sign Out"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/textView4"
+                        app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>
 

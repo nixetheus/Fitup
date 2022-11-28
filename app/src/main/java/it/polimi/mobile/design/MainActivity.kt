@@ -5,10 +5,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContract
-import androidx.activity.result.contract.ActivityResultContracts
-import com.google.android.gms.auth.api.signin.GoogleSignIn.getClient
-import com.google.android.gms.auth.api.signin.GoogleSignIn.getSignedInAccountFromIntent
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -18,19 +14,14 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import it.polimi.mobile.design.databinding.ActivityMainBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.nio.file.Files.exists
 
-const val REQUEST_CODE_SIGN_IN=0
+
 class MainActivity : AppCompatActivity() {
-    private lateinit var googleSignInClient: GoogleSignInClient
+
     private lateinit var binding: ActivityMainBinding
     lateinit var mGoogleSignInClient: GoogleSignInClient
     private lateinit var database: DatabaseReference
-    val RC_SIGN_IN: Int = 1
+    val RC_SIGN_IN: Int = 0
     lateinit var gso:GoogleSignInOptions
     lateinit var mAuth: FirebaseAuth
 
