@@ -8,9 +8,9 @@ import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.TypedValue
-import android.view.View.TEXT_ALIGNMENT_TEXT_END
-import android.view.View.TEXT_ALIGNMENT_TEXT_START
+import android.view.View.*
 import android.widget.LinearLayout
+import android.widget.LinearLayout.HORIZONTAL
 import android.widget.LinearLayout.VERTICAL
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -83,8 +83,27 @@ class CentralActivity : AppCompatActivity() {
 
             // Exercises Stat
             val exercisesStatLayout = createWorkoutStatLinearLayout()
-            // TODO
+            val exercisesStatValue = createStatValueText("--")  // TODO
+            val exercisesStatLabel = createStatLabelText(getString(R.string.number_exercises_label))
+            exercisesStatLayout.addView(exercisesStatValue)
+            exercisesStatLayout.addView(exercisesStatLabel)
             statsLayout.addView(exercisesStatLayout)
+
+            // Kcal Stat
+            val kcalStatLayout = createWorkoutStatLinearLayout()
+            val kcalStatValue = createStatValueText("--")  // TODO
+            val kcalStatLabel = createStatLabelText(getString(R.string.calories_data_label))
+            kcalStatLayout.addView(kcalStatValue)
+            kcalStatLayout.addView(kcalStatLabel)
+            statsLayout.addView(kcalStatLayout)
+
+            // BPM Stat
+            val bpmStatLayout = createWorkoutStatLinearLayout()
+            val bpmStatValue = createStatValueText("--")  // TODO
+            val bpmStatLabel = createStatLabelText(getString(R.string.bpm_data_label))
+            bpmStatLayout.addView(bpmStatValue)
+            bpmStatLayout.addView(bpmStatLabel)
+            statsLayout.addView(bpmStatLayout)
 
             workoutLayout.addView(statsLayout)
             workoutCard.addView(workoutLayout)
@@ -120,7 +139,7 @@ class CentralActivity : AppCompatActivity() {
 
         val workoutNameView = TextView(applicationContext)
         workoutNameView.text = "Workout Name"
-        workoutNameView.setTextColor(Color.BLACK)
+        workoutNameView.setTextColor(Color.WHITE)
         workoutNameView.textAlignment = TEXT_ALIGNMENT_TEXT_START
         workoutNameView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24f)
         workoutNameView.typeface = Typeface.create("Lato Bold", Typeface.BOLD)
@@ -139,17 +158,55 @@ class CentralActivity : AppCompatActivity() {
         workoutStatsLayout.layoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT
         )
-        workoutStatsLayout.orientation = VERTICAL
+        workoutStatsLayout.orientation = HORIZONTAL
         return workoutStatsLayout
     }
 
     private fun createWorkoutStatLinearLayout(): LinearLayout {
         val workoutStatLayout = LinearLayout(applicationContext)
-        workoutStatLayout.layoutParams = LinearLayout.LayoutParams(
+        val layoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT
         )
+        layoutParams.weight = 1f
+        workoutStatLayout.background = ColorDrawable(Color.GREEN)
+        workoutStatLayout.layoutParams = layoutParams
         workoutStatLayout.orientation = VERTICAL
         return workoutStatLayout
+    }
+
+    private fun createStatValueText(value: String): TextView {
+
+        val workoutNameView = TextView(applicationContext)
+        workoutNameView.text = value
+        workoutNameView.setTextColor(Color.WHITE)
+        workoutNameView.textAlignment = TEXT_ALIGNMENT_CENTER
+        workoutNameView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26f)
+        workoutNameView.typeface = Typeface.create("Lato", Typeface.BOLD)
+
+        val params = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        workoutNameView.layoutParams = params
+
+        return workoutNameView
+    }
+
+    private fun createStatLabelText(value: String): TextView {
+
+        val workoutNameView = TextView(applicationContext)
+        workoutNameView.text = value
+        workoutNameView.setTextColor(Color.WHITE)
+        workoutNameView.textAlignment = TEXT_ALIGNMENT_CENTER
+        workoutNameView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
+        workoutNameView.typeface = Typeface.create("Lato", Typeface.BOLD)
+        workoutNameView.isAllCaps = true
+
+        val params = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        workoutNameView.layoutParams = params
+
+        return workoutNameView
     }
 
     private fun Int.toPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()

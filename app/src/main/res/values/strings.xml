@@ -41,7 +41,7 @@
 
     <!-- WORKOUT DETAIL -->
     <string name="missing">--</string>
-    <string name="number_exercises_label">Exercises</string>
+    <string name="number_exercises_label">Exs</string>
     <string name="calories_data_label">Kcal</string>
     <string name="bpm_data_label">BPM</string>
     <string name="sets_label">Sets</string>
