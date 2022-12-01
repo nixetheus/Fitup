@@ -14,8 +14,12 @@
     <color name="dark_night"> #FF0C0E29</color>
     <color name="deep_ocean"> #FF01020E</color>
 
-    <color name="red_arms">#B60000</color>
+    <color name="red_arms">#A80000</color>
     <color name="yellow_core">#FFD500</color>
-    <color name="blue_legs">#126CCC</color>
-    <color name="green_spirit">#39CF5F</color>
+    <color name="blue_legs">#0063CD</color>
+    <color name="green_spirit">#3EC480</color>
+
+    <color name="lime_1">#BBDF59</color>
+    <color name="petroleum_1">#027C83</color>
+    <color name="pine_1">#3EC480</color>
 </resources>

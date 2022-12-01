@@ -43,25 +43,27 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="15"
+            android:fontFamily="@font/lato"
             android:hint="@string/email"
+            android:importantForAutofill="no"
             android:inputType="textEmailAddress"
             android:maxEms="15"
             android:minHeight="48dp"
-            android:minEms="15"
-            android:importantForAutofill="no" />
+            android:minEms="15" />
 
         <EditText
             android:id="@+id/Pass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
+            android:autofillHints=""
             android:ems="15"
+            android:fontFamily="@font/lato"
             android:hint="@string/password"
             android:inputType="textPassword"
             android:maxEms="15"
             android:minHeight="48dp"
-            android:minEms="15"
-            android:autofillHints="" />
+            android:minEms="15" />
 
         <EditText
             android:id="@+id/Pass2"
@@ -69,12 +71,13 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
             android:ems="15"
+            android:fontFamily="@font/lato"
             android:hint="@string/repeat_password"
+            android:importantForAutofill="no"
             android:inputType="textPassword"
             android:maxEms="15"
             android:minHeight="48dp"
-            android:minEms="15"
-            android:importantForAutofill="no" />
+            android:minEms="15" />
     </LinearLayout>
 
     <LinearLayout
