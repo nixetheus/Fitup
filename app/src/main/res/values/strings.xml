@@ -29,6 +29,8 @@
 
     <!-- HOME -->
     <string name="welcome_workouts">Chosen For You</string>
+    <string name="level_label">Lvl</string>
+    <string name="strongest_stat_label">Ace Stat</string>
     <string name="stats_link">Stats</string>
     <string name="workouts_link">Workouts</string>
     <string name="exercises_link">Exercises</string>
@@ -41,7 +43,7 @@
 
     <!-- WORKOUT DETAIL -->
     <string name="missing">--</string>
-    <string name="number_exercises_label">Exs</string>
+    <string name="number_exercises_label">Exp</string>
     <string name="calories_data_label">Kcal</string>
     <string name="bpm_data_label">BPM</string>
     <string name="sets_label">Sets</string>
