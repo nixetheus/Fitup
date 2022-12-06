@@ -43,7 +43,7 @@ class CentralActivity : AppCompatActivity() {
         database.child(uid).get().addOnSuccessListener {
             if(it.exists()){
                 val username=it.child("username").value
-                binding.textView4.text="Welcome "+username.toString()
+                binding.usernameText.text = username.toString()
             }
         }
 
@@ -70,7 +70,7 @@ class CentralActivity : AppCompatActivity() {
         for (workout in workouts) {
 
             val workoutCard = createWorkoutCard()
-            workoutCard.background = ColorDrawable(Color.RED)
+            workoutCard.setCardBackgroundColor(Color.RED)
 
             val workoutLayout = createWorkoutCardLinearLayout()
 
@@ -145,7 +145,7 @@ class CentralActivity : AppCompatActivity() {
         workoutNameView.typeface = Typeface.create("Lato Bold", Typeface.BOLD)
 
         val params = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT
+            LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT
         )
         params.bottomMargin = 25.toPx()
         workoutNameView.layoutParams = params
@@ -168,7 +168,6 @@ class CentralActivity : AppCompatActivity() {
             LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT
         )
         layoutParams.weight = 1f
-        workoutStatLayout.background = ColorDrawable(Color.GREEN)
         workoutStatLayout.layoutParams = layoutParams
         workoutStatLayout.orientation = VERTICAL
         return workoutStatLayout

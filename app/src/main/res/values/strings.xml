@@ -28,6 +28,7 @@
     <string name="sex">Sex</string>
 
     <!-- HOME -->
+    <string name="welcome">Welcome,</string>
     <string name="welcome_workouts">Chosen For You</string>
     <string name="level_label">Lvl</string>
     <string name="strongest_stat_label">Ace Stat</string>
