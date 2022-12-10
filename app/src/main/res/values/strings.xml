@@ -37,10 +37,17 @@
     <string name="exercises_link">Exercises</string>
 
     <!-- LISTS -->
+
     <string name="search_workouts">Search Workouts…</string>
     <string name="search_exercises">Search Exercises…</string>
     <string name="list_workouts_title">Workouts</string>
     <string name="list_exercises_title">Exercises</string>
+    <string name="add_workout_title">Create Workout</string>
+    <string name="add_exercise_title">Create Exercise</string>
+    <string name="add_workout_hint">Workout Name</string>
+    <string name="add_exercise_hint">Exercise Name</string>
+    <string name="exercise_type_hint">Type</string>
+    <string name="add_confirm">Add</string>
 
     <!-- WORKOUT DETAIL -->
     <string name="missing">--</string>
