@@ -47,6 +47,7 @@ class ExerciseListActivity : AppCompatActivity() {
             Toast.makeText(this, "Successfully saved!!", Toast.LENGTH_SHORT).show()
             val intent = Intent(this, ExerciseListActivity::class.java)
             startActivity(intent)
+            finish()
         }
     }
 
