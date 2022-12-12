@@ -22,25 +22,28 @@ class HomeActivity : AppCompatActivity() {
         setContentView(binding.root)
         firebaseAuth = FirebaseAuth.getInstance()
         binding.nextBtn.setOnClickListener {
-            val gender:Gender
-            val uid = firebaseAuth.uid.toString()
-            val username= binding.username.editText?.text.toString()
-            val age= binding.age.editText?.text.toString()
-            val weight= binding.weight.editText?.text.toString()
-            val g=binding.gender.selectedItem.toString()
-            val date=LocalDateTime.now()
-            gender = if (g=="male")
-                Gender.MALE
-            else
-                Gender.FEMALE
 
-            database= FirebaseDatabase.getInstance().getReference("Users")
-            val user=User(uid,username,weight, age ,gender )
-            database.child(uid).setValue(user).addOnSuccessListener {
-                Toast.makeText(this, "Successfully saved!!", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, CentralActivity::class.java)
-                startActivity(intent)
-            }
+        }
+    }
+    private fun createUser(){
+        val gender:Gender
+        val uid = firebaseAuth.uid.toString()
+        val username= binding.username.editText?.text.toString()
+        val age= binding.age.editText?.text.toString()
+        val weight= binding.weight.editText?.text.toString()
+        val g=binding.gender.selectedItem.toString()
+        val date=LocalDateTime.now()
+        gender = if (g=="male")
+            Gender.MALE
+        else
+            Gender.FEMALE
+
+        database= FirebaseDatabase.getInstance().getReference("Users")
+        val user=User(uid,username,weight, age ,gender )
+        database.child(uid).setValue(user).addOnSuccessListener {
+            Toast.makeText(this, "Successfully saved!!", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, CentralActivity::class.java)
+            startActivity(intent)
         }
     }
 }
