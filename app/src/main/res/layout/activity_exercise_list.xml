@@ -45,19 +45,14 @@
                     android:textSize="24sp"
                     android:textStyle="bold" />
 
-                <Button
-                    android:id="@+id/closeAddExercise"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/lato_bold"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    android:textColor="?colorOnPrimary"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    app:iconPadding="0dp"
-                    tools:ignore="SpeakableTextPresentCheck" />
+                <ImageView
+                    android:id="@+id/addExerciseClose"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginStart="20dp"
+                    android:contentDescription="@string/none"
+                    app:srcCompat="@drawable/ic_baseline_close_48" />
+
             </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -167,7 +162,7 @@
                     android:layout_height="35dp"
                     android:layout_marginStart="20dp"
                     android:contentDescription="@string/none"
-                    app:srcCompat="@drawable/gradient_0" />
+                    app:srcCompat="@drawable/ic_baseline_add_48" />
 
             </LinearLayout>
 
