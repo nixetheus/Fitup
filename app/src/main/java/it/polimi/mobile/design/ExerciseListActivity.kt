@@ -1,5 +1,6 @@
 package it.polimi.mobile.design
 
+import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Typeface
@@ -8,28 +9,51 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toolbar
+import android.widget.*
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.setPadding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import it.polimi.mobile.design.databinding.ActivityCentralBinding
+import it.polimi.mobile.design.databinding.ActivityExerciseListBinding
 import it.polimi.mobile.design.entities.Exercise
 import it.polimi.mobile.design.entities.Workout
 import it.polimi.mobile.design.enum.ExerciseType
 
 class ExerciseListActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityExerciseListBinding
+    private lateinit var database : DatabaseReference
+    private lateinit var firebaseAuth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_exercise_list)
-        showExercises(listOf(Exercise("12", "Exercise 1", ExerciseType.ARMS)))
+        binding = ActivityExerciseListBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        firebaseAuth = FirebaseAuth.getInstance()
+        binding.confirmAddExerciseBtn.setOnClickListener{
+            createExercise()
+        }
+    }
+    private fun createExercise(){
+        val name=binding.exerciseNameField.text.toString()
+        val uid=firebaseAuth.uid.toString()
+
+        database = FirebaseDatabase.getInstance().getReference("Exercise")
+        val eId = database.push().key!!
+        val exercise = Exercise(eId, name, "60", ExerciseType.ARMS, "test")
+        database.child(name).setValue(exercise).addOnSuccessListener {
+            Toast.makeText(this, "Successfully saved!!", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, ExerciseListActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
 
     private fun showExercises(exercises: List<Exercise>) {
 
-        val exercisesLayout = findViewById<LinearLayout>(R.id.exercisesListLayout)
+        val exercisesLayout = binding.exercisesListLayout
         for (exercise in exercises) {
 
             val exerciseCard = createExerciseCard()

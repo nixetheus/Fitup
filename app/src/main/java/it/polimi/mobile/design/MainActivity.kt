@@ -14,6 +14,10 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import it.polimi.mobile.design.databinding.ActivityMainBinding
+import it.polimi.mobile.design.entities.Workout
+import it.polimi.mobile.design.enum.ExerciseType
+import java.sql.Time
+import java.time.LocalDateTime
 
 
 class MainActivity : AppCompatActivity() {
@@ -122,4 +126,18 @@ class MainActivity : AppCompatActivity() {
                 }
             }
     }
+    private fun createExercise(workoutId:String,name: String?,type: ExerciseType){
+        database = FirebaseDatabase.getInstance().getReference("Exercise")
+        val eId=database.push().key!!
+    }
+    private fun createWorkout() {
+
+
+    }
+    private fun createWorkoutExercise(){
+        database=FirebaseDatabase.getInstance().getReference("WorkoutExercise")
+        val weId=database.push().key!!
+    }
+
+
 }

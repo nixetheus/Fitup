@@ -1,30 +1,102 @@
 package it.polimi.mobile.design
 
+import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Typeface
-import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import android.widget.Toolbar
 import androidx.cardview.widget.CardView
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
+import it.polimi.mobile.design.adapter.WorkoutAdapter
+import it.polimi.mobile.design.databinding.ActivityWorkoutListBinding
 import it.polimi.mobile.design.entities.Workout
-import java.sql.Time
 
 class WorkoutListActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityWorkoutListBinding
+    private lateinit var workoutRecyclerView: RecyclerView
+    private lateinit var workoutArrayList: ArrayList<Workout>
+    private lateinit var workoutAdapter: WorkoutAdapter
+    private lateinit var database : DatabaseReference
+    private lateinit var firebaseAuth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_workout_list)
-        showWorkouts(listOf(Workout("143", Time(5675643421)), Workout("123", Time(5675643421))))
+        binding = ActivityWorkoutListBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        firebaseAuth = FirebaseAuth.getInstance()
+        workoutRecyclerView=binding.recyclerView
+        workoutRecyclerView.layoutManager=LinearLayoutManager(this)
+        workoutRecyclerView.setHasFixedSize(false)
+        workoutArrayList= arrayListOf<Workout>()
+        database=FirebaseDatabase.getInstance().getReference("Workout")
+        database.addValueEventListener(object :ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                workoutArrayList.clear()
+                if (snapshot.exists()){
+                    for (workSnap in snapshot.children){
+                        val workData=workSnap.getValue(Workout::class.java)
+                        workoutArrayList.add(workData!!)
+
+                    }
+                    workoutAdapter= WorkoutAdapter(workoutArrayList)
+                    workoutRecyclerView.adapter=workoutAdapter
+
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
+        binding.closeAddWorkout.setOnClickListener{
+            binding.workoutAddLayout.visibility = View.GONE
+
+
+        }
+        binding.addWorkoutsButton.setOnClickListener{
+            binding.workoutAddLayout.visibility=View.VISIBLE
+        }
+
+
+        EventChangeListener()
+        binding.confirmAddWorkoutBtn.setOnClickListener{
+            createWorkout()
+        }
+    }
+    private fun EventChangeListener(){
+        database=FirebaseDatabase.getInstance().getReference("Workout")
+
+    }
+    private fun createWorkout(){
+        val name=binding.workoutNameField.text.toString()
+        val uid=firebaseAuth.uid.toString()
+
+        database = FirebaseDatabase.getInstance().getReference("Workout")
+        val wId = database.push().key!!
+        val workout = Workout(wId, uid,name,"random", "hip hop")
+        database.child(name).setValue(workout).addOnSuccessListener {
+            Toast.makeText(this, "Successfully saved!!", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, WorkoutListActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
 
     private fun showWorkouts(workouts: List<Workout>) {
 
-        val workoutsLayout = findViewById<LinearLayout>(R.id.workoutsListLayout)
+        val workoutsLayout = binding.workoutsListLayout
         for (workout in workouts) {
 
             val workoutCard = createWorkoutCard()

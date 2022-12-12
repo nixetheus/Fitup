@@ -38,14 +38,7 @@ class CentralActivity : AppCompatActivity() {
         setContentView(binding.root)
         firebaseAuth = FirebaseAuth.getInstance()
 
-        val uid = firebaseAuth.uid.toString()
-        database= FirebaseDatabase.getInstance().getReference("Users")
-        database.child(uid).get().addOnSuccessListener {
-            if(it.exists()){
-                val username=it.child("username").value
-                binding.usernameText.text = username.toString()
-            }
-        }
+        showUser();
 
         binding.exercisesLink.setOnClickListener{
             val intent = Intent(this, ExerciseListActivity::class.java)
@@ -60,13 +53,22 @@ class CentralActivity : AppCompatActivity() {
             val intent = Intent(this, WorkoutListActivity::class.java)
             startActivity(intent)
         }
-
-        showTopWorkouts(listOf(Workout("143", Time(5675643421)), Workout("123", Time(5675643421))))
+    }
+    private fun showUser(){
+        val uid = firebaseAuth.uid.toString()
+        database= FirebaseDatabase.getInstance().getReference("Users")
+        database.child(uid).get().addOnSuccessListener {
+            if(it.exists()){
+                val username=it.child("username").value
+                binding.usernameText.text = username.toString()
+            }
+        }
     }
 
     private fun showTopWorkouts(workouts: List<Workout>) {
-
-        val workoutsLayout = findViewById<LinearLayout>(R.id.workoutsLayout)
+        database= FirebaseDatabase.getInstance().getReference("Workout")
+        database.get()
+        val workoutsLayout = binding.workoutsLayout
         for (workout in workouts) {
 
             val workoutCard = createWorkoutCard()
