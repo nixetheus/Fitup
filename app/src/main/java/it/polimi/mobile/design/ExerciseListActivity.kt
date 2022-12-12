@@ -15,9 +15,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.setPadding
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import it.polimi.mobile.design.databinding.ActivityCentralBinding
+import com.google.firebase.database.*
 import it.polimi.mobile.design.databinding.ActivityExerciseListBinding
 import it.polimi.mobile.design.entities.Exercise
 import it.polimi.mobile.design.entities.Workout
@@ -27,11 +25,33 @@ class ExerciseListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityExerciseListBinding
     private lateinit var database : DatabaseReference
     private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var exerciseArrayList: ArrayList<Exercise>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityExerciseListBinding.inflate(layoutInflater)
         setContentView(binding.root)
         firebaseAuth = FirebaseAuth.getInstance()
+        exerciseArrayList= arrayListOf<Exercise>()
+        database=FirebaseDatabase.getInstance().getReference("Exercise")
+        database.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                exerciseArrayList.clear()
+                if (snapshot.exists()){
+                    for (workSnap in snapshot.children){
+                        val exerciseData=workSnap.getValue(Exercise::class.java)
+                        exerciseArrayList.add(exerciseData!!)
+
+                    }
+                    showExercises(exerciseArrayList)
+
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
         binding.confirmAddExerciseBtn.setOnClickListener{
             createExercise()
         }
@@ -68,7 +88,7 @@ class ExerciseListActivity : AppCompatActivity() {
             val exerciseMenu = createExerciseMenuLinearLayout()
 
             // Name
-            val exerciseName = createExerciseNameText()
+            val exerciseName = createExerciseNameText(exercise)
             exerciseMenu.addView(exerciseName)
             
             // Setup
@@ -127,10 +147,10 @@ class ExerciseListActivity : AppCompatActivity() {
         return exerciseMenuLayout
     }
 
-    private fun createExerciseNameText(): TextView {
+    private fun createExerciseNameText(exercise: Exercise): TextView {
 
         val exerciseNameView = TextView(applicationContext)
-        exerciseNameView.text = "Exercise Name"
+        exerciseNameView.text = exercise.name
         exerciseNameView.setTextColor(Color.WHITE)
         exerciseNameView.textAlignment = View.TEXT_ALIGNMENT_TEXT_START
         exerciseNameView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22f)

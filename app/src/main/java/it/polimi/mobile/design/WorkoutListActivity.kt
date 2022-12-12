@@ -35,9 +35,6 @@ class WorkoutListActivity : AppCompatActivity() {
         binding = ActivityWorkoutListBinding.inflate(layoutInflater)
         setContentView(binding.root)
         firebaseAuth = FirebaseAuth.getInstance()
-        workoutRecyclerView=binding.recyclerView
-        workoutRecyclerView.layoutManager=LinearLayoutManager(this)
-        workoutRecyclerView.setHasFixedSize(false)
         workoutArrayList= arrayListOf<Workout>()
         database=FirebaseDatabase.getInstance().getReference("Workout")
         database.addValueEventListener(object :ValueEventListener{
@@ -49,8 +46,8 @@ class WorkoutListActivity : AppCompatActivity() {
                         workoutArrayList.add(workData!!)
 
                     }
-                    workoutAdapter= WorkoutAdapter(workoutArrayList)
-                    workoutRecyclerView.adapter=workoutAdapter
+                    showWorkouts(workoutArrayList)
+
 
                 }
             }
@@ -60,13 +57,14 @@ class WorkoutListActivity : AppCompatActivity() {
             }
 
         })
+        showWorkouts(workoutArrayList)
         binding.closeAddWorkout.setOnClickListener{
-            binding.workoutAddLayout.visibility = View.GONE
+
 
 
         }
         binding.addWorkoutsButton.setOnClickListener{
-            binding.workoutAddLayout.visibility=View.VISIBLE
+
         }
 
 
@@ -105,7 +103,7 @@ class WorkoutListActivity : AppCompatActivity() {
             val workoutLayout = createWorkoutCardLinearLayout()
 
             // Name
-            val workoutName = createWorkoutNameText()
+            val workoutName = createWorkoutNameText(workout)
             workoutLayout.addView(workoutName)
 
             // Stats
@@ -165,10 +163,10 @@ class WorkoutListActivity : AppCompatActivity() {
         return workoutLayout
     }
 
-    private fun createWorkoutNameText(): TextView {
+    private fun createWorkoutNameText(workout: Workout): TextView {
 
         val workoutNameView = TextView(applicationContext)
-        workoutNameView.text = "Workout Name"
+        workoutNameView.text = workout.name
         workoutNameView.setTextColor(Color.WHITE)
         workoutNameView.textAlignment = View.TEXT_ALIGNMENT_TEXT_START
         workoutNameView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24f)
