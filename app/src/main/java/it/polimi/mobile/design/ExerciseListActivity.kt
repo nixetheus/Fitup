@@ -55,10 +55,16 @@ class ExerciseListActivity : AppCompatActivity() {
         binding.confirmAddExerciseBtn.setOnClickListener{
             createExercise()
         }
+        binding.addExerciseButton.setOnClickListener{
+            binding.addExerciseCard.visibility=View.VISIBLE
+        }
+        binding.addExerciseClose.setOnClickListener{
+            binding.addExerciseCard.visibility=View.GONE
+        }
     }
     private fun createExercise(){
         val name=binding.exerciseNameField.text.toString()
-        val uid=firebaseAuth.uid.toString()
+
 
         database = FirebaseDatabase.getInstance().getReference("Exercise")
         val eId = database.push().key!!

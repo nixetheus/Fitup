@@ -126,18 +126,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
     }
-    private fun createExercise(workoutId:String,name: String?,type: ExerciseType){
-        database = FirebaseDatabase.getInstance().getReference("Exercise")
-        val eId=database.push().key!!
-    }
-    private fun createWorkout() {
-
-
-    }
-    private fun createWorkoutExercise(){
-        database=FirebaseDatabase.getInstance().getReference("WorkoutExercise")
-        val weId=database.push().key!!
-    }
 
 
 }

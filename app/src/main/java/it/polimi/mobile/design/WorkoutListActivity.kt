@@ -13,21 +13,19 @@ import android.widget.TextView
 import android.widget.Toast
 import android.widget.Toolbar
 import androidx.cardview.widget.CardView
-import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import it.polimi.mobile.design.adapter.WorkoutAdapter
+
 import it.polimi.mobile.design.databinding.ActivityWorkoutListBinding
 import it.polimi.mobile.design.entities.Workout
 
 class WorkoutListActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityWorkoutListBinding
-    private lateinit var workoutRecyclerView: RecyclerView
+
     private lateinit var workoutArrayList: ArrayList<Workout>
-    private lateinit var workoutAdapter: WorkoutAdapter
+
     private lateinit var database : DatabaseReference
     private lateinit var firebaseAuth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,13 +55,13 @@ class WorkoutListActivity : AppCompatActivity() {
             }
 
         })
-        showWorkouts(workoutArrayList)
         binding.closeAddWorkout.setOnClickListener{
-
+            binding.addWorkoutCard.visibility=View.GONE
 
 
         }
         binding.addWorkoutsButton.setOnClickListener{
+            binding.addWorkoutCard.visibility=View.VISIBLE
 
         }
 
