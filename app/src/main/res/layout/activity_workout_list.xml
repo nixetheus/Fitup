@@ -32,31 +32,26 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/addWorkoutText"
+                    android:id="@+id/WorkoutText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="45dp"
                     android:layout_weight="0.25"
                     android:fontFamily="@font/lato_bold"
-                    android:text="@string/add_workout_title"
+                    android:text="@string/add_exercise_title"
                     android:textAllCaps="false"
                     android:textColor="?colorOnPrimary"
                     android:textSize="24sp"
                     android:textStyle="bold" />
 
-                <Button
-                    android:id="@+id/closeAddWorkout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/lato_bold"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    android:textColor="?colorOnPrimary"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    app:iconPadding="0dp"
-                    tools:ignore="SpeakableTextPresentCheck" />
+                <ImageView
+                    android:id="@+id/addWorkoutClose"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginStart="20dp"
+                    android:contentDescription="@string/none"
+                    app:srcCompat="@drawable/ic_baseline_close_48" />
+
             </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -134,39 +129,22 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/searchWorkoutsBar"
+                <SearchView
                     android:layout_width="0dp"
-                    android:layout_height="45dp"
+                    android:layout_height="35dp"
                     android:layout_weight="1"
-                    android:textColorHint="#000000"
-                    app:boxBackgroundColor="?colorOnPrimary"
-                    app:boxCornerRadiusBottomEnd="25dp"
-                    app:boxCornerRadiusBottomStart="25dp"
-                    app:boxCornerRadiusTopEnd="25dp"
-                    app:boxCornerRadiusTopStart="25dp"
-                    app:boxStrokeWidth="0dp">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/lato"
-                        android:hint="@string/search_workouts"
-                        android:paddingStart="24dp"
-                        android:paddingEnd="24dp"
-                        android:textColor="@color/black"
-                        android:textColorHint="@color/black"
-                        android:textStyle="bold"
-                        tools:ignore="TouchTargetSizeCheck" />
-                </com.google.android.material.textfield.TextInputLayout>
+                    android:iconifiedByDefault="true"
+                    android:layoutDirection="rtl"
+                    android:queryHint="@string/search_workouts"
+                    android:searchIcon="@drawable/ic_baseline_search_30" />
 
                 <ImageView
                     android:id="@+id/addWorkoutsButton"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
-                    android:layout_marginStart="20dp"
                     android:contentDescription="@string/none"
-                    app:srcCompat="@drawable/gradient_0" />
+                    android:cropToPadding="false"
+                    app:srcCompat="@drawable/ic_baseline_add_48" />
 
             </LinearLayout>
 

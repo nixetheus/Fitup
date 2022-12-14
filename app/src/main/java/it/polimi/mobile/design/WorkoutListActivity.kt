@@ -58,7 +58,7 @@ class WorkoutListActivity : AppCompatActivity() {
 
         })
         showWorkouts(workoutArrayList)
-        binding.closeAddWorkout.setOnClickListener{
+        binding.addWorkoutClose.setOnClickListener{
 
 
 
