@@ -22,7 +22,7 @@ class HomeActivity : AppCompatActivity() {
         setContentView(binding.root)
         firebaseAuth = FirebaseAuth.getInstance()
         binding.nextBtn.setOnClickListener {
-
+            createUser()
         }
     }
     private fun createUser(){
@@ -33,7 +33,7 @@ class HomeActivity : AppCompatActivity() {
         val weight= binding.weight.editText?.text.toString()
         val g=binding.gender.selectedItem.toString()
         val date=LocalDateTime.now()
-        gender = if (g=="male")
+        gender = if (g=="Male")
             Gender.MALE
         else
             Gender.FEMALE
