@@ -61,7 +61,12 @@ class CentralActivity : AppCompatActivity() {
         })
 
 
-        showUser();
+        showUser()
+
+        binding.userImage.setOnClickListener{
+            val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
+        }
 
         binding.exercisesLink.setOnClickListener{
             val intent = Intent(this, ExerciseListActivity::class.java)

@@ -78,6 +78,7 @@
         <Button
             android:id="@+id/SignInBtn"
             style="@null"
+            android:stateListAnimator="@null"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="?colorPrimary"
@@ -97,6 +98,7 @@
         <Button
             android:id="@+id/SignUpbtn"
             style="@null"
+            android:stateListAnimator="@null"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"

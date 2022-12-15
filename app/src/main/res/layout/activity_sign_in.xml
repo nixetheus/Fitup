@@ -100,11 +100,13 @@
             android:textColor="?colorOnPrimary"
             android:textSize="17sp"
             android:textStyle="bold"
+            android:stateListAnimator="@null"
             app:rippleColor="@null" />
 
         <Button
             android:id="@+id/signup_login"
             style="@null"
+            android:stateListAnimator="@null"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

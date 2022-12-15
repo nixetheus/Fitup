@@ -104,6 +104,7 @@
             android:insetBottom="0dp"
             android:minHeight="53dp"
             android:text="@string/signup_btn"
+            android:stateListAnimator="@null"
             android:textSize="17sp"
             android:textStyle="bold" />
 
@@ -122,6 +123,7 @@
             android:minHeight="53dp"
             android:text="@string/login_btn_back"
             android:textSize="17sp"
+            android:stateListAnimator="@null"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
