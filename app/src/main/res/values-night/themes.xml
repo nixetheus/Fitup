@@ -12,7 +12,9 @@
         <!-- Tertiary brand color. -->
         <item name="colorTertiary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
         <!-- Customize your theme here. -->
+        <item name="android:navigationBarColor">?colorPrimaryVariant</item>
+        <item name="android:alertDialogTheme">@color/red_arms</item>
     </style>
 </resources>

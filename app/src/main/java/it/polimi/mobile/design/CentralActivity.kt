@@ -73,11 +73,11 @@ class CentralActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        binding.statsLinkText.setOnClickListener{
+        binding.statsLink.setOnClickListener{
 
         }
 
-        binding.workoutLinkText.setOnClickListener{
+        binding.workoutsLink.setOnClickListener{
             val intent = Intent(this, WorkoutListActivity::class.java)
             startActivity(intent)
         }

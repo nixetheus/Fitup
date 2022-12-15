@@ -11,10 +11,12 @@
         android:id="@+id/addExerciseCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        app:cardBackgroundColor="?colorSecondaryVariant"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="?colorSecondary"
+        android:visibility="gone"
+        app:cardBackgroundColor="@null"
         app:cardCornerRadius="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -25,8 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="40dp"
-            android:visibility="visible">
+            android:padding="40dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -43,13 +44,13 @@
                     android:text="@string/add_exercise_title"
                     android:textAllCaps="false"
                     android:textColor="?colorOnPrimary"
-                    android:textSize="24sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <ImageView
                     android:id="@+id/addExerciseClose"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_marginStart="20dp"
                     android:contentDescription="@string/none"
                     app:srcCompat="@drawable/ic_baseline_close_48" />

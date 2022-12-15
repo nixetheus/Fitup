@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/gradient_1"
     tools:context=".EditWorkoutActivity">
 
     <ScrollView
@@ -145,7 +146,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/lato_bold"
-                    android:text="@string/list_exercises_title"
+                    android:text="@string/workout_list_exercises_title"
                     android:textColor="?colorOnPrimary"
                     android:textSize="24sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -155,14 +156,14 @@
 
                 <ImageButton
                     android:id="@+id/imageButton"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:background="@null"
                     android:contentDescription="@string/none"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/gradient_0"
+                    app:srcCompat="@drawable/ic_baseline_add_48"
                     tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck,DuplicateSpeakableTextCheck" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
