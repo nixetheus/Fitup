@@ -26,7 +26,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:padding="40dp"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -132,6 +132,7 @@
                 android:orientation="horizontal">
 
                 <SearchView
+                    android:id="@+id/searchExercise"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"

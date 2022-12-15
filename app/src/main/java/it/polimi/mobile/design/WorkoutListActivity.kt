@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.Toolbar
@@ -25,6 +26,7 @@ class WorkoutListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWorkoutListBinding
 
     private lateinit var workoutArrayList: ArrayList<Workout>
+    private lateinit var tempWorkoutArrayList: ArrayList<Workout>
 
     private lateinit var database : DatabaseReference
     private lateinit var firebaseAuth: FirebaseAuth
@@ -34,6 +36,7 @@ class WorkoutListActivity : AppCompatActivity() {
         setContentView(binding.root)
         firebaseAuth = FirebaseAuth.getInstance()
         workoutArrayList= arrayListOf<Workout>()
+        tempWorkoutArrayList= arrayListOf<Workout>()
         database=FirebaseDatabase.getInstance().getReference("Workout")
         database.addValueEventListener(object :ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -70,6 +73,25 @@ class WorkoutListActivity : AppCompatActivity() {
         binding.confirmAddWorkoutBtn.setOnClickListener{
             createWorkout()
         }
+        binding.searchWorkout.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(p0: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(p0: String?): Boolean {
+                tempWorkoutArrayList.clear()
+                for (workout in workoutArrayList) {
+                    if (workout.name!!.contains(p0.toString()) || workout.type.toString().contains(p0.toString()))
+                        tempWorkoutArrayList.add(workout)
+                }
+
+                showWorkouts(tempWorkoutArrayList)
+
+
+                return false
+            }
+
+        })
     }
     private fun EventChangeListener(){
         database=FirebaseDatabase.getInstance().getReference("Workout")
@@ -91,6 +113,7 @@ class WorkoutListActivity : AppCompatActivity() {
     }
 
     private fun showWorkouts(workouts: List<Workout>) {
+        binding.workoutsListLayout.removeAllViews()
 
         val workoutsLayout = binding.workoutsListLayout
         for (workout in workouts) {

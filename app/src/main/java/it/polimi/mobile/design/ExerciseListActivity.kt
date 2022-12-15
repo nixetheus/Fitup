@@ -1,5 +1,6 @@
 package it.polimi.mobile.design
 
+import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Color
@@ -20,18 +21,24 @@ import it.polimi.mobile.design.databinding.ActivityExerciseListBinding
 import it.polimi.mobile.design.entities.Exercise
 import it.polimi.mobile.design.entities.Workout
 import it.polimi.mobile.design.enum.ExerciseType
+import java.util.*
+import kotlin.collections.ArrayList
 
 class ExerciseListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityExerciseListBinding
     private lateinit var database : DatabaseReference
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var exerciseArrayList: ArrayList<Exercise>
+    private lateinit var exerciseStringList: ArrayList<String>
+    private lateinit var tempExerciseArrayList:ArrayList<Exercise>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityExerciseListBinding.inflate(layoutInflater)
         setContentView(binding.root)
         firebaseAuth = FirebaseAuth.getInstance()
         exerciseArrayList= arrayListOf<Exercise>()
+        exerciseStringList= arrayListOf<String>()
+        tempExerciseArrayList= arrayListOf<Exercise>()
         database=FirebaseDatabase.getInstance().getReference("Exercise")
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -40,6 +47,8 @@ class ExerciseListActivity : AppCompatActivity() {
                     for (workSnap in snapshot.children){
                         val exerciseData=workSnap.getValue(Exercise::class.java)
                         exerciseArrayList.add(exerciseData!!)
+                        exerciseStringList.add(exerciseData.name!!)
+
 
                     }
                     showExercises(exerciseArrayList)
@@ -61,6 +70,38 @@ class ExerciseListActivity : AppCompatActivity() {
         binding.addExerciseClose.setOnClickListener{
             binding.addExerciseCard.visibility=View.GONE
         }
+
+        binding.searchExercise.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(p0: String?): Boolean {
+                /*binding.searchExercise.clearFocus()
+                if(exerciseStringList.contains(p0)){
+
+                    for (exercise in exerciseArrayList) {
+                        if (exercise.name == p0 || exercise.type.toString() == p0)
+                            tempExerciseArrayList.add(exercise)
+                    }
+                    binding.exercisesListLayout.removeAllViews()
+                    showExercises(tempExerciseArrayList)
+
+                }*/
+                return false
+            }
+
+            override fun onQueryTextChange(p0: String?): Boolean {
+                tempExerciseArrayList.clear()
+                for (exercise in exerciseArrayList) {
+                        if (exercise.name!!.contains(p0.toString()) || exercise.type.toString().contains(p0.toString()))
+                            tempExerciseArrayList.add(exercise)
+                }
+
+                showExercises(tempExerciseArrayList)
+
+
+                return false
+
+            }
+
+        })
     }
     private fun createExercise(){
         val name=binding.exerciseNameField.text.toString()
@@ -78,7 +119,7 @@ class ExerciseListActivity : AppCompatActivity() {
     }
 
     private fun showExercises(exercises: List<Exercise>) {
-
+        binding.exercisesListLayout.removeAllViews()
         val exercisesLayout = binding.exercisesListLayout
         for (exercise in exercises) {
 
