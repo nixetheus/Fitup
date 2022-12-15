@@ -19,8 +19,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.view.marginBottom
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import it.polimi.mobile.design.databinding.ActivityCentralBinding
 import it.polimi.mobile.design.entities.Workout
 import java.sql.Time
@@ -31,12 +30,36 @@ class CentralActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCentralBinding
     private lateinit var database : DatabaseReference
     private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var workoutArrayList:ArrayList<Workout>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCentralBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        workoutArrayList= arrayListOf<Workout>()
         firebaseAuth = FirebaseAuth.getInstance()
+        database= FirebaseDatabase.getInstance().getReference("Workout")
+        database.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                workoutArrayList.clear()
+                if (snapshot.exists()) {
+                    for (workSnap in snapshot.children) {
+                        val workData = workSnap.getValue(Workout::class.java)
+                        workoutArrayList.add(workData!!)
+
+                    }
+                    showTopWorkouts(workoutArrayList)
+
+
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
+
 
         showUser();
 
@@ -53,6 +76,7 @@ class CentralActivity : AppCompatActivity() {
             val intent = Intent(this, WorkoutListActivity::class.java)
             startActivity(intent)
         }
+
     }
     private fun showUser(){
         val uid = firebaseAuth.uid.toString()
@@ -66,8 +90,6 @@ class CentralActivity : AppCompatActivity() {
     }
 
     private fun showTopWorkouts(workouts: List<Workout>) {
-        database= FirebaseDatabase.getInstance().getReference("Workout")
-        database.get()
         val workoutsLayout = binding.workoutsLayout
         for (workout in workouts) {
 
@@ -77,7 +99,7 @@ class CentralActivity : AppCompatActivity() {
             val workoutLayout = createWorkoutCardLinearLayout()
 
             // Name
-            val workoutName = createWorkoutNameText()
+            val workoutName = createWorkoutNameText(workout)
             workoutLayout.addView(workoutName)
 
             // Stats
@@ -110,6 +132,12 @@ class CentralActivity : AppCompatActivity() {
             workoutLayout.addView(statsLayout)
             workoutCard.addView(workoutLayout)
             workoutsLayout.addView(workoutCard)
+            workoutCard.setOnClickListener{
+                val intent = Intent(this, EditWorkoutActivity::class.java)
+                intent.putExtra("workout",workout /*as java.io.Serializable*/)
+                startActivity(intent)
+
+            }
         }
     }
 
@@ -137,10 +165,10 @@ class CentralActivity : AppCompatActivity() {
         return workoutLayout
     }
 
-    private fun createWorkoutNameText(): TextView {
+    private fun createWorkoutNameText(workout: Workout): TextView {
 
         val workoutNameView = TextView(applicationContext)
-        workoutNameView.text = "Workout Name"
+        workoutNameView.text = workout.name
         workoutNameView.setTextColor(Color.WHITE)
         workoutNameView.textAlignment = TEXT_ALIGNMENT_TEXT_START
         workoutNameView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24f)

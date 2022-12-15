@@ -197,7 +197,6 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:fontFamily="@font/lato_bold"
-                            android:text="Exercise Name"
                             android:textAlignment="center"
                             android:textColor="?colorOnSecondary"
                             android:textSize="20sp" />
