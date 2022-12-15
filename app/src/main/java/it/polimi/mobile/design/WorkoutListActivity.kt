@@ -38,14 +38,18 @@ class WorkoutListActivity : AppCompatActivity() {
         workoutArrayList= arrayListOf<Workout>()
         tempWorkoutArrayList= arrayListOf<Workout>()
         database=FirebaseDatabase.getInstance().getReference("Workout")
+        val uid = firebaseAuth.uid.toString()
         database.addValueEventListener(object :ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 workoutArrayList.clear()
                 if (snapshot.exists()){
                     for (workSnap in snapshot.children){
-                        val workData=workSnap.getValue(Workout::class.java)
-                        workoutArrayList.add(workData!!)
 
+                        val workData=workSnap.getValue(Workout::class.java)
+                        if (workData != null) {
+                            if (workData.userId==uid)
+                                workoutArrayList.add(workData!!)
+                        }
                     }
                     showWorkouts(workoutArrayList)
 
