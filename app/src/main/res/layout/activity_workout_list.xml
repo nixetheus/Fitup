@@ -7,12 +7,75 @@
     android:background="@drawable/popup_gradient"
     tools:context=".WorkoutListActivity">
 
+    <ScrollView
+        android:id="@+id/scrollView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/none"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ScrollViewCount">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="40dp">
+
+            <TextView
+                android:id="@+id/workoutsListTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/lato_bold"
+                android:text="@string/list_workouts_title"
+                android:textColor="?colorOnPrimary"
+                android:textSize="30sp" />
+
+            <LinearLayout
+                android:id="@+id/workoutsBarLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="35dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <SearchView
+                    android:id="@+id/searchWorkout"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_weight="1"
+                    android:iconifiedByDefault="true"
+                    android:layoutDirection="rtl"
+                    android:queryHint="@string/search_workouts"
+                    android:searchIcon="@drawable/ic_baseline_search_30" />
+
+                <ImageView
+                    android:id="@+id/addWorkoutsButton"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:contentDescription="@string/none"
+                    android:cropToPadding="false"
+                    app:srcCompat="@drawable/ic_baseline_add_48" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/workoutsListLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="50dp"
+                android:orientation="vertical" />
+        </LinearLayout>
+    </ScrollView>
+
     <androidx.cardview.widget.CardView
         android:id="@+id/workoutMenuCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/gradient_1"
-        android:visibility="gone"
+        android:visibility="invisible"
         app:cardBackgroundColor="@android:color/transparent"
         app:cardCornerRadius="0dp"
         app:cardElevation="0dp"
@@ -20,7 +83,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:visibility="gone">
+        tools:visibility="invisible">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -28,9 +91,19 @@
             android:background="@drawable/popup_gradient"
             android:orientation="vertical"
             android:paddingStart="40dp"
-            android:paddingTop="100dp"
+            android:paddingTop="175dp"
             android:paddingEnd="40dp"
             android:paddingBottom="40dp">
+
+            <ImageView
+                android:id="@+id/closeModifyExercise2"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_gravity="end"
+                android:layout_marginBottom="50dp"
+                android:contentDescription="@string/none"
+                android:layoutDirection="ltr"
+                app:srcCompat="@drawable/ic_baseline_close_48" />
 
             <TextView
                 android:id="@+id/workoutMenuName"
@@ -88,6 +161,8 @@
         android:visibility="invisible"
         app:cardBackgroundColor="@android:color/transparent"
         app:cardCornerRadius="15dp"
+        app:cardElevation="0dp"
+        app:cardMaxElevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -98,10 +173,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/gradient_1"
+            android:background="@drawable/popup_gradient"
             android:orientation="vertical"
             android:paddingStart="40dp"
-            android:paddingTop="100dp"
+            android:paddingTop="225dp"
             android:paddingEnd="40dp"
             android:paddingBottom="40dp">
 
@@ -177,68 +252,5 @@
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
-
-    <ScrollView
-        android:id="@+id/scrollView3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/none"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="ScrollViewCount">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="40dp">
-
-            <TextView
-                android:id="@+id/workoutsListTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:fontFamily="@font/lato_bold"
-                android:text="@string/list_workouts_title"
-                android:textColor="?colorOnPrimary"
-                android:textSize="30sp" />
-
-            <LinearLayout
-                android:id="@+id/workoutsBarLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="35dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <SearchView
-                    android:id="@+id/searchWorkout"
-                    android:layout_width="0dp"
-                    android:layout_height="35dp"
-                    android:layout_weight="1"
-                    android:iconifiedByDefault="true"
-                    android:layoutDirection="rtl"
-                    android:queryHint="@string/search_workouts"
-                    android:searchIcon="@drawable/ic_baseline_search_30" />
-
-                <ImageView
-                    android:id="@+id/addWorkoutsButton"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:contentDescription="@string/none"
-                    android:cropToPadding="false"
-                    app:srcCompat="@drawable/ic_baseline_add_48" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/workoutsListLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="50dp"
-                android:orientation="vertical" />
-        </LinearLayout>
-    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

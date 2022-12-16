@@ -14,6 +14,7 @@ import android.widget.TextView
 import android.widget.Toast
 import android.widget.Toolbar
 import androidx.cardview.widget.CardView
+import androidx.core.content.res.ResourcesCompat
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -123,7 +124,6 @@ class WorkoutListActivity : AppCompatActivity() {
         for (workout in workouts) {
 
             val workoutCard = createWorkoutCard()
-            workoutCard.setCardBackgroundColor(Color.RED)
 
             val workoutLayout = createWorkoutCardLinearLayout()
 
@@ -170,10 +170,9 @@ class WorkoutListActivity : AppCompatActivity() {
 
         val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, Toolbar.LayoutParams.MATCH_PARENT)
 
-        workoutCard.radius = 15.toPx().toFloat()
-        params.bottomMargin = 30.toPx()
+        workoutCard.radius = 10.toPx().toFloat()
+        params.bottomMargin = 20.toPx()
         workoutCard.layoutParams = params
-        workoutCard.setContentPadding(20.toPx(), 20.toPx(), 20.toPx(), 20.toPx())
 
         return workoutCard
 
@@ -185,6 +184,8 @@ class WorkoutListActivity : AppCompatActivity() {
             LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT
         )
         workoutLayout.orientation = LinearLayout.VERTICAL
+        workoutLayout.background = theme.getDrawable(R.drawable.core_background)
+        workoutLayout.setPadding(20.toPx(), 20.toPx(), 20.toPx(), 20.toPx())
         return workoutLayout
     }
 
@@ -194,7 +195,7 @@ class WorkoutListActivity : AppCompatActivity() {
         workoutNameView.text = workout.name
         workoutNameView.setTextColor(Color.WHITE)
         workoutNameView.textAlignment = View.TEXT_ALIGNMENT_TEXT_START
-        workoutNameView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24f)
+        workoutNameView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28f)
         workoutNameView.typeface = Typeface.create("Lato Bold", Typeface.BOLD)
 
         val params = LinearLayout.LayoutParams(
@@ -249,7 +250,7 @@ class WorkoutListActivity : AppCompatActivity() {
         workoutNameView.text = value
         workoutNameView.setTextColor(Color.WHITE)
         workoutNameView.textAlignment = View.TEXT_ALIGNMENT_CENTER
-        workoutNameView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
+        workoutNameView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
         workoutNameView.typeface = Typeface.create("Lato", Typeface.BOLD)
         workoutNameView.isAllCaps = true
 

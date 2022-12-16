@@ -82,5 +82,7 @@
     <!-- Workout Menu -->
     <string name="modify_workout">Modify</string>
     <string name="delete_workout">Delete</string>
+    <!-- Add Exercise To Workout Menu -->
+    <string name="exercise_label">Exercise</string>
 
 </resources>

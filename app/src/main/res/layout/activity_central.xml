@@ -108,10 +108,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="200dp"
                     android:orientation="horizontal"
-                    android:paddingStart="40dp"
+                    android:paddingStart="25dp"
                     android:paddingTop="20dp"
                     android:paddingEnd="40dp"
-                    android:paddingBottom="20dp"/>
+                    android:paddingBottom="20dp" />
             </HorizontalScrollView>
 
             <androidx.cardview.widget.CardView

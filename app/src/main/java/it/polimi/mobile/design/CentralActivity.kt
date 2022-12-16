@@ -153,7 +153,7 @@ class CentralActivity : AppCompatActivity() {
 
         val params = LinearLayout.LayoutParams(250.toPx(), LayoutParams.MATCH_PARENT)
 
-        workoutCard.radius = 3.toPx().toFloat()
+        workoutCard.radius = 10.toPx().toFloat()
         params.marginEnd = 20.toPx()
         workoutCard.layoutParams = params
         workoutCard.setCardBackgroundColor(Color.TRANSPARENT)
@@ -169,7 +169,9 @@ class CentralActivity : AppCompatActivity() {
         )
         workoutLayout.orientation = VERTICAL
         workoutLayout.setPadding(20.toPx(), 20.toPx(), 20.toPx(), 20.toPx())
-        workoutLayout.background = theme.getDrawable(R.drawable.primary_color_drawable)
+        val test = listOf(R.drawable.arms_background, R.drawable.core_background, R.drawable.legs_background,
+        R.drawable.mind_background)
+        workoutLayout.background = theme.getDrawable(test.random())
         return workoutLayout
     }
 
