@@ -19,7 +19,7 @@ import java.time.temporal.ChronoUnit
 
 class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(context, attrs) {
 
-    private val titleStrip = 75.toPx()
+    private val titleStrip = 40.toPx()
     private val fakePadding = 40.toPx()
 
     private var minY: Float = 0f
@@ -44,8 +44,6 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
             DataPoint(LocalDateTime.of(2022, 10, 8, 12, 0), 52.1f),
             DataPoint(LocalDateTime.of(2022, 10, 9, 12, 0), 55.9f),
             DataPoint(LocalDateTime.of(2022, 10, 10, 12, 0), 58.6f))
-        post{drawName()}
-        post{drawDifference()}
         post{drawDataPoints()}
     }
 
@@ -62,44 +60,6 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
             minY = dataPoints.minOf { el -> el.yCoordinate }
             maxY = dataPoints.maxOf { el -> el.yCoordinate }
         }
-    }
-
-    private fun drawName() {
-
-        val nameView = TextView(context)
-
-        nameView.text = "Body Weight"
-        nameView.setTextColor(Color.WHITE)
-        nameView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24f)
-        nameView.typeface = Typeface.create("Lato Bold", Typeface.BOLD)
-
-        val params = LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT,
-            ConstraintLayout.LayoutParams.WRAP_CONTENT)
-        params.leftMargin = fakePadding
-        params.topMargin = fakePadding / 2
-
-        addView(nameView, params)
-    }
-
-    private fun drawDifference() {
-
-        val nameView = TextView(context)
-
-        nameView.text =
-            if (dataPoints.size == 1) "0"
-            else String.format("%.1f", ((dataPoints[dataPoints.size - 1].yCoordinate -
-                    dataPoints[dataPoints.size - 2].yCoordinate))) + " Kg"  // TODO
-
-        nameView.setTextColor(Color.WHITE)
-        nameView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
-        nameView.typeface = Typeface.create("Lato Bold", Typeface.BOLD)
-
-        val params = LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT,
-            ConstraintLayout.LayoutParams.WRAP_CONTENT)
-        params.leftMargin = fakePadding
-        params.topMargin = (fakePadding * 1.35).toInt()
-
-        addView(nameView, params)
     }
 
     private fun drawDataPoints() {
@@ -147,7 +107,7 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
 
     private fun drawGrid(canvas: Canvas) {
 
-        val n = 4
+        val n = 2
         val linesPaint = Paint()
         linesPaint.strokeWidth = 1f
         linesPaint.style = Paint.Style.STROKE

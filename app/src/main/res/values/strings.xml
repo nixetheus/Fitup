@@ -30,6 +30,7 @@
     <!-- HOME -->
     <string name="welcome">Welcome,</string>
     <string name="welcome_workouts">Chosen For You</string>
+    <string name="popular_workouts">Most Popular</string>
     <string name="level_label">Lvl</string>
     <string name="strongest_stat_label">Ace Stat</string>
     <string name="bpm_stat_label">Avg. Bpm</string>
@@ -84,5 +85,7 @@
     <string name="delete_workout">Delete</string>
     <!-- Add Exercise To Workout Menu -->
     <string name="exercise_label">Exercise</string>
+    <string name="type_label">Type</string>
+    <string name="calories_label">Kcal</string>
 
 </resources>

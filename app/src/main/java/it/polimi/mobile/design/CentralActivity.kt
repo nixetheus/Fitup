@@ -51,7 +51,7 @@ class CentralActivity : AppCompatActivity() {
 
                     }
                     showTopWorkouts(workoutArrayList)
-
+                    showPopularWorkouts(workoutArrayList)
 
                 }
             }
@@ -76,7 +76,8 @@ class CentralActivity : AppCompatActivity() {
         }
 
         binding.statsLink.setOnClickListener{
-
+            val intent = Intent(this, StatsActivity::class.java)
+            startActivity(intent)
         }
 
         binding.workoutsLink.setOnClickListener{
@@ -97,7 +98,15 @@ class CentralActivity : AppCompatActivity() {
     }
 
     private fun showTopWorkouts(workouts: List<Workout>) {
-        val workoutsLayout = binding.workoutsLayout
+        showWorkouts(workouts, binding.workoutsLayout)
+    }
+
+    private fun showPopularWorkouts(workouts: List<Workout>) {
+        showWorkouts(workouts, binding.workoutsPopularLayout)
+    }
+
+    private fun showWorkouts(workouts: List<Workout>, layout: LinearLayout) {
+        val workoutsLayout = layout
         for (workout in workouts) {
 
             val workoutCard = createWorkoutCard()
