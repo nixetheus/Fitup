@@ -75,4 +75,12 @@
     <!-- Sync Preferences -->
     <string name="language">Choose your language</string>
 
+    <!-- MENUS -->
+    <!-- Exercise Menu -->
+    <string name="modify_exercise">Modify</string>
+    <string name="delete_exercise">Delete</string>
+    <!-- Workout Menu -->
+    <string name="modify_workout">Modify</string>
+    <string name="delete_workout">Delete</string>
+
 </resources>

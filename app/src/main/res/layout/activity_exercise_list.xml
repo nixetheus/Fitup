@@ -11,13 +11,9 @@
         android:id="@+id/addExerciseCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="?colorSecondary"
-        android:visibility="gone"
+        android:visibility="invisible"
         app:cardBackgroundColor="@null"
-        app:cardCornerRadius="15dp"
+        app:cardCornerRadius="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,8 +22,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@drawable/popup_gradient"
             android:orientation="vertical"
-            android:padding="40dp">
+            android:paddingStart="40dp"
+            android:paddingTop="100dp"
+            android:paddingEnd="40dp"
+            android:paddingBottom="40dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -44,7 +44,7 @@
                     android:text="@string/add_exercise_title"
                     android:textAllCaps="false"
                     android:textColor="?colorOnPrimary"
-                    android:textSize="20sp"
+                    android:textSize="22sp"
                     android:textStyle="bold" />
 
                 <ImageView
@@ -60,7 +60,9 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="35dp">
+                android:layout_marginBottom="35dp"
+                app:boxBackgroundColor="@android:color/transparent"
+                app:boxBackgroundMode="outline">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/exerciseNameField"
@@ -82,15 +84,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:backgroundTint="?colorOnPrimary"
+                android:backgroundTint="@android:color/transparent"
                 android:fontFamily="@font/lato"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
                 android:paddingStart="40dp"
                 android:paddingEnd="40dp"
+                android:stateListAnimator="@null"
                 android:text="@string/add_confirm"
-                android:textColor="?colorPrimary"
-                android:textSize="14sp"
+                android:textColor="?colorOnPrimary"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 app:cornerRadius="10dp"
                 tools:ignore="SpeakableTextPresentCheck" />

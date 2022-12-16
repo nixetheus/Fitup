@@ -17,6 +17,7 @@ import android.widget.TextView
 import android.widget.Toolbar.LayoutParams
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.marginBottom
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -36,6 +37,7 @@ class CentralActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityCentralBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         workoutArrayList= arrayListOf<Workout>()
         firebaseAuth = FirebaseAuth.getInstance()
         database= FirebaseDatabase.getInstance().getReference("Workout")
@@ -99,7 +101,6 @@ class CentralActivity : AppCompatActivity() {
         for (workout in workouts) {
 
             val workoutCard = createWorkoutCard()
-            workoutCard.setCardBackgroundColor(Color.RED)
 
             val workoutLayout = createWorkoutCardLinearLayout()
 
@@ -152,10 +153,10 @@ class CentralActivity : AppCompatActivity() {
 
         val params = LinearLayout.LayoutParams(250.toPx(), LayoutParams.MATCH_PARENT)
 
-        workoutCard.radius = 15.toPx().toFloat()
+        workoutCard.radius = 3.toPx().toFloat()
         params.marginEnd = 20.toPx()
         workoutCard.layoutParams = params
-        workoutCard.setContentPadding(20.toPx(), 20.toPx(), 20.toPx(), 20.toPx())
+        workoutCard.setCardBackgroundColor(Color.TRANSPARENT)
 
         return workoutCard
 
@@ -167,6 +168,8 @@ class CentralActivity : AppCompatActivity() {
             LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT
         )
         workoutLayout.orientation = VERTICAL
+        workoutLayout.setPadding(20.toPx(), 20.toPx(), 20.toPx(), 20.toPx())
+        workoutLayout.background = theme.getDrawable(R.drawable.primary_color_drawable)
         return workoutLayout
     }
 
