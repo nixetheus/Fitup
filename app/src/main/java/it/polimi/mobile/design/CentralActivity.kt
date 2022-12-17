@@ -110,6 +110,7 @@ class CentralActivity : AppCompatActivity() {
         for (workout in workouts) {
 
             val workoutCard = createWorkoutCard()
+            workoutCard.elevation = 0.toPx().toFloat()
 
             val workoutLayout = createWorkoutCardLinearLayout()
 

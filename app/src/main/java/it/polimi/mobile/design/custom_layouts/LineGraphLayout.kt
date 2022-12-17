@@ -6,6 +6,7 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -19,7 +20,7 @@ import java.time.temporal.ChronoUnit
 
 class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(context, attrs) {
 
-    private val titleStrip = 40.toPx()
+    private val titleStrip = 50.toPx()
     private val fakePadding = 40.toPx()
 
     private var minY: Float = 0f
@@ -38,13 +39,21 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
     init {
 
         setWillNotDraw(false)
+
         // TODO: testing
-        dataPoints = listOf(DataPoint(LocalDateTime.of(2022, 10, 6, 12, 0), 60.3f),
-            DataPoint(LocalDateTime.of(2022, 10, 7, 12, 0), 57.4f),
-            DataPoint(LocalDateTime.of(2022, 10, 8, 12, 0), 52.1f),
-            DataPoint(LocalDateTime.of(2022, 10, 9, 12, 0), 55.9f),
-            DataPoint(LocalDateTime.of(2022, 10, 10, 12, 0), 58.6f))
+        dataPoints = listOf(DataPoint(LocalDateTime.of(2022, 5, 6, 12, 0), 60.3f),
+            DataPoint(LocalDateTime.of(2022, 7, 7, 12, 0), 57.4f),
+            DataPoint(LocalDateTime.of(2022, 7, 8, 12, 0), 52.1f),
+            DataPoint(LocalDateTime.of(2022, 8, 9, 12, 0), 55.9f),
+            DataPoint(LocalDateTime.of(2022, 12, 10, 12, 0), 58.6f))
+
+        // Draw
         post{drawDataPoints()}
+    }
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        setMeasuredDimension((dataPoints.size * 100).toPx(), heightMeasureSpec)
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -63,6 +72,7 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
     }
 
     private fun drawDataPoints() {
+
         val dataPointSize = Constant.DATA_BUTTON_SIZE
         for (point in dataPoints) {
 
@@ -107,7 +117,7 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
 
     private fun drawGrid(canvas: Canvas) {
 
-        val n = 2
+        val n = 4
         val linesPaint = Paint()
         linesPaint.strokeWidth = 1f
         linesPaint.style = Paint.Style.STROKE

@@ -88,4 +88,14 @@
     <string name="type_label">Type</string>
     <string name="calories_label">Kcal</string>
 
+    <!-- PLAY -->
+    <string name="start_button">Start</string>
+    <string name="stop_button">Stop</string>
+    <string name="missing_time">00:00:00</string>
+    <string name="exp_label">Exp:</string>
+    <string name="next_up_label">Next Up:</string>
+    <string name="current_exercise_label">Current Exercise</string>
+    <string name="begin_exercise_button">Begin</string>
+    <string name="next_up_button">Next</string>
+
 </resources>
