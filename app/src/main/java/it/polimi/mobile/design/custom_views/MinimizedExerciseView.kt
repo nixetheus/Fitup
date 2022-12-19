@@ -33,14 +33,14 @@ class MinimizedExerciseView(context: Context, attrs: AttributeSet? = null) : Vie
         pointPaint.strokeWidth = dataPointSize.toFloat() / 10
         pointPaint.strokeCap = Paint.Cap.ROUND
 
+        pointPaint.color = Color.BLACK
+        pointPaint.style = Paint.Style.FILL
+        canvas.drawCircle((dataPointSize / 2f), (dataPointSize / 2f),
+            pointPaint.strokeWidth * 2.75f, pointPaint)
+
         pointPaint.color = Color.WHITE
         pointPaint.style = Paint.Style.STROKE
         canvas.drawCircle((dataPointSize / 2f), (dataPointSize / 2f),
-            pointPaint.strokeWidth * sqrt(2f), pointPaint)
-
-        pointPaint.color = Color.WHITE
-        pointPaint.style = Paint.Style.FILL
-        canvas.drawCircle((dataPointSize / 2f), (dataPointSize / 2f),
-            pointPaint.strokeWidth * sqrt(2f), pointPaint)
+            pointPaint.strokeWidth * 2.75f, pointPaint)
     }
 }
