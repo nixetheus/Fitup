@@ -66,7 +66,7 @@ class CentralActivity : AppCompatActivity() {
         showUser()
 
         binding.userImage.setOnClickListener{
-            val intent = Intent(this, SettingsActivity::class.java)
+            val intent = Intent(this, WorkoutPlayActivity::class.java)
             startActivity(intent)
         }
 

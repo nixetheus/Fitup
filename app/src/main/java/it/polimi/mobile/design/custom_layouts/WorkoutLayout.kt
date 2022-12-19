@@ -13,7 +13,7 @@ import it.polimi.mobile.design.helpers.Constant
 
 class WorkoutLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(context, attrs) {
 
-    private val distanceY = 80.toPx()
+    private val distanceY = 100.toPx()
     private val fakePadding = 80.toPx()
 
     private var exercises: List<Exercise> = listOf()
@@ -25,7 +25,7 @@ class WorkoutLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(con
     init {
 
         setWillNotDraw(false)
-        exercises = listOf(Exercise(), Exercise(), Exercise(), Exercise(), Exercise(), Exercise())
+        exercises = listOf(Exercise(), Exercise(), Exercise(), Exercise(), Exercise(), Exercise(), Exercise(), Exercise())
         post{drawExercises()}
     }
 
@@ -63,9 +63,20 @@ class WorkoutLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(con
         linesPaint.strokeCap = Paint.Cap.ROUND
 
         for (exerciseIndex in 0 until exercises.size - 1) {
+
+            // Draw bottom
             canvas.drawLine(
                 fakePadding + (exerciseIndex % 2) * (width - 2f  * fakePadding),
                 (fakePadding / 2) + exerciseIndex * distanceY.toFloat(),
+                fakePadding + (exerciseIndex % 2) * (width - 2f  * fakePadding),
+                (fakePadding / 2) + (exerciseIndex + 1) * distanceY.toFloat(),
+                linesPaint
+            )
+
+            // If even draw bottom-right else draw bottom left
+            canvas.drawLine(
+                fakePadding + (exerciseIndex % 2) * (width - 2f  * fakePadding),
+                (fakePadding / 2) + (exerciseIndex + 1) * distanceY.toFloat(),
                 fakePadding + ((exerciseIndex + 1) % 2) * (width - 2f  * fakePadding),
                 (fakePadding / 2) + (exerciseIndex + 1) * distanceY.toFloat(),
                 linesPaint
