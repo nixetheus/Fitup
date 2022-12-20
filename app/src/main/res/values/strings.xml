@@ -5,9 +5,23 @@
     <string name="back_btn">Back</string>
     <string name="next_btn">Next</string>
     <string-array name="sex">
+
         <item>Male</item>
         <item>Female</item>
     </string-array>
+    <string-array name="type_exercise">
+
+        <item>Arms</item>
+        <item>Legs</item>
+        <item>Abdomen</item>
+        <item>Chest</item>
+    </string-array>
+
+    <string name="facebook_app_id">3465451120365237</string>
+    <string name="fb_login_protocol_scheme">fb1234</string>
+    <string name="facebook_client_token">3693b90df68dbe71408081b07cb74f44</string>
+
+
     <!-- LOGIN -->
     <string name="welcome_title">Welcome</string>
     <string name="welcome_sub">Your fitness journey\n starts here</string>

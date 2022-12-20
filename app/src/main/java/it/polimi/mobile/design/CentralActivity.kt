@@ -5,25 +5,23 @@ import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Typeface
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View.*
 import android.widget.LinearLayout
 import android.widget.LinearLayout.HORIZONTAL
 import android.widget.LinearLayout.VERTICAL
-import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toolbar.LayoutParams
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
-import androidx.core.content.res.ResourcesCompat
-import androidx.core.view.marginBottom
+import com.facebook.login.LoginManager
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import it.polimi.mobile.design.databinding.ActivityCentralBinding
 import it.polimi.mobile.design.entities.Workout
-import java.sql.Time
 
 
 class CentralActivity : AppCompatActivity() {
@@ -69,7 +67,18 @@ class CentralActivity : AppCompatActivity() {
             val intent = Intent(this, WorkoutPlayActivity::class.java)
             startActivity(intent)
         }
+        binding.welcomeView.setOnClickListener{
+            firebaseAuth.signOut()
+            LoginManager.getInstance().logOut()
+            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
+            val googleSignInClient = GoogleSignIn.getClient(this, gso)
+            googleSignInClient.signOut()
+            finish()
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
 
+        
         binding.exercisesLink.setOnClickListener{
             val intent = Intent(this, ExerciseListActivity::class.java)
             startActivity(intent)

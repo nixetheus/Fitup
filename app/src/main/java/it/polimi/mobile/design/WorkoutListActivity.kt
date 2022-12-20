@@ -25,10 +25,8 @@ import it.polimi.mobile.design.entities.Workout
 class WorkoutListActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityWorkoutListBinding
-
     private lateinit var workoutArrayList: ArrayList<Workout>
     private lateinit var tempWorkoutArrayList: ArrayList<Workout>
-
     private lateinit var database : DatabaseReference
     private lateinit var firebaseAuth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {

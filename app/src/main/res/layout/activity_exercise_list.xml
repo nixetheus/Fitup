@@ -186,10 +186,11 @@
                     android:paddingEnd="20dp">
 
                     <Spinner
-                        android:id="@+id/spinner2"
+                        android:id="@+id/typeOfEx"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:entries="@array/type_exercise"
                         tools:ignore="SpeakableTextPresentCheck" />
 
                     <TextView

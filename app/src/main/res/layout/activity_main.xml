@@ -66,15 +66,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <ImageButton
-            android:id="@+id/buttonGoogle"
-            android:layout_width="match_parent"
-            android:layout_height="53dp"
-            android:adjustViewBounds="false"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/google"
-            tools:ignore="SpeakableTextPresentCheck" />
-
         <Button
             android:id="@+id/SignInBtn"
             style="@null"

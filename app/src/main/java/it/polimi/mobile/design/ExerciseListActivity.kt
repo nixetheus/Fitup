@@ -29,7 +29,7 @@ class ExerciseListActivity : AppCompatActivity() {
     private lateinit var database : DatabaseReference
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var exerciseArrayList: ArrayList<Exercise>
-    private lateinit var exerciseStringList: ArrayList<String>
+
     private lateinit var tempExerciseArrayList:ArrayList<Exercise>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +37,7 @@ class ExerciseListActivity : AppCompatActivity() {
         setContentView(binding.root)
         firebaseAuth = FirebaseAuth.getInstance()
         exerciseArrayList= arrayListOf<Exercise>()
-        exerciseStringList= arrayListOf<String>()
+
         tempExerciseArrayList= arrayListOf<Exercise>()
         database=FirebaseDatabase.getInstance().getReference("Exercise")
         database.addValueEventListener(object : ValueEventListener {
@@ -46,10 +46,8 @@ class ExerciseListActivity : AppCompatActivity() {
                 if (snapshot.exists()){
                     for (workSnap in snapshot.children){
                         val exerciseData=workSnap.getValue(Exercise::class.java)
-                        exerciseArrayList.add(exerciseData!!)
-                        exerciseStringList.add(exerciseData.name!!)
-
-
+                        if (exerciseData!=null)
+                            exerciseArrayList.add(exerciseData!!)
                     }
                     showExercises(exerciseArrayList)
 
@@ -104,12 +102,22 @@ class ExerciseListActivity : AppCompatActivity() {
         })
     }
     private fun createExercise(){
+        val exType: ExerciseType
         val name=binding.exerciseNameField.text.toString()
-
+        val kcalPerReps=binding.kcalInputValue.text.toString()
+        val exerciseType= binding.typeOfEx.selectedItem.toString()
+        exType= if (exerciseType=="Arms")
+            ExerciseType.ARMS
+        else if (exerciseType=="Legs")
+            ExerciseType.LEGS
+        else if(exerciseType=="Chest")
+            ExerciseType.CHEST
+        else
+            ExerciseType.ABDOMEN
 
         database = FirebaseDatabase.getInstance().getReference("Exercise")
         val eId = database.push().key!!
-        val exercise = Exercise(eId, name, "60", ExerciseType.ARMS, "test")
+        val exercise = Exercise(eId, name, kcalPerReps, exType, "test")
         database.child(name).setValue(exercise).addOnSuccessListener {
             Toast.makeText(this, "Successfully saved!!", Toast.LENGTH_SHORT).show()
             val intent = Intent(this, ExerciseListActivity::class.java)

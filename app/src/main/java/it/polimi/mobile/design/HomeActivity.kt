@@ -32,7 +32,7 @@ class HomeActivity : AppCompatActivity() {
         val age= binding.age.editText?.text.toString()
         val weight= binding.weight.editText?.text.toString()
         val g=binding.gender.selectedItem.toString()
-        val date=LocalDateTime.now()
+
         gender = if (g=="Male")
             Gender.MALE
         else

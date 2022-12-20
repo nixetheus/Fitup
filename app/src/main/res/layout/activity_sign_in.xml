@@ -7,6 +7,27 @@
     android:background="@drawable/gradient_1"
     tools:context=".SignInActivity">
 
+
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/buttonGoogle2"
+        android:layout_width="63dp"
+        android:layout_height="59dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="63dp"
+        android:layout_marginEnd="323dp"
+        android:layout_marginBottom="46dp"
+        android:adjustViewBounds="false"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout4"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/google"
+        tools:ignore="SpeakableTextPresentCheck" />
+
     <TextView
         android:id="@+id/welcometitle2"
         android:layout_width="match_parent"
@@ -28,6 +49,7 @@
         tools:ignore="RtlCompat" />
 
     <LinearLayout
+        android:id="@+id/linearLayout4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="125dp"
@@ -38,6 +60,10 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/welcometitle2">
+
+
+
+
 
         <EditText
             android:id="@+id/Email"
@@ -75,6 +101,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="50dp"
@@ -96,17 +123,16 @@
             android:insetTop="0dp"
             android:insetBottom="0dp"
             android:minHeight="53dp"
+            android:stateListAnimator="@null"
             android:text="@string/login_btn"
             android:textColor="?colorOnPrimary"
             android:textSize="17sp"
             android:textStyle="bold"
-            android:stateListAnimator="@null"
             app:rippleColor="@null" />
 
         <Button
             android:id="@+id/signup_login"
             style="@null"
-            android:stateListAnimator="@null"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -116,6 +142,7 @@
             android:insetTop="0dp"
             android:insetBottom="0dp"
             android:minHeight="53dp"
+            android:stateListAnimator="@null"
             android:text="@string/signup_btn_back"
             android:textColor="?colorOnPrimary"
             android:textSize="17sp"
@@ -125,5 +152,24 @@
             app:layout_constraintStart_toStartOf="parent"
             app:rippleColor="@null" />
     </LinearLayout>
+
+
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/facebookLogin"
+        android:layout_width="62dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="63dp"
+        android:layout_marginEnd="204dp"
+        android:layout_marginBottom="34dp"
+        android:adjustViewBounds="false"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/buttonGoogle2"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout4"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/facebook" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
