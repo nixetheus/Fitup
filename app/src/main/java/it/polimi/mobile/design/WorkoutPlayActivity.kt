@@ -6,6 +6,7 @@ import android.os.CountDownTimer
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import it.polimi.mobile.design.databinding.ActivityWorkoutPlayBinding
+import it.polimi.mobile.design.entities.Workout
 import java.util.concurrent.TimeUnit
 
 
@@ -18,10 +19,14 @@ class WorkoutPlayActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding=ActivityWorkoutPlayBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        var workout= intent.extras?.get("workout") as Workout
+        binding.playWorkoutName.text=workout.name
+        binding.currentExerciseName.text="test"
 
         binding.startStopButton.setOnClickListener{
             countdown()
         }
+        binding.playWorkoutName
 
     }
     private fun countdown(){

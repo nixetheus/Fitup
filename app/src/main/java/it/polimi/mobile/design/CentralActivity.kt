@@ -158,7 +158,7 @@ class CentralActivity : AppCompatActivity() {
             workoutCard.addView(workoutLayout)
             workoutsLayout.addView(workoutCard)
             workoutCard.setOnClickListener{
-                val intent = Intent(this, EditWorkoutActivity::class.java)
+                val intent = Intent(this, WorkoutPlayActivity::class.java)
                 intent.putExtra("workout",workout /*as java.io.Serializable*/)
                 startActivity(intent)
 
