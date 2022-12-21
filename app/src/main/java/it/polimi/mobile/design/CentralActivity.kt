@@ -38,6 +38,7 @@ class CentralActivity : AppCompatActivity() {
 
         workoutArrayList= arrayListOf<Workout>()
         firebaseAuth = FirebaseAuth.getInstance()
+        val uid = firebaseAuth.uid.toString()
         database= FirebaseDatabase.getInstance().getReference("Workout")
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -45,7 +46,10 @@ class CentralActivity : AppCompatActivity() {
                 if (snapshot.exists()) {
                     for (workSnap in snapshot.children) {
                         val workData = workSnap.getValue(Workout::class.java)
-                        workoutArrayList.add(workData!!)
+                        if (workData != null) {
+                            if (workData.userId==uid)
+                                workoutArrayList.add(workData!!)
+                        }
 
                     }
                     showTopWorkouts(workoutArrayList)
@@ -63,10 +67,7 @@ class CentralActivity : AppCompatActivity() {
 
         showUser()
 
-        binding.userImage.setOnClickListener{
-            val intent = Intent(this, WorkoutPlayActivity::class.java)
-            startActivity(intent)
-        }
+
         binding.welcomeView.setOnClickListener{
             firebaseAuth.signOut()
             LoginManager.getInstance().logOut()
@@ -269,5 +270,11 @@ class CentralActivity : AppCompatActivity() {
     }
 
     private fun Int.toPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
+    override fun onBackPressed() {
+        /*super.onBackPressed()
+        val intent = Intent(this, CentralActivity::class.java)
+        startActivity(intent)*/
+
+    }
 
 }
