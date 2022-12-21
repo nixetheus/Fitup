@@ -78,7 +78,7 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <TextView
+            <Chronometer
                 android:id="@+id/workoutTimeValue"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -182,6 +182,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
+            android:id="@+id/startCurrentExerciseLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/popup_gradient"
@@ -189,7 +190,8 @@
             android:paddingStart="40dp"
             android:paddingTop="60dp"
             android:paddingEnd="40dp"
-            android:paddingBottom="10dp">
+            android:paddingBottom="10dp"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/currentExerciseLabel"

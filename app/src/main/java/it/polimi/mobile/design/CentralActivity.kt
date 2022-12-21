@@ -38,6 +38,7 @@ class CentralActivity : AppCompatActivity() {
 
         workoutArrayList= arrayListOf<Workout>()
         firebaseAuth = FirebaseAuth.getInstance()
+        val uid = firebaseAuth.uid.toString()
         database= FirebaseDatabase.getInstance().getReference("Workout")
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -45,7 +46,10 @@ class CentralActivity : AppCompatActivity() {
                 if (snapshot.exists()) {
                     for (workSnap in snapshot.children) {
                         val workData = workSnap.getValue(Workout::class.java)
-                        workoutArrayList.add(workData!!)
+                        if (workData != null) {
+                            if (workData.userId==uid)
+                                workoutArrayList.add(workData!!)
+                        }
 
                     }
                     showTopWorkouts(workoutArrayList)
@@ -63,10 +67,7 @@ class CentralActivity : AppCompatActivity() {
 
         showUser()
 
-        binding.userImage.setOnClickListener{
-            val intent = Intent(this, WorkoutPlayActivity::class.java)
-            startActivity(intent)
-        }
+
         binding.welcomeView.setOnClickListener{
             firebaseAuth.signOut()
             LoginManager.getInstance().logOut()
@@ -157,6 +158,12 @@ class CentralActivity : AppCompatActivity() {
             workoutLayout.addView(statsLayout)
             workoutCard.addView(workoutLayout)
             workoutsLayout.addView(workoutCard)
+            workoutCard.setOnLongClickListener{
+                val intent = Intent(this, WorkoutListActivity::class.java)
+                intent.putExtra("workout",workout /*as java.io.Serializable*/)
+                startActivity(intent)
+                true
+            }
             workoutCard.setOnClickListener{
                 val intent = Intent(this, WorkoutPlayActivity::class.java)
                 intent.putExtra("workout",workout /*as java.io.Serializable*/)

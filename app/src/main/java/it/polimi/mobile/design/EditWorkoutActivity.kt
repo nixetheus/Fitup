@@ -13,5 +13,6 @@ class EditWorkoutActivity : AppCompatActivity() {
         setContentView(binding.root)
         var workout= intent.extras?.get("workout") as Workout
         binding.exerciseNameExampleWorkout.text=workout.name
+        binding.addExerciseToWorkoutCard
     }
 }

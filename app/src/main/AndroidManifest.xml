@@ -49,14 +49,27 @@
         </activity>
         <activity
             android:name=".WorkoutPlayActivity"
-            android:exported="false">
+
+            android:exported="false"
+            android:noHistory="false">
+
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity android:name=".ComeBackPopUp"
+            android:exported="false"
+            android:theme="@android:style/Theme.Dialog"
+
+            >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".LogoutPopUp"
-            android:exported="false">
+            android:exported="false"
+            android:theme="@android:style/Theme.Dialog">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

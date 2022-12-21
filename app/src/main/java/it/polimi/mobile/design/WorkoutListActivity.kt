@@ -4,23 +4,18 @@ import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Typeface
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
-import android.widget.LinearLayout
-import android.widget.SearchView
-import android.widget.TextView
-import android.widget.Toast
-import android.widget.Toolbar
+import android.view.animation.TranslateAnimation
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
-import androidx.core.content.res.ResourcesCompat
-
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-
 import it.polimi.mobile.design.databinding.ActivityWorkoutListBinding
 import it.polimi.mobile.design.entities.Workout
+
 
 class WorkoutListActivity : AppCompatActivity() {
 
@@ -64,11 +59,34 @@ class WorkoutListActivity : AppCompatActivity() {
 
         showWorkouts(workoutArrayList)
         binding.addWorkoutClose.setOnClickListener{
-            binding.addWorkoutCard.visibility=View.GONE
+            val animate = TranslateAnimation(
+                0F,  // fromXDelta
+                0F,  // toXDelta
+                0F,// fromYDelta
+                binding.addWorkoutCard.height.toFloat()
+            )
+
+            animate.duration = 500
+            animate.fillAfter = true
+            binding.addWorkoutCard.startAnimation(animate)
+            binding.addWorkoutsButton.isClickable=true
+            binding.addWorkoutClose.isClickable=false
         }
 
         binding.addWorkoutsButton.setOnClickListener{
-            binding.addWorkoutCard.visibility=View.VISIBLE
+            binding.addWorkoutCard.visibility = View.VISIBLE
+            val animate = TranslateAnimation(
+                0F,  // fromXDelta
+                0F,  // toXDelta
+                binding.addWorkoutCard.height.toFloat(),// fromYDelta
+                0F
+            )
+
+            animate.duration = 500
+            animate.fillAfter = true
+            binding.addWorkoutCard.startAnimation(animate)
+            binding.addWorkoutsButton.isClickable=false
+            binding.addWorkoutClose.isClickable=true
         }
 
 
@@ -76,12 +94,15 @@ class WorkoutListActivity : AppCompatActivity() {
         binding.confirmAddWorkoutBtn.setOnClickListener{
             createWorkout()
         }
+
         binding.searchWorkout.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+
             override fun onQueryTextSubmit(p0: String?): Boolean {
                 return false
             }
 
             override fun onQueryTextChange(p0: String?): Boolean {
+
                 tempWorkoutArrayList.clear()
                 for (workout in workoutArrayList) {
                     if (workout.name!!.contains(p0.toString()) || workout.type.toString().contains(p0.toString()))
@@ -95,6 +116,7 @@ class WorkoutListActivity : AppCompatActivity() {
             }
 
         })
+
     }
     private fun EventChangeListener(){
         database=FirebaseDatabase.getInstance().getReference("Workout")
@@ -159,6 +181,40 @@ class WorkoutListActivity : AppCompatActivity() {
             workoutLayout.addView(statsLayout)
             workoutCard.addView(workoutLayout)
             workoutsLayout.addView(workoutCard)
+            workoutCard.setOnLongClickListener{
+                binding.editWorkoutLayout.visibility=View.VISIBLE
+                val animate = TranslateAnimation(
+                    0F,  // fromXDelta
+                    0F,  // toXDelta
+                    binding.addWorkoutCard.height.toFloat(),// fromYDelta
+                    0F
+                )
+
+                animate.duration = 500
+                animate.fillAfter = true
+                binding.editWorkoutLayout.startAnimation(animate)
+                workoutCard.isLongClickable=false
+                true
+            }
+            binding.closeModifyExercise2.setOnClickListener{
+                val animate = TranslateAnimation(
+                    0F,  // fromXDelta
+                    0F,  // toXDelta
+                    0F,// fromYDelta
+                    binding.editWorkoutLayout.height.toFloat()
+                )
+
+                animate.duration = 500
+                animate.fillAfter = true
+                binding.editWorkoutLayout.startAnimation(animate)
+                workoutCard.isLongClickable=true
+            }
+            workoutCard.setOnClickListener{
+                val intent = Intent(this, WorkoutPlayActivity::class.java)
+                intent.putExtra("workout",workout /*as java.io.Serializable*/)
+                startActivity(intent)
+
+            }
         }
     }
 

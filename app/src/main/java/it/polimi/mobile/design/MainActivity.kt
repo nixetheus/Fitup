@@ -44,24 +44,6 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }*/
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        mAuth=FirebaseAuth.getInstance()
-
-
-
-        binding.SignInBtn.setOnClickListener {
-            val intent = Intent(this, SignInActivity::class.java)
-            startActivity(intent)
-        }
-
-        binding.SignUpbtn.setOnClickListener {
-            val intent = Intent(this, SignUpActivity::class.java)
-            startActivity(intent)
-        }
-    }
     public override fun onStart() {
         super.onStart()
         // Check if user is signed in (non-null) and update UI accordingly.
@@ -82,6 +64,25 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        mAuth=FirebaseAuth.getInstance()
+
+
+
+        binding.SignInBtn.setOnClickListener {
+            val intent = Intent(this, SignInActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.SignUpbtn.setOnClickListener {
+            val intent = Intent(this, SignUpActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
     fun printHashKey(pContext: Context) {
         try {
             val info: PackageInfo = pContext.getPackageManager()
