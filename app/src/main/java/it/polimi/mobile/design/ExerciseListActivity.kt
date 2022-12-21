@@ -38,14 +38,15 @@ class ExerciseListActivity : AppCompatActivity() {
         firebaseAuth = FirebaseAuth.getInstance()
         exerciseArrayList= arrayListOf<Exercise>()
 
+
         tempExerciseArrayList= arrayListOf<Exercise>()
         database=FirebaseDatabase.getInstance().getReference("Exercise")
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 exerciseArrayList.clear()
                 if (snapshot.exists()){
-                    for (workSnap in snapshot.children){
-                        val exerciseData=workSnap.getValue(Exercise::class.java)
+                    for (exerciseSnap in snapshot.children){
+                        val exerciseData=exerciseSnap.getValue(Exercise::class.java)
                         if (exerciseData!=null)
                             exerciseArrayList.add(exerciseData!!)
                     }

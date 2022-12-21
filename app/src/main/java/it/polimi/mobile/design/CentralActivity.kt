@@ -158,12 +158,6 @@ class CentralActivity : AppCompatActivity() {
             workoutLayout.addView(statsLayout)
             workoutCard.addView(workoutLayout)
             workoutsLayout.addView(workoutCard)
-            workoutCard.setOnLongClickListener{
-                val intent = Intent(this, WorkoutListActivity::class.java)
-                intent.putExtra("workout",workout /*as java.io.Serializable*/)
-                startActivity(intent)
-                true
-            }
             workoutCard.setOnClickListener{
                 val intent = Intent(this, WorkoutPlayActivity::class.java)
                 intent.putExtra("workout",workout /*as java.io.Serializable*/)
@@ -275,5 +269,11 @@ class CentralActivity : AppCompatActivity() {
     }
 
     private fun Int.toPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
+    override fun onBackPressed() {
+        /*super.onBackPressed()
+        val intent = Intent(this, CentralActivity::class.java)
+        startActivity(intent)*/
+
+    }
 
 }

@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import it.polimi.mobile.design.databinding.ActivityWorkoutListBinding
 import it.polimi.mobile.design.entities.Workout
+import it.polimi.mobile.design.enum.WorkoutType
 
 
 class WorkoutListActivity : AppCompatActivity() {
@@ -128,7 +129,7 @@ class WorkoutListActivity : AppCompatActivity() {
 
         database = FirebaseDatabase.getInstance().getReference("Workout")
         val wId = database.push().key!!
-        val workout = Workout(wId, uid,name,"random", "hip hop")
+        val workout = Workout(wId, uid,name,WorkoutType.RELAX, "hip hop")
         database.child(name).setValue(workout).addOnSuccessListener {
             Toast.makeText(this, "Successfully saved!!", Toast.LENGTH_SHORT).show()
             val intent = Intent(this, WorkoutListActivity::class.java)
@@ -194,6 +195,13 @@ class WorkoutListActivity : AppCompatActivity() {
                 animate.fillAfter = true
                 binding.editWorkoutLayout.startAnimation(animate)
                 workoutCard.isLongClickable=false
+                binding.modifyWorkoutButton.setOnClickListener{
+                    val intent = Intent(this, EditWorkoutActivity::class.java)
+                    intent.putExtra("workout",workout /*as java.io.Serializable*/)
+                    startActivity(intent)
+
+
+                }
                 true
             }
             binding.closeModifyExercise2.setOnClickListener{
@@ -215,6 +223,7 @@ class WorkoutListActivity : AppCompatActivity() {
                 startActivity(intent)
 
             }
+
         }
     }
 
