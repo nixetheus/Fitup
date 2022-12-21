@@ -62,13 +62,6 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".GoogleSignIn"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
             android:name=".EditWorkoutActivity"
             android:exported="false">
             <meta-data
@@ -91,13 +84,6 @@
         </activity>
         <activity
             android:name=".WorkoutListActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".LoginActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

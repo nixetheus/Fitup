@@ -187,7 +187,7 @@ class CentralActivity : AppCompatActivity() {
             LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT
         )
         workoutLayout.orientation = VERTICAL
-        workoutLayout.setPadding(20.toPx(), 20.toPx(), 20.toPx(), 20.toPx())
+        workoutLayout.setPadding(20.toPx(), 30.toPx(), 20.toPx(), 20.toPx())
         val test = listOf(R.drawable.arms_background, R.drawable.core_background, R.drawable.legs_background,
         R.drawable.mind_background)
         workoutLayout.background = theme.getDrawable(test.random())
@@ -200,13 +200,14 @@ class CentralActivity : AppCompatActivity() {
         workoutNameView.text = workout.name
         workoutNameView.setTextColor(Color.WHITE)
         workoutNameView.textAlignment = TEXT_ALIGNMENT_TEXT_START
-        workoutNameView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24f)
+        workoutNameView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26f)
         workoutNameView.typeface = Typeface.create("Lato Bold", Typeface.BOLD)
 
         val params = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT
         )
-        params.bottomMargin = 25.toPx()
+        params.bottomMargin = 20.toPx()
+        params.marginStart = 10.toPx()
         workoutNameView.layoutParams = params
 
         return workoutNameView

@@ -1,14 +1,18 @@
 package it.polimi.mobile.design.custom_layouts
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.*
 import android.util.AttributeSet
 import android.util.TypedValue
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.RelativeLayout
 import android.widget.TextView
+import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import it.polimi.mobile.design.custom_objects.DataPoint
 import it.polimi.mobile.design.custom_views.LineGraphDataView
@@ -71,6 +75,7 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun drawDataPoints() {
 
         val dataPointSize = Constant.DATA_BUTTON_SIZE
@@ -87,8 +92,36 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
             params.topMargin =
                 (getRelativeY(point.yCoordinate).toFloat() - (dataPointSize / 2f)).toInt()
 
+            pointView.setOnTouchListener(View.OnTouchListener { _, motionEvent ->
+                return@OnTouchListener pointTouchHandler(params.leftMargin, params.topMargin,
+                    motionEvent)
+            })
+
             addView(pointView, params)
         }
+    }
+
+    private fun pointTouchHandler(x: Int, y: Int, event: MotionEvent?) : Boolean {
+
+        if (event == null) return false
+
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                drawValueBubble(x, y)
+            }
+        }
+        return true
+    }
+
+    private fun drawValueBubble(x: Int, y: Int) {
+
+        val card = CardView(context)
+
+        Toast.makeText(context, x.toString(), Toast.LENGTH_SHORT).show()
+        val bubbleParams = LayoutParams(75, 75)
+        bubbleParams.leftMargin = x
+        bubbleParams.topMargin = y
+        addView(card, bubbleParams)
     }
 
     private fun drawLines(canvas: Canvas) {

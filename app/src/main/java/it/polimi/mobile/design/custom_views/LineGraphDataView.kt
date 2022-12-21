@@ -1,11 +1,13 @@
 package it.polimi.mobile.design.custom_views
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.drawable.ColorDrawable
 import android.util.AttributeSet
+import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
 import it.polimi.mobile.design.helpers.Constant
@@ -17,9 +19,7 @@ class LineGraphDataView(context: Context, attrs: AttributeSet? = null) : View(co
     private val dataPointSize = Constant.DATA_BUTTON_SIZE
 
     init {
-        setOnClickListener {
-            Toast.makeText(context, dataValue.toString(), Toast.LENGTH_SHORT).show()
-        }
+
     }
 
     override fun onDraw(canvas: Canvas) {
