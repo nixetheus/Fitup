@@ -10,7 +10,7 @@
         android:id="@+id/workoutExercisesCard"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="25dp"
+        android:layout_marginBottom="20dp"
         app:cardBackgroundColor="@color/red_arms"
         app:cardCornerRadius="10dp">
 
@@ -32,14 +32,15 @@
                 android:paddingBottom="15dp">
 
                 <TextView
-                    android:id="@+id/exerciseNameExampleWorkout"
+                    android:id="@+id/exerciseNameWorkout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:fontFamily="@font/lato_bold"
+                    android:fontFamily="@font/lato"
                     android:textAlignment="center"
                     android:textColor="?colorOnSecondary"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -54,11 +55,13 @@
                         android:id="@+id/setsValue"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="2dp"
                         android:fontFamily="@font/lato_bold"
                         android:text="@string/missing"
                         android:textAlignment="center"
                         android:textColor="?colorOnSecondary"
-                        android:textSize="24sp" />
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/textView8"
@@ -85,11 +88,13 @@
                         android:id="@+id/repsValue"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="2dp"
                         android:fontFamily="@font/lato_bold"
                         android:text="@string/missing"
                         android:textAlignment="center"
                         android:textColor="?colorOnSecondary"
-                        android:textSize="24sp" />
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/textView10"
@@ -106,7 +111,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1.25"
+                    android:layout_weight="1.35"
                     android:orientation="vertical"
                     android:textAlignment="center">
 
@@ -114,11 +119,12 @@
                         android:id="@+id/restValue"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="2dp"
                         android:fontFamily="@font/lato_bold"
                         android:text="@string/missing"
                         android:textAlignment="center"
                         android:textColor="?colorOnSecondary"
-                        android:textSize="18sp" />
+                        android:textSize="20sp" />
 
                     <TextView
                         android:id="@+id/textView12"

@@ -41,7 +41,7 @@
                 android:id="@+id/workoutDataBox"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="50dp"
+                android:layout_marginBottom="75dp"
                 android:baselineAligned="false"
                 android:orientation="horizontal">
 
@@ -174,8 +174,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="25dp"
-                app:cardBackgroundColor="@color/red_arms"
-                app:cardCornerRadius="10dp">
+                app:cardBackgroundColor="@android:color/transparent">
 
                 <LinearLayout
                     android:id="@+id/workoutExercisesList"

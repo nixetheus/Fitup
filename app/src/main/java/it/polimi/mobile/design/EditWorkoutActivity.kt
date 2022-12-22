@@ -1,5 +1,6 @@
 package it.polimi.mobile.design
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -146,13 +147,14 @@ class EditWorkoutActivity : AppCompatActivity() {
         binding.caloriesDataBox
 
     }
+    @SuppressLint("SetTextI18n")
     private fun showExerciseCards(workoutExercise: List<WorkoutExercise>){
         for (workoutExercise in workoutExercise) {
             binding2= ExerciseInWorkoutBinding.inflate(layoutInflater)
-            binding2.exerciseNameExampleWorkout.text = workoutExercise.exerciseId.toString()
+            binding2.exerciseNameWorkout.text = workoutExercise.exerciseId.toString()
             binding2.repsValue.text = workoutExercise.reps.toString()
             binding2.setsValue.text = workoutExercise.sets.toString()
-            binding2.restValue.text = workoutExercise.rest.toString()
+            binding2.restValue.text = workoutExercise.rest.toString() + "''"
             binding.workoutExercisesList.addView(binding2.root)
 
         }
