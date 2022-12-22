@@ -1,10 +1,12 @@
 package it.polimi.mobile.design
 
+import android.content.ContentValues
 import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.animation.TranslateAnimation
@@ -199,7 +201,40 @@ class WorkoutListActivity : AppCompatActivity() {
                     val intent = Intent(this, EditWorkoutActivity::class.java)
                     intent.putExtra("workout",workout /*as java.io.Serializable*/)
                     startActivity(intent)
+                    workoutCard.isLongClickable=true
 
+
+                }
+                binding.deleteWorkoutButton.setOnClickListener{
+                    val ref = FirebaseDatabase.getInstance().reference
+                    val workoutExercise = ref.child("WorkoutExercise").orderByChild("workoutId").equalTo(workout.woId.toString())
+
+                    workoutExercise.addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(dataSnapshot: DataSnapshot) {
+                            for (appleSnapshot in dataSnapshot.children) {
+                                appleSnapshot.ref.removeValue()
+                            }
+                        }
+
+                        override fun onCancelled(databaseError: DatabaseError) {
+                            Log.e(ContentValues.TAG, "onCancelled", databaseError.toException())
+                        }
+                    })
+                    val workout = ref.child("Workout").orderByChild("woId").equalTo(workout.woId.toString())
+
+                    workout.addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(dataSnapshot: DataSnapshot) {
+                            for (workoutSnapshot in dataSnapshot.children) {
+                                workoutSnapshot.ref.removeValue()
+                            }
+                        }
+
+                        override fun onCancelled(databaseError: DatabaseError) {
+                            Log.e(ContentValues.TAG, "onCancelled", databaseError.toException())
+                        }
+                    })
+                    val intent = Intent(this, WorkoutListActivity::class.java)
+                    startActivity(intent)
 
                 }
                 true
@@ -217,6 +252,7 @@ class WorkoutListActivity : AppCompatActivity() {
                 binding.editWorkoutLayout.startAnimation(animate)
                 workoutCard.isLongClickable=true
             }
+
             workoutCard.setOnClickListener{
                 val intent = Intent(this, WorkoutPlayActivity::class.java)
                 intent.putExtra("workout",workout /*as java.io.Serializable*/)
