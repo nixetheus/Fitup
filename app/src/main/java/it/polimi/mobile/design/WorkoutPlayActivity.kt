@@ -7,19 +7,26 @@ import android.view.View
 import android.widget.Chronometer
 import android.widget.Chronometer.OnChronometerTickListener
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.database.*
 import it.polimi.mobile.design.databinding.ActivityWorkoutPlayBinding
 import it.polimi.mobile.design.entities.Workout
+import it.polimi.mobile.design.entities.WorkoutExercise
 
 
 class WorkoutPlayActivity : AppCompatActivity() {
     private val FORMAT = "%02d:%02d"
     private lateinit var binding:ActivityWorkoutPlayBinding
     private lateinit var chrono: Chronometer
+    private lateinit var database: DatabaseReference
+    private lateinit var workoutExercise: ArrayList<WorkoutExercise>
+    private var i=0
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         binding=ActivityWorkoutPlayBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        workoutExercise= arrayListOf<WorkoutExercise>()
 
         chrono= binding.workoutTimeValue
         chrono.onChronometerTickListener =
@@ -37,15 +44,46 @@ class WorkoutPlayActivity : AppCompatActivity() {
 
         var workout= intent.extras?.get("workout") as Workout
         binding.playWorkoutName.text=workout.name
-        binding.currentExerciseName.text="test"
+        database=FirebaseDatabase.getInstance().getReference("WorkoutExercise")
+        database.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                workoutExercise.clear()
+                if (snapshot.exists()){
+                    for (workSnap in snapshot.children) {
+                        val workData = workSnap.getValue(WorkoutExercise::class.java)
+                        if (workData != null) {
+                            if (workData.workoutId == workout.woId) {
+
+                                    workoutExercise.add(workData!!)
+                                }
+                            }
+                        }
+                    }
 
 
+                }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
         binding.beingTimeButton.setOnClickListener{
             start()
         }
         binding.startStopButton.setOnClickListener{
+            i=0
             binding.startCurrentExerciseLayout.visibility= View.VISIBLE
+            binding.currentExerciseName.text= workoutExercise[i].exerciseId
         }
+        binding.nextExerciseButton.setOnClickListener{
+            if(i<workoutExercise.size){
+                i++
+                binding.currentExerciseName.text= workoutExercise[i].exerciseId}
+            else
+                binding.nextExerciseButton.text="FINISH!!"
+        }
+
 
     }
     override fun onBackPressed() {
@@ -60,6 +98,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
 
     private fun start(){
         chrono.start()
+
     }
 
 
