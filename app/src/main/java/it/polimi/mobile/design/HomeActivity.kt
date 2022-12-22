@@ -37,13 +37,17 @@ class HomeActivity : AppCompatActivity() {
             Gender.MALE
         else
             Gender.FEMALE
+        if (username.isNotEmpty()&&age.isNotEmpty()&&weight.isNotEmpty()){
 
-        database= FirebaseDatabase.getInstance().getReference("Users")
-        val user=User(uid,username,weight, age ,gender )
-        database.child(uid).setValue(user).addOnSuccessListener {
-            Toast.makeText(this, "Successfully saved!!", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, CentralActivity::class.java)
-            startActivity(intent)
+            database= FirebaseDatabase.getInstance().getReference("Users")
+            val user=User(uid,username,weight, age ,gender )
+            database.child(uid).setValue(user).addOnSuccessListener {
+                Toast.makeText(this, "Successfully saved!!", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, CentralActivity::class.java)
+                startActivity(intent)
         }
+        }
+        else Toast.makeText(this, "Fill in all fields to continue!!", Toast.LENGTH_SHORT).show()
+
     }
 }
