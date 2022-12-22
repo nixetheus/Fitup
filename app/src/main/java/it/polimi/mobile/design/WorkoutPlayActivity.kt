@@ -77,11 +77,14 @@ class WorkoutPlayActivity : AppCompatActivity() {
             binding.currentExerciseName.text= workoutExercise[i].exerciseId
         }
         binding.nextExerciseButton.setOnClickListener{
-            if(i<workoutExercise.size){
+            if(i<workoutExercise.size-1){
                 i++
                 binding.currentExerciseName.text= workoutExercise[i].exerciseId}
-            else
-                binding.nextExerciseButton.text="FINISH!!"
+            else {
+                chrono.stop()
+                binding.startStopButton.text = "FINISH!!"
+                binding.startCurrentExerciseLayout.visibility = View.GONE
+            }
         }
 
 
