@@ -5,15 +5,15 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.*
 import android.util.AttributeSet
-import android.util.TypedValue
+import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.widget.HorizontalScrollView
 import android.widget.RelativeLayout
 import android.widget.TextView
-import android.widget.Toast
+import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.cardview.widget.CardView
-import androidx.constraintlayout.widget.ConstraintLayout
+import it.polimi.mobile.design.R
 import it.polimi.mobile.design.custom_objects.DataPoint
 import it.polimi.mobile.design.custom_views.LineGraphDataView
 import it.polimi.mobile.design.helpers.Constant
@@ -63,7 +63,9 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         drawLines(canvas)
-        drawGrid(canvas)
+        drawAuxiliaryLines(canvas)
+        drawIntegralArea(canvas)
+        drawMinMaxMid(canvas)
     }
 
     private fun getEdges() {
@@ -79,7 +81,7 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
     private fun drawDataPoints() {
 
         val dataPointSize = Constant.DATA_BUTTON_SIZE
-        for (point in dataPoints) {
+        for (point in dataPoints.subList(1, dataPoints.size)) {
 
             val pointView = LineGraphDataView(context)
             pointView.dataValue = point.yCoordinate
@@ -94,34 +96,49 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
 
             pointView.setOnTouchListener(View.OnTouchListener { _, motionEvent ->
                 return@OnTouchListener pointTouchHandler(params.leftMargin, params.topMargin,
-                    motionEvent)
+                    point.yCoordinate, motionEvent)
             })
 
             addView(pointView, params)
         }
     }
 
-    private fun pointTouchHandler(x: Int, y: Int, event: MotionEvent?) : Boolean {
+    private fun pointTouchHandler(x: Int, y: Int, value: Float, event: MotionEvent?) : Boolean {
 
         if (event == null) return false
 
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-                drawValueBubble(x, y)
+                drawValueBubble(x, y, value)
             }
         }
         return true
     }
 
-    private fun drawValueBubble(x: Int, y: Int) {
+    private fun drawValueBubble(x: Int, y: Int, value: Float) {
 
+        val cardDim = 110
         val card = CardView(context)
+        card.radius = cardDim.toPx().toFloat()
+        card.background = getDrawable(context, R.drawable.gradient_0)
+        card.foregroundGravity = CENTER_VERTICAL
 
-        Toast.makeText(context, x.toString(), Toast.LENGTH_SHORT).show()
-        val bubbleParams = LayoutParams(75, 75)
+        val valueTextView = TextView(context)
+        valueTextView.text = value.toString()
+        valueTextView.textAlignment = TEXT_ALIGNMENT_CENTER
+        valueTextView.typeface = Typeface.create("Lato Bold", Typeface.BOLD)
+        valueTextView.setTextColor(Color.WHITE)
+        valueTextView.height = cardDim
+        valueTextView.gravity = Gravity.CENTER_VERTICAL
+        card.addView(valueTextView)
+
+        val bubbleParams = LayoutParams(cardDim, cardDim)
         bubbleParams.leftMargin = x
-        bubbleParams.topMargin = y
+        bubbleParams.topMargin = y - cardDim
         addView(card, bubbleParams)
+
+        val removeCardTask = Runnable { removeView(card) }
+        postDelayed(removeCardTask, 2000)
     }
 
     private fun drawLines(canvas: Canvas) {
@@ -148,38 +165,110 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
 
     }
 
-    private fun drawGrid(canvas: Canvas) {
+    private fun drawAuxiliaryLines(canvas: Canvas) {
 
-        val n = 4
-        val linesPaint = Paint()
-        linesPaint.strokeWidth = 1f
-        linesPaint.style = Paint.Style.STROKE
-        linesPaint.strokeCap = Paint.Cap.ROUND
+        val graphPaint = Paint()
+        graphPaint.strokeWidth = 7.5f
+        graphPaint.color = Color.argb(0.15f, 1f, 1f, 1f)
+        graphPaint.style = Paint.Style.FILL
 
-        val positions = floatArrayOf(0.05f, 0.5f, 0.95f)
-        val fadedWhite = Color.parseColor("#AAFFFFFF")
-        val transparentWhite = Color.parseColor("#11FFFFFF")
-        val colors = intArrayOf(transparentWhite, fadedWhite, transparentWhite)
+        val pointZero = dataPoints.elementAt(0)
 
-        for (index in 1 until n) {
+        // XY COORDINATES
+        graphPaint.color = Color.argb(1f, 1f, 1f, 1f)
+        graphPaint.style = Paint.Style.STROKE
+        graphPaint.strokeCap = Paint.Cap.BUTT
 
-            // X Lines
-            linesPaint.shader = LinearGradient(0f, index * (height.toFloat() / n),
-                width.toFloat(), index * (height.toFloat() / n), colors, positions,
-                Shader.TileMode.REPEAT)
+        canvas.drawLine(
+            getRelativeX(pointZero.xCoordinate).toFloat(),
+            height.toFloat() - 25,
+            getRelativeX(dataPoints.elementAt(dataPoints.size - 1).xCoordinate).toFloat(),
+            height.toFloat() - 25,
+            graphPaint
+        )
+
+        canvas.drawLine(
+            getRelativeX(pointZero.xCoordinate).toFloat(),
+            height.toFloat() - 25,
+            getRelativeX(pointZero.xCoordinate).toFloat(),
+            150f,
+            graphPaint
+        )
+
+        graphPaint.style = Paint.Style.FILL_AND_STROKE
+
+        canvas.drawCircle(
+            getRelativeX(dataPoints.elementAt(dataPoints.size - 1).xCoordinate).toFloat(),
+            height.toFloat() - 25,
+            graphPaint.strokeWidth,
+            graphPaint
+        )
+
+        canvas.drawCircle(
+            getRelativeX(pointZero.xCoordinate).toFloat(),
+            150f,
+            graphPaint.strokeWidth,
+            graphPaint
+        )
+
+    }
+
+    private fun drawIntegralArea(canvas: Canvas) {
+
+        val graphPaint = Paint()
+        graphPaint.strokeWidth = 7.5f
+        graphPaint.style = Paint.Style.FILL
+        graphPaint.color = Color.argb(0.15f, 1f, 1f, 1f)
+
+        // POLYGON
+        val graphPath = Path()
+        val pointZero = dataPoints.elementAt(0)
+        graphPath.moveTo(
+            getRelativeX(pointZero.xCoordinate).toFloat(),
+            getRelativeY(pointZero.yCoordinate).toFloat())
+
+        for (pointIndex in 1 until dataPoints.size) {
+
+            val point = dataPoints.elementAt(pointIndex)
+            graphPath.lineTo(
+                getRelativeX(point.xCoordinate).toFloat(),
+                getRelativeY(point.yCoordinate).toFloat())
+        }
+
+        // Last Three Points
+        graphPath.lineTo(
+            getRelativeX(dataPoints.elementAt(dataPoints.size - 1).xCoordinate).toFloat(),
+            height.toFloat() - 25)
+
+        graphPath.lineTo(
+            getRelativeX(pointZero.xCoordinate).toFloat(),
+            height.toFloat() - 25)
+
+        graphPath.lineTo(
+            getRelativeX(pointZero.xCoordinate).toFloat(),
+            getRelativeY(pointZero.yCoordinate).toFloat())
+
+        canvas.drawPath(graphPath, graphPaint)
+    }
+
+    private fun drawMinMaxMid(canvas: Canvas) {
+
+        val graphPaint = Paint()
+        graphPaint.strokeWidth = 5f
+        graphPaint.style = Paint.Style.FILL
+        graphPaint.color = Color.argb(0.5f, 1f, 1f, 1f)
+        graphPaint.pathEffect = DashPathEffect(floatArrayOf(10f, 20f), 0f)
+
+        val pointZero = dataPoints.elementAt(0)
+        val pointEnd = dataPoints.elementAt(dataPoints.size - 1)
+
+        for (y in listOf(minY, (minY + maxY) / 2, maxY)) {
             canvas.drawLine(
-                0f, index * ((height - titleStrip).toFloat() / n) + titleStrip,
-                width.toFloat(), index * ((height - titleStrip).toFloat() / n) + titleStrip,
-                linesPaint
-            )
-
-            // Y Lines
-            linesPaint.shader = LinearGradient(index * (width.toFloat() / n), 0f,
-                index * (width.toFloat() / n), height.toFloat(), colors, positions,
-                Shader.TileMode.CLAMP)
-            canvas.drawLine(
-                index * (width.toFloat() / n), titleStrip.toFloat(),
-                index * (width.toFloat() / n), height.toFloat(), linesPaint
+                getRelativeX(pointZero.xCoordinate).toFloat() - 50,
+                getRelativeY(y).toFloat(),
+                getRelativeX(pointEnd.xCoordinate).toFloat() + 50,
+                getRelativeY(y).toFloat(),
+                graphPaint
             )
         }
     }

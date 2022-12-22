@@ -27,6 +27,7 @@
     <string name="welcome_sub">Your fitness journey\n starts here</string>
     <string name="welcome_image">Welcome Image</string>
     <string name="google_login_btn">Sign In With Google</string>
+    <string name="facebook_login_btn">Continue With Facebook</string>
     <string name="login_btn">Login</string>
     <string name="signup_btn">Sign Up</string>
     <string name="login_btn_back">Or Login</string>
@@ -112,5 +113,10 @@
     <string name="current_exercise_label">Current Exercise</string>
     <string name="begin_exercise_button">Begin</string>
     <string name="next_up_button">Next</string>
+
+    <!-- STATS -->
+    <string name="latest_label">Latest</string>
+    <string name="diff_label">+/-</string>
+    <string name="new_value">Value</string>
 
 </resources>
