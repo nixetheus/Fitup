@@ -51,6 +51,7 @@
                     android:textAlignment="center">
 
                     <TextView
+                        android:id="@+id/setsValue"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/lato_bold"
@@ -81,7 +82,7 @@
                     android:textAlignment="center">
 
                     <TextView
-                        android:id="@+id/textView9"
+                        android:id="@+id/repsValue"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/lato_bold"
@@ -110,7 +111,7 @@
                     android:textAlignment="center">
 
                     <TextView
-                        android:id="@+id/textView11"
+                        android:id="@+id/restValue"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/lato_bold"
