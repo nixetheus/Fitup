@@ -47,6 +47,14 @@ class MainActivity : AppCompatActivity() {
     public override fun onStart() {
         super.onStart()
         // Check if user is signed in (non-null) and update UI accordingly.
+    }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        mAuth=FirebaseAuth.getInstance()
+
         val currentUser = mAuth.currentUser
         if (currentUser!=null)
         {  val uid = mAuth.uid.toString()
@@ -63,14 +71,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        mAuth=FirebaseAuth.getInstance()
-
-
 
         binding.SignInBtn.setOnClickListener {
             val intent = Intent(this, SignInActivity::class.java)

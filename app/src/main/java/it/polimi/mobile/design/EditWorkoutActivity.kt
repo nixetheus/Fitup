@@ -154,7 +154,7 @@ class EditWorkoutActivity : AppCompatActivity() {
             binding2.exerciseNameWorkout.text = workoutExercise.exerciseId.toString()
             binding2.repsValue.text = workoutExercise.reps.toString()
             binding2.setsValue.text = workoutExercise.sets.toString()
-            binding2.restValue.text = workoutExercise.rest.toString() + "''"
+            binding2.restValue.text = workoutExercise.rest.toString()
             binding.workoutExercisesList.addView(binding2.root)
 
         }
