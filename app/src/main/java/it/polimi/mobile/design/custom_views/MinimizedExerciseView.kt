@@ -9,7 +9,6 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.Toast
 import it.polimi.mobile.design.helpers.Constant
-import kotlin.math.sqrt
 
 class MinimizedExerciseView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
 

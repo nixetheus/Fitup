@@ -1,16 +1,15 @@
 package it.polimi.mobile.design
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import it.polimi.mobile.design.entities.User
 import it.polimi.mobile.design.databinding.ActivityHomeBinding
+import it.polimi.mobile.design.entities.User
 import it.polimi.mobile.design.enum.Gender
-import java.time.LocalDateTime
 
 class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding

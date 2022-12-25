@@ -1,11 +1,8 @@
 package it.polimi.mobile.design
 
 import android.annotation.SuppressLint
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.widget.HorizontalScrollView
-import android.widget.ScrollView
+import androidx.appcompat.app.AppCompatActivity
 
 class StatsActivity : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")

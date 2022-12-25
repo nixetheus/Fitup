@@ -7,7 +7,8 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
 import android.util.TypedValue
-import android.view.View.*
+import android.view.View.TEXT_ALIGNMENT_CENTER
+import android.view.View.TEXT_ALIGNMENT_TEXT_START
 import android.widget.LinearLayout
 import android.widget.LinearLayout.HORIZONTAL
 import android.widget.LinearLayout.VERTICAL
@@ -270,11 +271,5 @@ class CentralActivity : AppCompatActivity() {
     }
 
     private fun Int.toPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
-    override fun onBackPressed() {
-        /*super.onBackPressed()
-        val intent = Intent(this, CentralActivity::class.java)
-        startActivity(intent)*/
-
-    }
 
 }

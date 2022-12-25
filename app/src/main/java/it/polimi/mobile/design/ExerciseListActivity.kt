@@ -1,16 +1,15 @@
 package it.polimi.mobile.design
 
-import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
@@ -19,10 +18,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import it.polimi.mobile.design.databinding.ActivityExerciseListBinding
 import it.polimi.mobile.design.entities.Exercise
-import it.polimi.mobile.design.entities.Workout
 import it.polimi.mobile.design.enum.ExerciseType
-import java.util.*
-import kotlin.collections.ArrayList
 
 class ExerciseListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityExerciseListBinding

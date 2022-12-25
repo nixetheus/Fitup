@@ -4,7 +4,6 @@ import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.facebook.*
@@ -25,76 +24,79 @@ import it.polimi.mobile.design.databinding.ActivitySignInBinding
 
 class SignInActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivitySignInBinding
-    private lateinit var database: DatabaseReference
     private lateinit var auth: FirebaseAuth
+    private lateinit var database: DatabaseReference
+    private lateinit var binding: ActivitySignInBinding
+    private lateinit var buttonFacebookLogin: LoginButton
+    private lateinit var mGoogleSignInClient: GoogleSignInClient
     private lateinit var callbackManager: CallbackManager
-    private lateinit var buttonFacebookLogin:LoginButton
-    lateinit var mGoogleSignInClient: GoogleSignInClient
 
-    val RC_SIGN_IN: Int = 0
-    lateinit var gso:GoogleSignInOptions
+    private val RC_SIGN_IN: Int = 0
+    private lateinit var gso : GoogleSignInOptions
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
-        binding = ActivitySignInBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        FacebookSdk.sdkInitialize(applicationContext);
-        callbackManager = CallbackManager.Factory.create()
-
-
-        buttonFacebookLogin=binding.facebookLogin
-        buttonFacebookLogin.setReadPermissions("email", "public_profile")
-        createRequest()
-
 
         auth = FirebaseAuth.getInstance()
+        binding = ActivitySignInBinding.inflate(layoutInflater)
+
+        setContentView(binding.root)
+        // FacebookSdk.sdkInitialize(applicationContext)
+        callbackManager = CallbackManager.Factory.create()
+
+        buttonFacebookLogin = binding.facebookLogin
+        buttonFacebookLogin.setPermissions("email", "public_profile")
+        createRequest()
+
         binding.signupLogin.setOnClickListener {
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
         }
-        binding.buttonGoogle2.setOnClickListener{
-            signIn()
+
+        binding.buttonGoogle2.setOnClickListener {
+            googleSignIn()
         }
 
-        binding.button.setOnClickListener{
-                val email = binding.Email.text.toString()
-                val pass = binding.Pass.text.toString()
+        binding.emailLoginButton.setOnClickListener {
 
-                if (email.isNotEmpty() && pass.isNotEmpty()) {
+            val pass = binding.Pass.text.toString()
+            val email = binding.Email.text.toString()
 
-                    auth.signInWithEmailAndPassword(email, pass).addOnCompleteListener {
-                        if (it.isSuccessful) {
-                            val uid = auth.uid.toString()
-                            database = FirebaseDatabase.getInstance().getReference("Users")
-                            database.child(uid).get().addOnSuccessListener {
-                                if (it.exists())
-                                {
-                                    val intent = Intent(this, CentralActivity::class.java)
-                                    startActivity(intent)
-                                }
-                                else{
-                                    val intent = Intent(this, HomeActivity::class.java)
-                                    startActivity(intent)
-                                }
+            if (email.isNotEmpty() && pass.isNotEmpty()) {
+
+                auth.signInWithEmailAndPassword(email, pass).addOnCompleteListener {
+
+                    if (it.isSuccessful) {
+                        val uid = auth.uid.toString()
+                        database = FirebaseDatabase.getInstance().getReference("Users")
+                        database.child(uid).get().addOnSuccessListener {
+                            if (it.exists())
+                            {
+                                val intent = Intent(this, CentralActivity::class.java)
+                                startActivity(intent)
                             }
-                        } else {
-                            Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
-
+                            else{
+                                val intent = Intent(this, HomeActivity::class.java)
+                                startActivity(intent)
+                            }
                         }
+                    } else {
+                        Toast.makeText(this, "Incorrect email or password", Toast.LENGTH_SHORT).show()
                     }
-                } else {
-                    Toast.makeText(this, "Empty Fields Are not Allowed !!", Toast.LENGTH_SHORT).show()
-
                 }
+
+            } else {
+                Toast.makeText(this, "Please, fill all fields", Toast.LENGTH_SHORT).show()
             }
+        }
 
+        buttonFacebookLogin.
+        registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
 
-        buttonFacebookLogin.registerCallback(callbackManager, object :
-            FacebookCallback<LoginResult> {
-            override fun onSuccess(loginResult: LoginResult) {
-                Log.d(TAG, "facebook:onSuccess:$loginResult")
-                handleFacebookAccessToken(loginResult.accessToken)
+            override fun onSuccess(result: LoginResult) {
+                Log.d(TAG, "facebook:onSuccess:$result")
+                handleFacebookAccessToken(result.accessToken)
             }
 
             override fun onCancel() {
@@ -105,8 +107,8 @@ class SignInActivity : AppCompatActivity() {
                 Log.d(TAG, "facebook:onError", error)
             }
         })
-        // ...
     }
+
     public override fun onStart() {
         super.onStart()
         // Check if user is signed in (non-null) and update UI accordingly.
@@ -114,6 +116,7 @@ class SignInActivity : AppCompatActivity() {
         if (currentUser!=null)
             updateUI(currentUser)
     }
+
     private fun handleFacebookAccessToken(token: AccessToken) {
         Log.d(TAG, "handleFacebookAccessToken:$token")
 
@@ -136,10 +139,11 @@ class SignInActivity : AppCompatActivity() {
     }
 
     private fun updateUI(user: FirebaseUser?) {
-        if (user!=null)
+        if (user != null)
         {
             val uid = auth.uid.toString()
             database = FirebaseDatabase.getInstance().getReference("Users")
+
             database.child(uid).get().addOnSuccessListener {
                 if (it.exists())
                 {
@@ -152,14 +156,7 @@ class SignInActivity : AppCompatActivity() {
                 }
             }
         }
-        else{
-            Toast.makeText(this, "please sign to continue", Toast.LENGTH_SHORT).show()
-        }
-
     }
-    /*override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        callbackManager.onActivityResult(requestCode, resultCode, data)
-        super.onActivityResult(requestCode, resultCode, data)*/
 
     private fun createRequest() {
         // Configure Google Sign In
@@ -170,7 +167,7 @@ class SignInActivity : AppCompatActivity() {
         mGoogleSignInClient = com.google.android.gms.auth.api.signin.GoogleSignIn.getClient(this, gso);
     }
 
-    private fun signIn() {
+    private fun googleSignIn() {
         val signInIntent = mGoogleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
@@ -224,14 +221,4 @@ class SignInActivity : AppCompatActivity() {
                 }
             }
     }
-
-    /* override fun onStart() {
-         super.onStart()
- 
-         if(firebaseAuth.currentUser != null){
-             val intent = Intent(this, MainActivity::class.java)
-             startActivity(intent)
-         }
-     }
- */
 }

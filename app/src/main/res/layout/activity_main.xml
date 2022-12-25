@@ -19,7 +19,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/undraw_fitness_stats_sht6" />
+        app:srcCompat="@drawable/undraw_pilates_gpdb" />
 
     <TextView
         android:id="@+id/welcometitle"

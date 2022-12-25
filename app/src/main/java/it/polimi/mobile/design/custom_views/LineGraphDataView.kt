@@ -1,15 +1,11 @@
 package it.polimi.mobile.design.custom_views
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.graphics.drawable.ColorDrawable
 import android.util.AttributeSet
-import android.view.MotionEvent
 import android.view.View
-import android.widget.Toast
 import it.polimi.mobile.design.helpers.Constant
 import kotlin.math.sqrt
 

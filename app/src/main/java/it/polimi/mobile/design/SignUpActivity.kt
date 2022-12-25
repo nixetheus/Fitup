@@ -1,10 +1,9 @@
 package it.polimi.mobile.design
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import it.polimi.mobile.design.databinding.ActivitySignUpBinding
 
