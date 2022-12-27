@@ -109,7 +109,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="MissingConstraints"
-        tools:visibility="invisible">
+        tools:visibility="visible">
 
         <LinearLayout
             android:layout_width="match_parent"

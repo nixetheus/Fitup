@@ -254,6 +254,10 @@ class CentralActivity : AppCompatActivity() {
         return workoutNameView
     }
 
+    override fun onBackPressed() {
+
+    }
+
     private fun createStatLabelText(value: String): TextView {
 
         val workoutNameView = TextView(applicationContext)

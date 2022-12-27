@@ -111,16 +111,20 @@ class ExerciseListActivity : AppCompatActivity() {
             ExerciseType.CHEST
         else
             ExerciseType.ABDOMEN
+        val exp=binding.expInputValue.text.toString()
 
         database = FirebaseDatabase.getInstance().getReference("Exercise")
         val eId = database.push().key!!
-        val exercise = Exercise(eId, name, kcalPerReps, exType, "test")
+        if (name.isNotEmpty()&&kcalPerReps.isNotEmpty()&&exp.isNotEmpty()){
+        val exercise = Exercise(eId, name, kcalPerReps, exType, exp)
         database.child(name).setValue(exercise).addOnSuccessListener {
             Toast.makeText(this, "Successfully saved!!", Toast.LENGTH_SHORT).show()
             val intent = Intent(this, ExerciseListActivity::class.java)
             startActivity(intent)
             finish()
         }
+        }
+        else Toast.makeText(this, "Fill in all fields to continue!!", Toast.LENGTH_SHORT).show()
     }
 
     private fun showExercises(exercises: List<Exercise>) {

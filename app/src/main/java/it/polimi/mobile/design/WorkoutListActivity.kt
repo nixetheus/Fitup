@@ -16,8 +16,11 @@ import androidx.cardview.widget.CardView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import it.polimi.mobile.design.databinding.ActivityWorkoutListBinding
+import it.polimi.mobile.design.entities.Exercise
 import it.polimi.mobile.design.entities.Workout
+import it.polimi.mobile.design.entities.WorkoutExercise
 import it.polimi.mobile.design.enum.WorkoutType
+import kotlin.math.exp
 
 
 class WorkoutListActivity : AppCompatActivity() {
@@ -26,7 +29,13 @@ class WorkoutListActivity : AppCompatActivity() {
     private lateinit var workoutArrayList: ArrayList<Workout>
     private lateinit var tempWorkoutArrayList: ArrayList<Workout>
     private lateinit var database : DatabaseReference
+    private lateinit var databaseExercise : DatabaseReference
+    private lateinit var databaseWorkout : DatabaseReference
+    private lateinit var databaseWorkoutExercise : DatabaseReference
+
     private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var exerciseArrayList: ArrayList<Exercise>
+    private lateinit var workoutExerciseList:ArrayList<WorkoutExercise>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityWorkoutListBinding.inflate(layoutInflater)
@@ -34,6 +43,8 @@ class WorkoutListActivity : AppCompatActivity() {
         firebaseAuth = FirebaseAuth.getInstance()
         workoutArrayList= arrayListOf<Workout>()
         tempWorkoutArrayList= arrayListOf<Workout>()
+        workoutExerciseList=ArrayList<WorkoutExercise>()
+        exerciseArrayList=ArrayList<Exercise>()
         database=FirebaseDatabase.getInstance().getReference("Workout")
         val uid = firebaseAuth.uid.toString()
         database.addValueEventListener(object :ValueEventListener{
@@ -131,17 +142,23 @@ class WorkoutListActivity : AppCompatActivity() {
 
         database = FirebaseDatabase.getInstance().getReference("Workout")
         val wId = database.push().key!!
-        val workout = Workout(wId, uid,name,WorkoutType.RELAX, "hip hop")
-        database.child(name).setValue(workout).addOnSuccessListener {
-            Toast.makeText(this, "Successfully saved!!", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, WorkoutListActivity::class.java)
-            startActivity(intent)
-            finish()
+        if(name.isNotEmpty()) {
+            val workout = Workout(wId, uid, name, WorkoutType.RELAX, "hip hop")
+            database.child(name).setValue(workout).addOnSuccessListener {
+                Toast.makeText(this, "Successfully saved!!", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, WorkoutListActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
         }
+        else Toast.makeText(this, "Fill in all fields to continue!!", Toast.LENGTH_SHORT).show()
+
     }
 
     private fun showWorkouts(workouts: List<Workout>) {
         binding.workoutsListLayout.removeAllViews()
+        var kcalTot: Float = 0F
+        var exp: Float = 0F
 
         val workoutsLayout = binding.workoutsListLayout
         for (workout in workouts) {
@@ -154,12 +171,67 @@ class WorkoutListActivity : AppCompatActivity() {
             val workoutName = createWorkoutNameText(workout)
             workoutLayout.addView(workoutName)
 
-            // Stats
+            //join tables
             val statsLayout = createWorkoutStatsLinearLayout()
+            databaseExercise= FirebaseDatabase.getInstance().getReference("Exercise")
+            databaseExercise.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()){
+                        for (workSnap in snapshot.children){
+                            val exerciseData=workSnap.getValue(Exercise::class.java)
+                            if (exerciseData!=null)
+                                exerciseArrayList.add(exerciseData!!)
+                        }
 
+
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+
+            })
+            databaseWorkoutExercise=FirebaseDatabase.getInstance().getReference("WorkoutExercise")
+            databaseWorkoutExercise.addValueEventListener(object :ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    workoutExerciseList.clear()
+                    if (snapshot.exists()) {
+                        for (workSnap in snapshot.children) {
+
+                            val workData = workSnap.getValue(WorkoutExercise::class.java)
+                            if (workData != null) {
+                                if (workData.workoutId == workout.woId)
+                                    workoutExerciseList.add(workData!!)
+                            }
+                        }
+
+                        for (workoutExercise in workoutExerciseList) {
+                            for (exercise in exerciseArrayList)
+                                if (exercise.eid == workoutExercise.exerciseId) {
+                                    var rep = workoutExercise.reps?.toFloat()
+                                    val sets = workoutExercise.sets?.toFloat()
+                                    var calPerRep = exercise.caloriesPerRep?.toFloat()
+                                    var expPerRep = exercise.experiencePerReps?.toFloat()
+                                    if (rep != null) {
+                                        kcalTot += (rep * calPerRep!!) * sets!!
+                                        exp += (rep * sets) * expPerRep!!
+
+                                    }
+                                }
+
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+            }
+            )
             // Exercises Stat
             val exercisesStatLayout = createWorkoutStatLinearLayout()
-            val exercisesStatValue = createStatValueText("--")  // TODO
+            val exercisesStatValue = createStatValueText(exp.toString())  // TODO
             val exercisesStatLabel = createStatLabelText(getString(R.string.number_exercises_label))
             exercisesStatLayout.addView(exercisesStatValue)
             exercisesStatLayout.addView(exercisesStatLabel)
@@ -167,7 +239,7 @@ class WorkoutListActivity : AppCompatActivity() {
 
             // Kcal Stat
             val kcalStatLayout = createWorkoutStatLinearLayout()
-            val kcalStatValue = createStatValueText("--")  // TODO
+            val kcalStatValue = createStatValueText(kcalTot.toString())  // TODO
             val kcalStatLabel = createStatLabelText(getString(R.string.calories_data_label))
             kcalStatLayout.addView(kcalStatValue)
             kcalStatLayout.addView(kcalStatLabel)

@@ -1,16 +1,20 @@
 package it.polimi.mobile.design
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.View
 import android.widget.Chronometer
 import android.widget.Chronometer.OnChronometerTickListener
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.*
 import it.polimi.mobile.design.databinding.ActivityWorkoutPlayBinding
 import it.polimi.mobile.design.entities.Workout
 import it.polimi.mobile.design.entities.WorkoutExercise
+import kotlin.properties.Delegates
 
 
 class WorkoutPlayActivity : AppCompatActivity() {
@@ -22,7 +26,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
     private var i=0
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
+        val exp =0F
         super.onCreate(savedInstanceState)
         binding=ActivityWorkoutPlayBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -70,16 +74,34 @@ class WorkoutPlayActivity : AppCompatActivity() {
         })
         binding.beingTimeButton.setOnClickListener{
             start()
+
         }
         binding.startStopButton.setOnClickListener{
             i=0
-            binding.startCurrentExerciseLayout.visibility= View.VISIBLE
-            binding.currentExerciseName.text= workoutExercise[i].exerciseId
+
+            if (workoutExercise.size!=0) {
+                binding.currentExerciseName.text = workoutExercise[i].exerciseName
+                binding.startCurrentExerciseLayout.visibility= View.VISIBLE
+            }
+            else {
+                Toast.makeText(
+                    this,
+                    "This workout is empty, please add exercises to continue your training",
+                    Toast.LENGTH_SHORT
+                ).show()
+                chrono.stop()
+                binding.startStopButton.text = "FINISH!!"
+                binding.startStopButton.setOnClickListener {
+                    val intent = Intent(this, CentralActivity::class.java)
+                    startActivity(intent)
+                }
+            }
         }
         binding.nextExerciseButton.setOnClickListener{
             if(i<workoutExercise.size-1){
                 i++
-                binding.currentExerciseName.text= workoutExercise[i].exerciseId}
+                binding.currentExerciseName.text= workoutExercise[i].exerciseId
+            }
             else {
                 chrono.stop()
                 binding.startStopButton.text = "FINISH!!"
