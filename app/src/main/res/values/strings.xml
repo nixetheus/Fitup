@@ -67,7 +67,7 @@
     <string name="exercise_type_hint">Type</string>
     <string name="add_confirm">Add</string>
     <string name="workout_list_exercises_title">Exercises</string>
-    <string name="exercises_exp_label">Exp</string>
+    <string name="exp_exercises_label">Exp</string>
 
     <!-- WORKOUT DETAIL -->
     <string name="missing">--</string>
