@@ -100,7 +100,7 @@ class ExerciseListActivity : AppCompatActivity() {
     }
     private fun createExercise(){
         val exType: ExerciseType
-        val name=binding.exerciseNameField.text.toString().toLowerCase()
+        val name=binding.exerciseNameField.text.toString()
         val kcalPerReps=binding.kcalInputValue.text.toString()
         val exerciseType= binding.typeOfEx.selectedItem.toString()
         exType= if (exerciseType=="Arms")
