@@ -25,6 +25,7 @@ class EditWorkoutActivity : AppCompatActivity() {
     private lateinit var workoutExerciseDatabase: DatabaseReference
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var exerciseArrayList: ArrayList<Exercise>
+    private lateinit var exerciseInWorkout:ArrayList<Exercise>
     private lateinit var workoutExerciseList:ArrayList<WorkoutExercise>
 
     private lateinit var exercisesSpinner: Spinner
@@ -38,6 +39,7 @@ class EditWorkoutActivity : AppCompatActivity() {
 
         var workout= intent.extras?.get("workout") as Workout
         workoutExerciseList=ArrayList<WorkoutExercise>()
+        exerciseInWorkout=ArrayList<Exercise>()
 
         binding.workoutName.text=workout.name
         binding.openAddExerciseLayout.setOnClickListener{
@@ -93,18 +95,21 @@ class EditWorkoutActivity : AppCompatActivity() {
         binding.confirmAddWorkoutBtn.setOnClickListener{
 
             val ex= binding.exercisesSpinner.selectedItem
-            exerciseDatabase= FirebaseDatabase.getInstance().getReference("WorkoutExercise")
+            workoutExerciseDatabase= FirebaseDatabase.getInstance().getReference("WorkoutExercise")
             val id = exerciseDatabase.push().key!!
             val workoutId= workout.woId.toString()
-            val exerciseId= binding.exercisesSpinner.selectedItem.toString()
+            val exerciseName= binding.exercisesSpinner.selectedItem.toString()
+            val exercise=binding.exercisesSpinner.selectedItem as Exercise
+            val exerciseId =exercise.eid
             val sets=binding.setsInputValue.text.toString()
             val reps= binding.repsInputValue.text.toString()
             val rest=binding.restInputValue.text.toString()
-            val workoutExercise= WorkoutExercise(id, workoutId, exerciseId, sets,reps,rest)
+            val workoutExercise= WorkoutExercise(id, workoutId, exerciseName,exerciseId, sets,reps,rest)
             if (sets.isNotEmpty()&&reps.isNotEmpty()&&rest.isNotEmpty()) {
-                exerciseDatabase.child(id).setValue(workoutExercise).addOnSuccessListener {
+                workoutExerciseDatabase.child(id).setValue(workoutExercise).addOnSuccessListener {
                     Toast.makeText(this, "Successfully saved!!", Toast.LENGTH_SHORT).show()
                     finish()
+                    exerciseInWorkout.add(exercise)
                     val intent = Intent(this, EditWorkoutActivity::class.java)
                     intent.putExtra("workout",workout /*as java.io.Serializable*/)
                     startActivity(intent)
@@ -127,6 +132,16 @@ class EditWorkoutActivity : AppCompatActivity() {
                         }
                     }
                     showExerciseCards(workoutExerciseList)
+                    var kcalTot=0
+                    for(workoutExercise in workoutExerciseList){
+                        for (exercise in exerciseInWorkout)
+                            if (exercise.eid==workoutExercise.exerciseId)
+                                kcalTot += (workoutExercise.reps?.toInt()
+                                    ?.times(exercise.caloriesPerRep?.toInt()!!)!!)
+
+
+                    }
+                    binding.kcalOfWorkout.text = kcalTot.toString()
 
 
                 }
@@ -137,6 +152,8 @@ class EditWorkoutActivity : AppCompatActivity() {
             }
 
         })
+
+
     }
     private fun showExerciseSpinner(exercises: List<Exercise>) {
         exercisesSpinner=binding.exercisesSpinner

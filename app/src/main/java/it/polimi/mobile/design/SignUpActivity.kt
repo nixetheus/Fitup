@@ -27,7 +27,7 @@ class SignUpActivity : AppCompatActivity() {
         }
 
         binding.SignUpBtn.setOnClickListener {
-            val email = binding.Email.text.toString()
+            val email = binding.EmailField.text.toString()
             val pass = binding.Pass.text.toString()
             val confirmPass = binding.Pass2.text.toString()
 

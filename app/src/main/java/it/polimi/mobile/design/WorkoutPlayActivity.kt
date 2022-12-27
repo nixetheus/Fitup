@@ -84,6 +84,10 @@ class WorkoutPlayActivity : AppCompatActivity() {
                 chrono.stop()
                 binding.startStopButton.text = "FINISH!!"
                 binding.startCurrentExerciseLayout.visibility = View.GONE
+                binding.startStopButton.setOnClickListener {
+                    val intent = Intent(this, CentralActivity::class.java)
+                    startActivity(intent)
+                }
             }
         }
 

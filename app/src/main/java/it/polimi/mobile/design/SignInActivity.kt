@@ -57,11 +57,16 @@ class SignInActivity : AppCompatActivity() {
         binding.buttonGoogle2.setOnClickListener {
             googleSignIn()
         }
+        binding.forgetPass.setOnClickListener{
+            val intent = Intent(this, ResetPasswordActivity::class.java)
+            startActivity(intent)
+
+        }
 
         binding.emailLoginButton.setOnClickListener {
 
             val pass = binding.Pass.text.toString()
-            val email = binding.Email.text.toString()
+            val email = binding.EmailField.text.toString()
 
             if (email.isNotEmpty() && pass.isNotEmpty()) {
 

@@ -39,7 +39,7 @@
         app:layout_constraintTop_toBottomOf="@+id/welcometitle3">
 
         <EditText
-            android:id="@+id/Email"
+            android:id="@+id/EmailField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="15"
