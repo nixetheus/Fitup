@@ -126,7 +126,7 @@ class WorkoutListActivity : AppCompatActivity() {
 
     }
     private fun createWorkout(){
-        val name=binding.workoutNameField.text.toString()
+        val name=binding.workoutNameField.text.toString().toLowerCase()
         val uid=firebaseAuth.uid.toString()
 
         database = FirebaseDatabase.getInstance().getReference("Workout")

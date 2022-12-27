@@ -39,7 +39,7 @@ class HomeActivity : AppCompatActivity() {
         if (username.isNotEmpty()&&age.isNotEmpty()&&weight.isNotEmpty()){
 
             database= FirebaseDatabase.getInstance().getReference("Users")
-            val user=User(uid,username,weight, age ,gender )
+            val user=User(uid,username,weight, age ,gender, "0" )
             database.child(uid).setValue(user).addOnSuccessListener {
                 Toast.makeText(this, "Successfully saved!!", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, CentralActivity::class.java)

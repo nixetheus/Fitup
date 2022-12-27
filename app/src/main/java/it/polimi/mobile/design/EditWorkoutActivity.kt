@@ -100,11 +100,11 @@ class EditWorkoutActivity : AppCompatActivity() {
             val workoutId= workout.woId.toString()
             val exerciseName= binding.exercisesSpinner.selectedItem.toString()
             val exercise=binding.exercisesSpinner.selectedItem as Exercise
-            val exerciseId =exercise.eid
+            val exerciseId =exercise.eid.toString()
             val sets=binding.setsInputValue.text.toString()
             val reps= binding.repsInputValue.text.toString()
             val rest=binding.restInputValue.text.toString()
-            val workoutExercise= WorkoutExercise(id, workoutId, exerciseName,exerciseId, sets,reps,rest)
+            val workoutExercise= WorkoutExercise(id, workoutId, exerciseId,exerciseName,sets,reps,rest)
             if (sets.isNotEmpty()&&reps.isNotEmpty()&&rest.isNotEmpty()) {
                 workoutExerciseDatabase.child(id).setValue(workoutExercise).addOnSuccessListener {
                     Toast.makeText(this, "Successfully saved!!", Toast.LENGTH_SHORT).show()
@@ -132,16 +132,25 @@ class EditWorkoutActivity : AppCompatActivity() {
                         }
                     }
                     showExerciseCards(workoutExerciseList)
-                    var kcalTot=0
+                    var kcalTot:Float= 0F
+                    var exp:Float=0F
                     for(workoutExercise in workoutExerciseList){
-                        for (exercise in exerciseInWorkout)
-                            if (exercise.eid==workoutExercise.exerciseId)
-                                kcalTot += (workoutExercise.reps?.toInt()
-                                    ?.times(exercise.caloriesPerRep?.toInt()!!)!!)
+                        for (exercise in exerciseArrayList)
+                            if (exercise.eid==workoutExercise.exerciseId) {
+                                var rep = workoutExercise.reps?.toFloat()
+                                val sets= workoutExercise.sets?.toFloat()
+                                var calPerRep=exercise.caloriesPerRep?.toFloat()
+                                var expPerRep= exercise.experiencePerReps?.toFloat()
+                                if (rep != null) {
+                                    kcalTot += (rep * calPerRep!!)* sets!!
+                                    exp+=(rep*sets)* expPerRep!!
 
+                                }
+                            }
 
                     }
                     binding.kcalOfWorkout.text = kcalTot.toString()
+                    binding.expOfWorkout.text= exp.toString()
 
 
                 }
@@ -159,14 +168,14 @@ class EditWorkoutActivity : AppCompatActivity() {
         exercisesSpinner=binding.exercisesSpinner
         adapter= ArrayAdapter(this,android.R.layout.simple_spinner_item, exerciseArrayList)
         exercisesSpinner.adapter=adapter
-        binding.caloriesDataBox
+
 
     }
     @SuppressLint("SetTextI18n")
     private fun showExerciseCards(workoutExercise: List<WorkoutExercise>){
         for (workoutExercise in workoutExercise) {
             binding2= ExerciseInWorkoutBinding.inflate(layoutInflater)
-            binding2.exerciseNameWorkout.text = workoutExercise.exerciseId.toString()
+            binding2.exerciseNameWorkout.text = workoutExercise.exerciseName.toString()
             binding2.repsValue.text = workoutExercise.reps.toString()
             binding2.setsValue.text = workoutExercise.sets.toString()
             binding2.restValue.text = workoutExercise.rest.toString()

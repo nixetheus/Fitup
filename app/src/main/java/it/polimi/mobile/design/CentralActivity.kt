@@ -103,7 +103,9 @@ class CentralActivity : AppCompatActivity() {
         database.child(uid).get().addOnSuccessListener {
             if(it.exists()){
                 val username=it.child("username").value
+                val expLevel=it.child("exp").value
                 binding.usernameText.text = username.toString()
+                binding.userLevelValue.text=expLevel.toString()
             }
         }
     }
