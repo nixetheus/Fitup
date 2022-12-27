@@ -273,6 +273,7 @@
                         android:ems="10"
                         android:importantForAutofill="no"
                         android:inputType="number"
+                        android:textAlignment="center"
                         tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
                     <TextView
@@ -302,6 +303,7 @@
                         android:ems="10"
                         android:importantForAutofill="no"
                         android:inputType="number"
+                        android:textAlignment="center"
                         tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
                     <TextView
@@ -331,6 +333,7 @@
                         android:ems="10"
                         android:importantForAutofill="no"
                         android:inputType="number"
+                        android:textAlignment="center"
                         tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
                     <TextView
