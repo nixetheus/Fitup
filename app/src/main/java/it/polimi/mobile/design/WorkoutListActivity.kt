@@ -258,6 +258,7 @@ class WorkoutListActivity : AppCompatActivity() {
             workoutsLayout.addView(workoutCard)
             workoutCard.setOnLongClickListener{
                 binding.editWorkoutLayout.visibility=View.VISIBLE
+                binding.workoutMenuName.text = workout.name
                 val animate = TranslateAnimation(
                     0F,  // fromXDelta
                     0F,  // toXDelta
@@ -274,10 +275,11 @@ class WorkoutListActivity : AppCompatActivity() {
                     intent.putExtra("workout",workout /*as java.io.Serializable*/)
                     startActivity(intent)
                     workoutCard.isLongClickable=true
-
+                    binding.editWorkoutLayout.visibility=View.GONE
 
                 }
                 binding.deleteWorkoutButton.setOnClickListener{
+                    binding.editWorkoutLayout.visibility=View.GONE
                     val ref = FirebaseDatabase.getInstance().reference
                     val workoutExercise = ref.child("WorkoutExercise").orderByChild("workoutId").equalTo(workout.woId.toString())
 

@@ -78,7 +78,7 @@ class EditWorkoutActivity : AppCompatActivity() {
 
         })
 
-        binding.closeModifyExercise.setOnClickListener{
+        binding.addWorkoutClose.setOnClickListener{
             binding.addExerciseToWorkoutCard.visibility=View.GONE
             val animate = TranslateAnimation(
                 0F,  // fromXDelta
@@ -113,6 +113,7 @@ class EditWorkoutActivity : AppCompatActivity() {
                     val intent = Intent(this, EditWorkoutActivity::class.java)
                     intent.putExtra("workout",workout /*as java.io.Serializable*/)
                     startActivity(intent)
+                    binding.addExerciseToWorkoutCard.visibility=View.GONE
                 }
             }
             else Toast.makeText(this, "Fill in all fields to continue!!", Toast.LENGTH_SHORT).show()

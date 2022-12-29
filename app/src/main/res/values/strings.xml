@@ -115,9 +115,21 @@
     <string name="begin_exercise_button">Begin</string>
     <string name="next_up_button">Next</string>
 
+    <!-- FINISH -->
+    <string name="congrats_main">You\'ve Done It!</string>
+    <string name="congrats_sub">Now stretch, relax and enjoy the rest of your day</string>
+    <string name="recap_exp">Total Exp:</string>
+    <string name="recap_time">Final Time:</string>
+    <string name="recap_number_ex">N. Exercises:</string>
+
     <!-- STATS -->
     <string name="latest_label">Latest</string>
     <string name="diff_label">+/-</string>
     <string name="new_value">Value</string>
+
+    <!-- RESET -->
+    <string name="reset_label">Reset Your Password</string>
+    <string name="confirm_label">Confirm Email</string>
+    <string name="reset_btn">Reset</string>
 
 </resources>

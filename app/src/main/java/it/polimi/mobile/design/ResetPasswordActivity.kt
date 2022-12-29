@@ -24,7 +24,7 @@ class ResetPasswordActivity : AppCompatActivity() {
 
         setContentView(binding.root)
         mAuth=FirebaseAuth.getInstance()
-        eMail=binding.EmailField
+        eMail=binding.resetEmailField
         reset=binding.resetBtn
         reset.setOnClickListener{
             val sPass=eMail.text.toString()
@@ -36,6 +36,11 @@ class ResetPasswordActivity : AppCompatActivity() {
                 Toast.makeText(this, it.toString(),Toast.LENGTH_SHORT).show()
             }
 
+        }
+
+        binding.loginResetBtn.setOnClickListener {
+            val intent = Intent(this, SignInActivity::class.java)
+            startActivity(intent)
         }
     }
 }

@@ -58,6 +58,7 @@ class ExerciseListActivity : AppCompatActivity() {
         })
         binding.confirmAddExerciseBtn.setOnClickListener{
             createExercise()
+            binding.addExerciseCard.visibility=View.GONE
         }
         binding.addExerciseButton.setOnClickListener{
             binding.addExerciseCard.visibility=View.VISIBLE
