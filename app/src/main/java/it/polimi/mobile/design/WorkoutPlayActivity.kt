@@ -76,6 +76,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
             start()
 
         }
+
         binding.startStopButton.setOnClickListener{
             i=0
 

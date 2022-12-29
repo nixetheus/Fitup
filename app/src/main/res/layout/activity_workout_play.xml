@@ -152,6 +152,7 @@
                 android:layout_height="match_parent">
 
             </it.polimi.mobile.design.custom_layouts.WorkoutLayout>
+
         </LinearLayout>
     </ScrollView>
 
