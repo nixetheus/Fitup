@@ -21,6 +21,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+
 import it.polimi.mobile.design.databinding.ActivityCentralBinding
 import it.polimi.mobile.design.entities.Workout
 
@@ -36,6 +37,8 @@ class CentralActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityCentralBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
 
         workoutArrayList= arrayListOf<Workout>()
         firebaseAuth = FirebaseAuth.getInstance()
@@ -162,6 +165,9 @@ class CentralActivity : AppCompatActivity() {
             workoutCard.addView(workoutLayout)
             workoutsLayout.addView(workoutCard)
             workoutCard.setOnClickListener{
+                SpotifyService.connect(this) {
+
+                }
                 val intent = Intent(this, WorkoutPlayActivity::class.java)
                 intent.putExtra("workout",workout /*as java.io.Serializable*/)
                 startActivity(intent)
@@ -254,6 +260,7 @@ class CentralActivity : AppCompatActivity() {
         return workoutNameView
     }
 
+
     override fun onBackPressed() {
 
     }
@@ -276,6 +283,8 @@ class CentralActivity : AppCompatActivity() {
         return workoutNameView
     }
 
+
     private fun Int.toPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
+
 
 }

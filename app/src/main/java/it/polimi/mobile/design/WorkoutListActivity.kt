@@ -45,6 +45,7 @@ class WorkoutListActivity : AppCompatActivity() {
         tempWorkoutArrayList= arrayListOf<Workout>()
         workoutExerciseList=ArrayList<WorkoutExercise>()
         exerciseArrayList=ArrayList<Exercise>()
+
         database=FirebaseDatabase.getInstance().getReference("Workout")
         val uid = firebaseAuth.uid.toString()
         database.addValueEventListener(object :ValueEventListener{
@@ -157,11 +158,12 @@ class WorkoutListActivity : AppCompatActivity() {
 
     private fun showWorkouts(workouts: List<Workout>) {
         binding.workoutsListLayout.removeAllViews()
-        var kcalTot: Float = 0F
-        var exp: Float = 0F
+
 
         val workoutsLayout = binding.workoutsListLayout
         for (workout in workouts) {
+            var kcalTot: Float = 0F
+            var exp: Float = 0F
 
             val workoutCard = createWorkoutCard()
 
@@ -193,7 +195,7 @@ class WorkoutListActivity : AppCompatActivity() {
 
             })
             databaseWorkoutExercise=FirebaseDatabase.getInstance().getReference("WorkoutExercise")
-            databaseWorkoutExercise.addValueEventListener(object :ValueEventListener {
+            databaseWorkoutExercise.child("workoutId").orderByKey().equalTo(workout.woId).addValueEventListener(object :ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
                     workoutExerciseList.clear()
                     if (snapshot.exists()) {
@@ -206,29 +208,34 @@ class WorkoutListActivity : AppCompatActivity() {
                             }
                         }
 
-                        for (workoutExercise in workoutExerciseList) {
-                            for (exercise in exerciseArrayList)
-                                if (exercise.eid == workoutExercise.exerciseId) {
-                                    var rep = workoutExercise.reps?.toFloat()
-                                    val sets = workoutExercise.sets?.toFloat()
-                                    var calPerRep = exercise.caloriesPerRep?.toFloat()
-                                    var expPerRep = exercise.experiencePerReps?.toFloat()
-                                    if (rep != null) {
-                                        kcalTot += (rep * calPerRep!!) * sets!!
-                                        exp += (rep * sets) * expPerRep!!
 
-                                    }
-                                }
 
-                        }
                     }
                 }
 
                 override fun onCancelled(error: DatabaseError) {
                     TODO("Not yet implemented")
                 }
+            })
+
+
+
+
+            for (workoutExercise in workoutExerciseList) {
+                for (exercise in exerciseArrayList)
+                    if (exercise.eid == workoutExercise.exerciseId) {
+                        var rep = workoutExercise.reps?.toFloat()
+                        val sets = workoutExercise.sets?.toFloat()
+                        var calPerRep = exercise.caloriesPerRep?.toFloat()
+                        var expPerRep = exercise.experiencePerReps?.toFloat()
+                        if (rep != null) {
+                            kcalTot += (rep * calPerRep!!) * sets!!
+                            exp += (rep * sets) * expPerRep!!
+
+                        }
+                    }
+
             }
-            )
             // Exercises Stat
             val exercisesStatLayout = createWorkoutStatLinearLayout()
             val exercisesStatValue = createStatValueText(exp.toString())  // TODO
@@ -236,6 +243,7 @@ class WorkoutListActivity : AppCompatActivity() {
             exercisesStatLayout.addView(exercisesStatValue)
             exercisesStatLayout.addView(exercisesStatLabel)
             statsLayout.addView(exercisesStatLayout)
+
 
             // Kcal Stat
             val kcalStatLayout = createWorkoutStatLinearLayout()

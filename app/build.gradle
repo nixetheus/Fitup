@@ -14,6 +14,9 @@ android {
         versionCode 1
         versionName "1.0"
 
+        manifestPlaceholders = [redirectSchemeName: "spotify-sdk", redirectHostName: "auth"]
+
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -48,6 +51,13 @@ dependencies {
     implementation 'com.android.car.ui:car-ui-lib:2.0.0'
     implementation 'androidx.preference:preference:1.1.+'
     implementation 'com.google.firebase:firebase-auth-ktx:21.1.0'
+
+    implementation "com.google.code.gson:gson:2.8.9"
+    api project(':libs')
+
+
+    //noinspection GradlePath
+    implementation files('/home/nicog97/StudioProjects/MobileProjectApp/libs/spotify-app-remote-release-0.7.2')
     testImplementation 'junit:junit:4.13.2'
     //implementation 'com.facebook.android:facebook-android-sdk:[8,9)'
     implementation 'com.facebook.android:facebook-login:latest.release'
