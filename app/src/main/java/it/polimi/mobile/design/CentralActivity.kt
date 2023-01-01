@@ -31,48 +31,53 @@ class CentralActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCentralBinding
     private lateinit var database : DatabaseReference
     private lateinit var firebaseAuth: FirebaseAuth
-    private lateinit var workoutArrayList:ArrayList<Workout>
+    private var workoutArrayList: ArrayList<Workout> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         binding = ActivityCentralBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-
-        workoutArrayList= arrayListOf<Workout>()
         firebaseAuth = FirebaseAuth.getInstance()
-        val uid = firebaseAuth.uid.toString()
-        database= FirebaseDatabase.getInstance().getReference("Workout")
-        database.addValueEventListener(object : ValueEventListener {
+        databaseCallSetup()
+
+        createBindings()
+
+        showUser()
+    }
+
+    private fun databaseCallSetup() {
+
+        val workoutsSchema = FirebaseDatabase.getInstance().getReference("Workout")
+        workoutsSchema.addValueEventListener(object : ValueEventListener {
+
             override fun onDataChange(snapshot: DataSnapshot) {
+
                 workoutArrayList.clear()
                 if (snapshot.exists()) {
-                    for (workSnap in snapshot.children) {
-                        val workData = workSnap.getValue(Workout::class.java)
-                        if (workData != null) {
-                            if (workData.userId==uid)
-                                workoutArrayList.add(workData!!)
+                    for (workoutSnap in snapshot.children) {
+                        val workout = workoutSnap.getValue(Workout::class.java)
+                        if (workout != null) {
+                            if (workout.userId == firebaseAuth.uid.toString())  // TODO: could be a query
+                                workoutArrayList.add(workout)
                         }
 
                     }
                     showTopWorkouts(workoutArrayList)
                     showPopularWorkouts(workoutArrayList)
-
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
                 TODO("Not yet implemented")
             }
-
         })
+    }
 
+    private fun createBindings() {
 
-        showUser()
-
-
-        binding.welcomeView.setOnClickListener{
+        """binding.welcomeView.setOnClickListener{
             firebaseAuth.signOut()
             LoginManager.getInstance().logOut()
             val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
@@ -81,9 +86,8 @@ class CentralActivity : AppCompatActivity() {
             finish()
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
-        }
+        }"""
 
-        
         binding.exercisesLink.setOnClickListener{
             val intent = Intent(this, ExerciseListActivity::class.java)
             startActivity(intent)
@@ -98,17 +102,14 @@ class CentralActivity : AppCompatActivity() {
             val intent = Intent(this, WorkoutListActivity::class.java)
             startActivity(intent)
         }
-
     }
+
     private fun showUser(){
-        val uid = firebaseAuth.uid.toString()
-        database= FirebaseDatabase.getInstance().getReference("Users")
-        database.child(uid).get().addOnSuccessListener {
-            if(it.exists()){
-                val username=it.child("username").value
-                val expLevel=it.child("exp").value
-                binding.usernameText.text = username.toString()
-                binding.userLevelValue.text=expLevel.toString()
+        val usersSchema = FirebaseDatabase.getInstance().getReference("Users")
+        usersSchema.child(firebaseAuth.uid.toString()).get().addOnSuccessListener {
+            if (it.exists()) {
+                binding.usernameText.text = it.child("username").value.toString()
+                binding.userLevelValue.text = it.child("exp").value.toString()
             }
         }
     }
@@ -122,7 +123,7 @@ class CentralActivity : AppCompatActivity() {
     }
 
     private fun showWorkouts(workouts: List<Workout>, layout: LinearLayout) {
-        val workoutsLayout = layout
+
         for (workout in workouts) {
 
             val workoutCard = createWorkoutCard()
@@ -163,13 +164,13 @@ class CentralActivity : AppCompatActivity() {
 
             workoutLayout.addView(statsLayout)
             workoutCard.addView(workoutLayout)
-            workoutsLayout.addView(workoutCard)
-            workoutCard.setOnClickListener{
+            layout.addView(workoutCard)
+            workoutCard.setOnClickListener {
                 SpotifyService.connect(this) {
 
                 }
                 val intent = Intent(this, WorkoutPlayActivity::class.java)
-                intent.putExtra("workout",workout /*as java.io.Serializable*/)
+                intent.putExtra("workout", workout /*as java.io.Serializable*/)
                 startActivity(intent)
 
             }
