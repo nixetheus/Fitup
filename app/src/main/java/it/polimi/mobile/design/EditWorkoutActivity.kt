@@ -110,9 +110,9 @@ class EditWorkoutActivity : AppCompatActivity() {
         val exerciseId = exercise.eid
         val exerciseName = exercise.name
 
-        val sets = parseIntInput(binding.setsInputValue.text.toString())
-        val reps = parseIntInput(binding.repsInputValue.text.toString())
-        val rest = parseIntInput(binding.restInputValue.text.toString())
+        val sets = HelperFunctions().parseIntInput(binding.setsInputValue.text.toString())
+        val reps = HelperFunctions().parseIntInput(binding.repsInputValue.text.toString())
+        val rest = HelperFunctions().parseIntInput(binding.restInputValue.text.toString())
 
         val workoutExercise= WorkoutExercise(id, workoutId, exerciseId,
             exerciseName, sets, reps, rest)
@@ -127,12 +127,6 @@ class EditWorkoutActivity : AppCompatActivity() {
             finish()
             startActivity(intent)
         }
-    }
-
-    private fun parseIntInput(text: String) : Int {
-        if (text.isNotEmpty())
-            return Integer.parseInt(text)
-        return 0
     }
 
     private fun showExerciseSpinner() {

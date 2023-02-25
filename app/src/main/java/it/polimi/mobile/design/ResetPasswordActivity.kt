@@ -13,26 +13,26 @@ import it.polimi.mobile.design.databinding.ActivityMainBinding
 import it.polimi.mobile.design.databinding.ActivityResetPasswordBinding
 
 class ResetPasswordActivity : AppCompatActivity() {
-    private lateinit var mAuth: FirebaseAuth
-    private lateinit var binding: ActivityResetPasswordBinding
-    private lateinit var database: DatabaseReference
-    private lateinit var eMail:EditText
-    private lateinit var reset: Button
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityResetPasswordBinding.inflate(layoutInflater)
 
+    private var mAuth = FirebaseAuth.getInstance()
+    private lateinit var binding: ActivityResetPasswordBinding
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+
+        super.onCreate(savedInstanceState)
+
+        binding = ActivityResetPasswordBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        mAuth=FirebaseAuth.getInstance()
-        eMail=binding.resetEmailField
-        reset=binding.resetBtn
-        reset.setOnClickListener{
-            val sPass=eMail.text.toString()
+
+        binding.resetBtn.setOnClickListener{
+
+            val sPass = binding.resetEmailField.text.toString()
             mAuth.sendPasswordResetEmail(sPass).addOnSuccessListener {
                 Toast.makeText(this, "please check your e-mail", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, SignInActivity::class.java)
                 startActivity(intent)
-            }.addOnFailureListener(){
+            }.addOnFailureListener {
                 Toast.makeText(this, it.toString(),Toast.LENGTH_SHORT).show()
             }
 

@@ -19,17 +19,16 @@ import java.security.NoSuchAlgorithmException
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var mAuth: FirebaseAuth
     private lateinit var binding: ActivityMainBinding
-    private lateinit var database: DatabaseReference
+    private var mAuth = FirebaseAuth.getInstance()
+    private var userDatabase = FirebaseDatabase.getInstance().getReference("Users")
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
 
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        mAuth = FirebaseAuth.getInstance()
 
         checkUserSignIn()
 
@@ -46,13 +45,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkUserSignIn() {
-        // Check if user is signed in (non-null) and update UI accordingly.
-        val currentUser = mAuth.currentUser
-        if (currentUser != null) {
-            val uid = mAuth.uid.toString()
-            database = FirebaseDatabase.getInstance().getReference("Users")
 
-            database.child(uid).get().addOnSuccessListener {
+        // Check if user is signed in (non-null) and update UI accordingly.
+        if (mAuth.currentUser != null) {
+
+            val uid = mAuth.uid.toString()
+            userDatabase.child(uid).get().addOnSuccessListener {
                 if (it.exists()) {
                     val intent = Intent(this, CentralActivity::class.java)
                     startActivity(intent)
@@ -65,21 +63,21 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-    private fun printHashKey(pContext: Context) {
-        try {
-            val info: PackageInfo = pContext.packageManager
-                .getPackageInfo(pContext.packageName, PackageManager.GET_SIGNATURES)
-            for (signature in info.signatures) {
-                val md: MessageDigest = MessageDigest.getInstance("SHA")
-                md.update(signature.toByteArray())
-                val hashKey: String = String(Base64.encode(md.digest(), 0))
-                Log.i(TAG, "printHashKey() Hash Key: $hashKey")
-            }
-        } catch (e: NoSuchAlgorithmException) {
-            Log.e(TAG, "printHashKey()", e)
-        } catch (e: Exception) {
-            Log.e(TAG, "printHashKey()", e)
-        }
-    }
+/*private fun printHashKey(pContext: Context) {
+try {
+val info: PackageInfo = pContext.packageManager
+.getPackageInfo(pContext.packageName, PackageManager.GET_SIGNATURES)
+for (signature in info.signatures) {
+val md: MessageDigest = MessageDigest.getInstance("SHA")
+md.update(signature.toByteArray())
+val hashKey: String = String(Base64.encode(md.digest(), 0))
+Log.i(TAG, "printHashKey() Hash Key: $hashKey")
+}
+} catch (e: NoSuchAlgorithmException) {
+Log.e(TAG, "printHashKey()", e)
+} catch (e: Exception) {
+Log.e(TAG, "printHashKey()", e)
+}
+}*/
 
 

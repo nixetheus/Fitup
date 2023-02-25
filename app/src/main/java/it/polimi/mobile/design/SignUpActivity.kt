@@ -8,25 +8,25 @@ import com.google.firebase.auth.FirebaseAuth
 import it.polimi.mobile.design.databinding.ActivitySignUpBinding
 
 class SignUpActivity : AppCompatActivity() {
+
+    private var firebaseAuth = FirebaseAuth.getInstance()
     private lateinit var binding: ActivitySignUpBinding
-    private lateinit var firebaseAuth: FirebaseAuth
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
 
         binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        firebaseAuth = FirebaseAuth.getInstance()
-
-        binding.loginSignup
-            .setOnClickListener {
-
+        binding.loginSignup.setOnClickListener {
             val intent = Intent(this, SignInActivity::class.java)
             startActivity(intent)
         }
 
         binding.SignUpBtn.setOnClickListener {
+
             val email = binding.EmailField.text.toString()
             val pass = binding.Pass.text.toString()
             val confirmPass = binding.Pass2.text.toString()
@@ -40,15 +40,14 @@ class SignUpActivity : AppCompatActivity() {
                             startActivity(intent)
                         } else {
                             Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
-
                         }
                     }
+
                 } else {
-                    Toast.makeText(this, "Password is not matching", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Password do not match", Toast.LENGTH_SHORT).show()
                 }
             } else {
-                Toast.makeText(this, "Empty Fields Are not Allowed !!", Toast.LENGTH_SHORT).show()
-
+                Toast.makeText(this, "Empty Fields are not allowed", Toast.LENGTH_SHORT).show()
             }
         }
     }
