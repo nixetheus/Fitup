@@ -8,8 +8,8 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
 import android.widget.RelativeLayout
-import it.polimi.mobile.design.custom_objects.Exercise
 import it.polimi.mobile.design.custom_views.MinimizedExerciseView
+import it.polimi.mobile.design.entities.Exercise
 import it.polimi.mobile.design.helpers.Constant
 
 
@@ -29,7 +29,7 @@ class WorkoutLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(con
         setPadding(0, 0, 0, 400)
 
         setWillNotDraw(false)
-        exercises = listOf(Exercise(), Exercise(), Exercise(), Exercise(), Exercise(), Exercise(), Exercise(), Exercise())
+        exercises = listOf()
         post{drawExercises()}
     }
 

@@ -56,7 +56,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
                     for (workSnap in snapshot.children) {
                         val workData = workSnap.getValue(WorkoutExercise::class.java)
                         if (workData != null) {
-                            if (workData.workoutId == workout.woId) {
+                            if (workData.workoutId == workout.workoutId) {
 
                                     workoutExercise.add(workData!!)
                                 }

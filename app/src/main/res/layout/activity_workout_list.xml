@@ -96,7 +96,7 @@
             android:visibility="gone">
 
             <ImageView
-                android:id="@+id/closeModifyExercise2"
+                android:id="@+id/closeWorkoutMenu"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:layout_gravity="end"

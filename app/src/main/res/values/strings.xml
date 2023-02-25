@@ -4,8 +4,8 @@
     <string name="none">none</string>
     <string name="back_btn">Back</string>
     <string name="next_btn">Next</string>
+    <string name="null_value">--</string>
     <string-array name="sex">
-
         <item>Male</item>
         <item>Female</item>
     </string-array>

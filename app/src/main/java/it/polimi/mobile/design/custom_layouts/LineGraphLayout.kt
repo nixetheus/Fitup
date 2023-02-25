@@ -13,7 +13,7 @@ import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.cardview.widget.CardView
 import it.polimi.mobile.design.R
-import it.polimi.mobile.design.custom_objects.DataPoint
+import it.polimi.mobile.design.entities.DataPoint
 import it.polimi.mobile.design.custom_views.LineGraphDataView
 import it.polimi.mobile.design.helpers.Constant
 import java.time.LocalDateTime
@@ -44,11 +44,8 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
         setWillNotDraw(false)
 
         // TODO: testing
-        dataPoints = listOf(DataPoint(LocalDateTime.of(2022, 5, 6, 12, 0), 60.3f),
-            DataPoint(LocalDateTime.of(2022, 7, 7, 12, 0), 57.4f),
-            DataPoint(LocalDateTime.of(2022, 7, 8, 12, 0), 52.1f),
-            DataPoint(LocalDateTime.of(2022, 8, 9, 12, 0), 55.9f),
-            DataPoint(LocalDateTime.of(2022, 12, 10, 12, 0), 58.6f))
+        dataPoints = listOf(
+        )
 
         // Draw
         post{drawDataPoints()}

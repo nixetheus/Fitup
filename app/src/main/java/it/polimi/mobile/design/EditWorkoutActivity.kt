@@ -1,191 +1,174 @@
 package it.polimi.mobile.design
 
-import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import android.view.animation.TranslateAnimation
-import android.widget.ArrayAdapter
-import android.widget.Spinner
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.auth.FirebaseAuth
+import android.widget.ArrayAdapter
 import com.google.firebase.database.*
-import it.polimi.mobile.design.databinding.ActivityEditWorkoutBinding
-import it.polimi.mobile.design.databinding.ExerciseInWorkoutBinding
-import it.polimi.mobile.design.entities.Exercise
+import androidx.appcompat.app.AppCompatActivity
 import it.polimi.mobile.design.entities.Workout
+import android.view.animation.TranslateAnimation
+import it.polimi.mobile.design.entities.Exercise
+import it.polimi.mobile.design.helpers.DatabaseHelper
+import it.polimi.mobile.design.helpers.HelperFunctions
 import it.polimi.mobile.design.entities.WorkoutExercise
+import it.polimi.mobile.design.databinding.ActivityEditWorkoutBinding
+import it.polimi.mobile.design.databinding.FragmentExerciseInWorkoutBinding
 
 
 class EditWorkoutActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivityEditWorkoutBinding
-    private lateinit var binding2:ExerciseInWorkoutBinding
-    private lateinit var exerciseDatabase : DatabaseReference
-    private lateinit var workoutExerciseDatabase: DatabaseReference
-    private lateinit var firebaseAuth: FirebaseAuth
-    private lateinit var exerciseArrayList: ArrayList<Exercise>
-    private lateinit var exerciseInWorkout:ArrayList<Exercise>
-    private lateinit var workoutExerciseList:ArrayList<WorkoutExercise>
+    private var exerciseDatabase = FirebaseDatabase.getInstance().getReference("Exercise")
+    private var workoutExerciseDatabase = FirebaseDatabase.getInstance().getReference("WorkoutExercise")
+    private val databaseHelperInstance = DatabaseHelper().getInstance()
 
-    private lateinit var exercisesSpinner: Spinner
+    private var exerciseArrayList = ArrayList<Exercise>()
+    private var exerciseInWorkout = ArrayList<Exercise>()
+    private var workoutExerciseList = ArrayList<WorkoutExercise>()
+
     private lateinit var adapter: ArrayAdapter<Exercise>
+
+    private lateinit var workout: Workout
+
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
-        binding= ActivityEditWorkoutBinding.inflate(layoutInflater)
+        workout = intent.extras?.get("workout") as Workout  // TODO: with JSON
+
+        binding = ActivityEditWorkoutBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding2= ExerciseInWorkoutBinding.inflate(layoutInflater)
 
+        setupWorkoutUI()
+        setupExercisesUI()
 
-        var workout= intent.extras?.get("workout") as Workout
-        workoutExerciseList=ArrayList<WorkoutExercise>()
-        exerciseInWorkout=ArrayList<Exercise>()
+        binding.confirmAddWorkoutBtn.setOnClickListener{onAddNewExercise()}
 
-        binding.workoutName.text=workout.name
-        binding.openAddExerciseLayout.setOnClickListener{
-            binding.addExerciseToWorkoutCard.visibility=View.VISIBLE
-            val animate = TranslateAnimation(
-                0F,  // fromXDelta
-                0F,  // toXDelta
-                binding.addExerciseToWorkoutCard.height.toFloat(),// fromYDelta
-                0F
-            )
-
-            animate.duration = 500
-            animate.fillAfter = true
-            binding.addExerciseToWorkoutCard.startAnimation(animate)
-        }
-        exerciseArrayList = arrayListOf<Exercise>()
-
-
-        exerciseDatabase= FirebaseDatabase.getInstance().getReference("Exercise")
-        exerciseDatabase.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()){
-                    for (workSnap in snapshot.children){
-                        val exerciseData=workSnap.getValue(Exercise::class.java)
-                        if (exerciseData!=null)
-                            exerciseArrayList.add(exerciseData!!)
-                    }
-                    showExerciseSpinner(exerciseArrayList)
-
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-
-        })
-
-        binding.addWorkoutClose.setOnClickListener{
-            binding.addExerciseToWorkoutCard.visibility=View.GONE
-            val animate = TranslateAnimation(
-                0F,  // fromXDelta
-                0F,  // toXDelta
-                0F,// fromYDelta
-                binding.addExerciseToWorkoutCard.height.toFloat()
-            )
-
-            animate.duration = 500
-            animate.fillAfter = true
-            binding.addExerciseToWorkoutCard.startAnimation(animate)
-
-        }
-        binding.confirmAddWorkoutBtn.setOnClickListener{
-
-            val ex= binding.exercisesSpinner.selectedItem
-            workoutExerciseDatabase= FirebaseDatabase.getInstance().getReference("WorkoutExercise")
-            val id = exerciseDatabase.push().key!!
-            val workoutId= workout.woId.toString()
-            val exerciseName= binding.exercisesSpinner.selectedItem.toString()
-            val exercise=binding.exercisesSpinner.selectedItem as Exercise
-            val exerciseId =exercise.eid.toString()
-            val sets=binding.setsInputValue.text.toString()
-            val reps= binding.repsInputValue.text.toString()
-            val rest=binding.restInputValue.text.toString()
-            val workoutExercise= WorkoutExercise(id, workoutId, exerciseId,exerciseName,sets,reps,rest)
-            if (sets.isNotEmpty()&&reps.isNotEmpty()&&rest.isNotEmpty()) {
-                workoutExerciseDatabase.child(id).setValue(workoutExercise).addOnSuccessListener {
-                    Toast.makeText(this, "Successfully saved!!", Toast.LENGTH_SHORT).show()
-                    finish()
-                    exerciseInWorkout.add(exercise)
-                    val intent = Intent(this, EditWorkoutActivity::class.java)
-                    intent.putExtra("workout",workout /*as java.io.Serializable*/)
-                    startActivity(intent)
-                    binding.addExerciseToWorkoutCard.visibility=View.GONE
-                }
-            }
-            else Toast.makeText(this, "Fill in all fields to continue!!", Toast.LENGTH_SHORT).show()
-
-        }
-        workoutExerciseDatabase=FirebaseDatabase.getInstance().getReference("WorkoutExercise")
         workoutExerciseDatabase.addValueEventListener(object :ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
-                workoutExerciseList.clear()
-                if (snapshot.exists()){
-                    for (workSnap in snapshot.children){
-
-                        val workData=workSnap.getValue(WorkoutExercise::class.java)
-                        if (workData != null) {
-                            if (workData.workoutId==workout.woId)
-                                workoutExerciseList.add(workData!!)
-                        }
-                    }
-                    showExerciseCards(workoutExerciseList)
-                    var kcalTot:Float= 0F
-                    var exp:Float=0F
-                    for(workoutExercise in workoutExerciseList){
-                        for (exercise in exerciseArrayList)
-                            if (exercise.eid==workoutExercise.exerciseId) {
-                                var rep = workoutExercise.reps?.toFloat()
-                                val sets= workoutExercise.sets?.toFloat()
-                                var calPerRep=exercise.caloriesPerRep?.toFloat()
-                                var expPerRep= exercise.experiencePerReps?.toFloat()
-                                if (rep != null) {
-                                    kcalTot += (rep * calPerRep!!)* sets!!
-                                    exp+=(rep*sets)* expPerRep!!
-
-                                }
-                            }
-
-                    }
-                    binding.kcalOfWorkout.text = kcalTot.toString()
-                    binding.expOfWorkout.text= exp.toString()
-
-
-                }
+                workoutExerciseList = DatabaseHelper().getWorkoutsExercisesFromSnapshot(snapshot,
+                        workout.workoutId.toString())
+                showExerciseCards(workoutExerciseList)
+                calculateWorkoutData()
             }
-
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+                Log.w("Firebase", "Couldn't retrieve data...")
             }
-
         })
 
 
     }
-    private fun showExerciseSpinner(exercises: List<Exercise>) {
-        exercisesSpinner=binding.exercisesSpinner
-        adapter= ArrayAdapter(this,android.R.layout.simple_spinner_item, exerciseArrayList)
-        exercisesSpinner.adapter=adapter
 
+    private fun setupWorkoutUI() {
 
-    }
-    @SuppressLint("SetTextI18n")
-    private fun showExerciseCards(workoutExercise: List<WorkoutExercise>){
-        for (workoutExercise in workoutExercise) {
-            binding2= ExerciseInWorkoutBinding.inflate(layoutInflater)
-            binding2.exerciseNameWorkout.text = workoutExercise.exerciseName.toString()
-            binding2.repsValue.text = workoutExercise.reps.toString()
-            binding2.setsValue.text = workoutExercise.sets.toString()
-            binding2.restValue.text = workoutExercise.rest.toString()
-            binding.workoutExercisesList.addView(binding2.root)
+        binding.workoutName.text = workout.name
 
+        // Add workout animation
+        binding.openAddExerciseLayout.setOnClickListener{
+            binding.addExerciseToWorkoutCard.visibility = View.VISIBLE
+            val openAddExerciseMenuAnimation = TranslateAnimation(
+                0F, 0F, binding.addExerciseToWorkoutCard.height.toFloat(), 0F)
+            openAddExerciseMenuAnimation.duration = 500
+            openAddExerciseMenuAnimation.fillAfter = true
+            binding.addExerciseToWorkoutCard.startAnimation(openAddExerciseMenuAnimation)
         }
 
+        // Close add workout animation
+        binding.addWorkoutClose.setOnClickListener{
+            binding.addExerciseToWorkoutCard.visibility=View.GONE
+            val closeAddExerciseMenuAnimation = TranslateAnimation(
+                0F, 0F, 0F, binding.addExerciseToWorkoutCard.height.toFloat())
+            closeAddExerciseMenuAnimation.duration = 500
+            closeAddExerciseMenuAnimation.fillAfter = true
+            binding.addExerciseToWorkoutCard.startAnimation(closeAddExerciseMenuAnimation)
 
+        }
+    }
 
+    private fun setupExercisesUI() {
+        exerciseDatabase.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                exerciseArrayList = databaseHelperInstance!!.getExercisesFromSnapshot(snapshot)
+                showExerciseSpinner()
+            }
+            override fun onCancelled(error: DatabaseError) {
+                Log.w("Firebase", "Couldn't retrieve data...")
+            }
+        })
+    }
+
+    private fun onAddNewExercise() {
+
+        workoutExerciseDatabase= FirebaseDatabase.getInstance().getReference("WorkoutExercise")
+
+        val id = exerciseDatabase.push().key!!
+
+        val workoutId = workout.workoutId
+
+        val exercise = binding.exercisesSpinner.selectedItem as Exercise
+        val exerciseId = exercise.eid
+        val exerciseName = exercise.name
+
+        val sets = parseIntInput(binding.setsInputValue.text.toString())
+        val reps = parseIntInput(binding.repsInputValue.text.toString())
+        val rest = parseIntInput(binding.restInputValue.text.toString())
+
+        val workoutExercise= WorkoutExercise(id, workoutId, exerciseId,
+            exerciseName, sets, reps, rest)
+
+        workoutExerciseDatabase = FirebaseDatabase.getInstance().getReference("WorkoutExercise")
+        workoutExerciseDatabase.child(id).setValue(workoutExercise).addOnSuccessListener {
+
+            Toast.makeText(this, "Successfully saved!!", Toast.LENGTH_SHORT).show()  // TODO: better UI
+            binding.addExerciseToWorkoutCard.visibility = View.GONE
+            exerciseInWorkout.add(exercise)
+
+            finish()
+            startActivity(intent)
+        }
+    }
+
+    private fun parseIntInput(text: String) : Int {
+        if (text.isNotEmpty())
+            return Integer.parseInt(text)
+        return 0
+    }
+
+    private fun showExerciseSpinner() {
+        adapter = ArrayAdapter(this,android.R.layout.simple_spinner_item, exerciseArrayList)
+        binding.exercisesSpinner.adapter = adapter
+    }
+
+    private fun showExerciseCards(workoutExercise: List<WorkoutExercise>) {
+        for (exercise in workoutExercise) {
+
+            val exerciseFragment = FragmentExerciseInWorkoutBinding.inflate(layoutInflater)
+
+            exerciseFragment.exerciseNameWorkout.text = exercise.exerciseName.toString()
+            exerciseFragment.repsValue.text = exercise.reps.toString()
+            exerciseFragment.setsValue.text = exercise.sets.toString()
+            exerciseFragment.restValue.text = exercise.rest?.let {
+                HelperFunctions().secondsToFormatString(it)
+            }
+
+            binding.workoutExercisesList.addView(exerciseFragment.root)
+        }
+    }
+
+    private fun calculateWorkoutData() {
+
+        var exp = 0f
+        var kcalTot = 0F
+        for(workoutExercise in workoutExerciseList) {
+            for (exercise in exerciseArrayList.filter { ex -> ex.eid == workoutExercise.exerciseId})
+            {
+                exp += (workoutExercise.reps!! * workoutExercise.sets!!) * exercise.experiencePerReps!!
+                kcalTot += (workoutExercise.reps * exercise.caloriesPerRep!!) * workoutExercise.sets
+            }
+        }
+        binding.kcalOfWorkout.text = kcalTot.toString()
+        binding.expOfWorkout.text= exp.toString()
     }
 }
 

@@ -117,7 +117,7 @@ class ExerciseListActivity : AppCompatActivity() {
         database = FirebaseDatabase.getInstance().getReference("Exercise")
         val eId = database.push().key!!
         if (name.isNotEmpty()&&kcalPerReps.isNotEmpty()&&exp.isNotEmpty()){
-        val exercise = Exercise(eId, name, kcalPerReps, exType, exp)
+        val exercise = Exercise(eId, name, 0f, exType, 0)
         database.child(name).setValue(exercise).addOnSuccessListener {
             Toast.makeText(this, "Successfully saved!!", Toast.LENGTH_SHORT).show()
             val intent = Intent(this, ExerciseListActivity::class.java)

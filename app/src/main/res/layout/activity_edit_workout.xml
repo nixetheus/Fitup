@@ -191,13 +191,15 @@
         android:id="@+id/addExerciseToWorkoutCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="invisible"
         app:cardBackgroundColor="@android:color/transparent"
         app:cardCornerRadius="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="MissingConstraints">
+        tools:ignore="MissingConstraints"
+        tools:visibility="invisible">
 
         <LinearLayout
             android:id="@+id/addExerciseLayout"

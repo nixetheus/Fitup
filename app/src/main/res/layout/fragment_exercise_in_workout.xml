@@ -37,7 +37,9 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="@font/lato"
-                    android:textAlignment="center"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="0dp"
+                    android:textAlignment="textStart"
                     android:textColor="?colorOnSecondary"
                     android:textSize="20sp"
                     android:textStyle="bold" />
