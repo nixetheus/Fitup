@@ -27,12 +27,12 @@ import it.polimi.mobile.design.databinding.ActivitySignInBinding
 
 class SignInActivity : AppCompatActivity() {
 
-    private lateinit var auth: FirebaseAuth
+    private var auth =  FirebaseAuth.getInstance()
     private lateinit var database: DatabaseReference
     private lateinit var binding: ActivitySignInBinding
-    private lateinit var buttonFacebookLogin: LoginButton
+    private var buttonFacebookLogin = binding.facebookLogin
     private lateinit var mGoogleSignInClient: GoogleSignInClient
-    private lateinit var callbackManager: CallbackManager
+    private var callbackManager = CallbackManager.Factory.create()
 
     private val RC_SIGN_IN: Int = 0
     private lateinit var gso : GoogleSignInOptions
@@ -41,14 +41,9 @@ class SignInActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
 
-        auth = FirebaseAuth.getInstance()
         binding = ActivitySignInBinding.inflate(layoutInflater)
-
         setContentView(binding.root)
-        // FacebookSdk.sdkInitialize(applicationContext)
-        callbackManager = CallbackManager.Factory.create()
 
-        buttonFacebookLogin = binding.facebookLogin
         buttonFacebookLogin.setPermissions("email", "public_profile")
         createRequest()
 
@@ -172,7 +167,7 @@ class SignInActivity : AppCompatActivity() {
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
-        mGoogleSignInClient = com.google.android.gms.auth.api.signin.GoogleSignIn.getClient(this, gso);
+        mGoogleSignInClient = com.google.android.gms.auth.api.signin.GoogleSignIn.getClient(this, gso)
     }
 
     private fun googleSignIn() {

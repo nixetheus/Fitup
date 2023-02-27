@@ -16,6 +16,7 @@ object SpotifyService {
         .setRedirectUri(REDIRECT_URI)
         .showAuthView(true)
         .build()
+
     fun connect(context: Context, handler: (connected: Boolean) -> Unit) {
         if (spotifyAppRemote?.isConnected == true) {
             handler(true)

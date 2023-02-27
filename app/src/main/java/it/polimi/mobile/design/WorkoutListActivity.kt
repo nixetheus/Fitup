@@ -45,7 +45,7 @@ class WorkoutListActivity : AppCompatActivity() {
 
         binding = ActivityWorkoutListBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        // TODO: Can remove? showWorkouts(workoutArrayList)
+        showWorkouts(workoutArrayList)
 
         setupUI()
         configDatabases()
@@ -129,8 +129,8 @@ class WorkoutListActivity : AppCompatActivity() {
     }
 
     private fun createWorkout(){
-        val name=binding.workoutNameField.text.toString()
-        val uid=firebaseAuth.uid.toString()
+        val name = binding.workoutNameField.text.toString()
+        val uid = firebaseAuth.uid.toString()
 
         val wId = databaseWorkout.push().key!!
         if(name.isNotEmpty()) {
