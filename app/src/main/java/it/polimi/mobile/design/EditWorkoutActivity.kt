@@ -3,18 +3,21 @@ package it.polimi.mobile.design
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
-import android.widget.ArrayAdapter
-import com.google.firebase.database.*
-import androidx.appcompat.app.AppCompatActivity
-import it.polimi.mobile.design.entities.Workout
 import android.view.animation.TranslateAnimation
-import it.polimi.mobile.design.entities.Exercise
-import it.polimi.mobile.design.helpers.DatabaseHelper
-import it.polimi.mobile.design.helpers.HelperFunctions
-import it.polimi.mobile.design.entities.WorkoutExercise
+import android.widget.ArrayAdapter
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import it.polimi.mobile.design.databinding.ActivityEditWorkoutBinding
 import it.polimi.mobile.design.databinding.FragmentExerciseInWorkoutBinding
+import it.polimi.mobile.design.entities.Exercise
+import it.polimi.mobile.design.entities.Workout
+import it.polimi.mobile.design.entities.WorkoutExercise
+import it.polimi.mobile.design.helpers.DatabaseHelper
+import it.polimi.mobile.design.helpers.HelperFunctions
 
 
 class EditWorkoutActivity : AppCompatActivity() {

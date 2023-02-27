@@ -1,7 +1,7 @@
 package it.polimi.mobile.design
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 
 class WorkoutEndActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

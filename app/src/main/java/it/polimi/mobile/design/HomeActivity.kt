@@ -1,15 +1,15 @@
 package it.polimi.mobile.design
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
-import android.content.Intent
-import it.polimi.mobile.design.enum.Gender
-import it.polimi.mobile.design.entities.User
-import com.google.firebase.auth.FirebaseAuth
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
-import it.polimi.mobile.design.helpers.HelperFunctions
 import it.polimi.mobile.design.databinding.ActivityHomeBinding
+import it.polimi.mobile.design.entities.User
+import it.polimi.mobile.design.enum.Gender
+import it.polimi.mobile.design.helpers.HelperFunctions
 
 class HomeActivity : AppCompatActivity() {
 

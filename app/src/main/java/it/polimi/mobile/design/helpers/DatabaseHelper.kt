@@ -1,10 +1,10 @@
 package it.polimi.mobile.design.helpers
 
 import com.google.firebase.auth.FirebaseAuth
-import it.polimi.mobile.design.entities.Workout
 import com.google.firebase.database.DataSnapshot
 import it.polimi.mobile.design.entities.Exercise
 import it.polimi.mobile.design.entities.User
+import it.polimi.mobile.design.entities.Workout
 import it.polimi.mobile.design.entities.WorkoutExercise
 
 

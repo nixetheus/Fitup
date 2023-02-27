@@ -13,8 +13,8 @@ import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.cardview.widget.CardView
 import it.polimi.mobile.design.R
-import it.polimi.mobile.design.entities.DataPoint
 import it.polimi.mobile.design.custom_views.LineGraphDataView
+import it.polimi.mobile.design.entities.DataPoint
 import it.polimi.mobile.design.helpers.Constant
 import java.time.LocalDateTime
 import java.time.ZoneOffset

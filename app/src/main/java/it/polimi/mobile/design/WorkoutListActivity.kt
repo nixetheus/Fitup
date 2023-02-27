@@ -1,22 +1,26 @@
 package it.polimi.mobile.design
 
-import android.widget.*
-import android.util.Log
-import android.os.Bundle
-import android.view.View
-import android.content.Intent
 import android.content.ContentValues
-import com.google.firebase.database.*
-import com.google.firebase.auth.FirebaseAuth
-import it.polimi.mobile.design.enum.WorkoutType
-import it.polimi.mobile.design.entities.Workout
-import androidx.appcompat.app.AppCompatActivity
-import it.polimi.mobile.design.entities.Exercise
+import android.content.Intent
+import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.view.animation.TranslateAnimation
-import it.polimi.mobile.design.helpers.DatabaseHelper
-import it.polimi.mobile.design.entities.WorkoutExercise
-import it.polimi.mobile.design.databinding.FragmentWorkoutListBinding
+import android.widget.SearchView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import it.polimi.mobile.design.databinding.ActivityWorkoutListBinding
+import it.polimi.mobile.design.databinding.FragmentWorkoutListBinding
+import it.polimi.mobile.design.entities.Exercise
+import it.polimi.mobile.design.entities.Workout
+import it.polimi.mobile.design.entities.WorkoutExercise
+import it.polimi.mobile.design.enum.WorkoutType
+import it.polimi.mobile.design.helpers.DatabaseHelper
 
 
 class WorkoutListActivity : AppCompatActivity() {

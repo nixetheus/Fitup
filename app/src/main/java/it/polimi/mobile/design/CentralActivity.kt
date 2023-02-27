@@ -1,16 +1,19 @@
 package it.polimi.mobile.design
 
 
-import android.util.Log
-import android.os.Bundle
 import android.content.Intent
-import com.google.firebase.database.*
-import com.google.firebase.auth.FirebaseAuth
+import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import it.polimi.mobile.design.entities.Workout
-import it.polimi.mobile.design.helpers.DatabaseHelper
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import it.polimi.mobile.design.databinding.ActivityCentralBinding
 import it.polimi.mobile.design.databinding.FragmentWorkoutBinding
+import it.polimi.mobile.design.entities.Workout
+import it.polimi.mobile.design.helpers.DatabaseHelper
 
 
 class CentralActivity : AppCompatActivity() {
