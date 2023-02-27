@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.widget.*
@@ -17,136 +18,104 @@ import androidx.core.view.setPadding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import it.polimi.mobile.design.databinding.ActivityExerciseListBinding
+import it.polimi.mobile.design.databinding.FragmentExerciseListBinding
+import it.polimi.mobile.design.databinding.FragmentWorkoutBinding
 import it.polimi.mobile.design.entities.Exercise
 import it.polimi.mobile.design.enum.ExerciseType
+import it.polimi.mobile.design.helpers.DatabaseHelper
+import it.polimi.mobile.design.helpers.HelperFunctions
 
 class ExerciseListActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityExerciseListBinding
-    private lateinit var database : DatabaseReference
-    private lateinit var firebaseAuth: FirebaseAuth
-    private lateinit var exerciseArrayList: ArrayList<Exercise>
 
-    private lateinit var tempExerciseArrayList:ArrayList<Exercise>
+    private lateinit var binding: ActivityExerciseListBinding
+    private var exerciseDatabase = FirebaseDatabase.getInstance().getReference("Exercise")
+    private val databaseHelperInstance = DatabaseHelper().getInstance()
+
+    private var exerciseArrayList = ArrayList<Exercise>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
+
         binding = ActivityExerciseListBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        firebaseAuth = FirebaseAuth.getInstance()
-        exerciseArrayList= arrayListOf<Exercise>()
 
+        setBindings()
 
-        tempExerciseArrayList= arrayListOf<Exercise>()
-        database=FirebaseDatabase.getInstance().getReference("Exercise")
-        database.addValueEventListener(object : ValueEventListener {
+        exerciseDatabase.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                exerciseArrayList.clear()
-                if (snapshot.exists()){
-                    for (exerciseSnap in snapshot.children){
-                        val exerciseData=exerciseSnap.getValue(Exercise::class.java)
-                        if (exerciseData!=null)
-                            exerciseArrayList.add(exerciseData!!)
-                    }
-                    showExercises(exerciseArrayList)
-
-                }
+                showExercises(databaseHelperInstance!!.getExercisesFromSnapshot(snapshot))
             }
-
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+                Log.w("Firebase", "Couldn't retrieve data...")
             }
-
         })
+
+    }
+
+    private fun setBindings() {
+
         binding.confirmAddExerciseBtn.setOnClickListener{
             createExercise()
-            binding.addExerciseCard.visibility=View.GONE
+            binding.addExerciseCard.visibility = View.GONE
         }
         binding.addExerciseButton.setOnClickListener{
-            binding.addExerciseCard.visibility=View.VISIBLE
+            binding.addExerciseCard.visibility = View.VISIBLE
         }
         binding.addExerciseClose.setOnClickListener{
-            binding.addExerciseCard.visibility=View.GONE
+            binding.addExerciseCard.visibility = View.GONE
         }
 
         binding.searchExercise.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(p0: String?): Boolean {
-                /*binding.searchExercise.clearFocus()
-                if(exerciseStringList.contains(p0)){
-
-                    for (exercise in exerciseArrayList) {
-                        if (exercise.name == p0 || exercise.type.toString() == p0)
-                            tempExerciseArrayList.add(exercise)
-                    }
-                    binding.exercisesListLayout.removeAllViews()
-                    showExercises(tempExerciseArrayList)
-
-                }*/
                 return false
             }
-
             override fun onQueryTextChange(p0: String?): Boolean {
-                tempExerciseArrayList.clear()
-                for (exercise in exerciseArrayList) {
-                        if (exercise.name!!.contains(p0.toString()) || exercise.type.toString().contains(p0.toString()))
-                            tempExerciseArrayList.add(exercise)
-                }
-
-                showExercises(tempExerciseArrayList)
-
-
+                showExercises(exerciseArrayList.filter { exercise ->
+                    exercise.name!!.contains(p0!!) || exercise.type.toString().contains(p0)
+                })
                 return false
-
             }
-
         })
     }
-    private fun createExercise(){
-        val exType: ExerciseType
-        val name=binding.exerciseNameField.text.toString()
-        val kcalPerReps=binding.kcalInputValue.text.toString()
-        val exerciseType= binding.typeOfEx.selectedItem.toString()
-        exType= if (exerciseType=="Arms")
-            ExerciseType.ARMS
-        else if (exerciseType=="Legs")
-            ExerciseType.LEGS
-        else if(exerciseType=="Chest")
-            ExerciseType.CHEST
-        else
-            ExerciseType.ABDOMEN
-        val exp=binding.expInputValue.text.toString()
 
-        database = FirebaseDatabase.getInstance().getReference("Exercise")
-        val eId = database.push().key!!
-        if (name.isNotEmpty()&&kcalPerReps.isNotEmpty()&&exp.isNotEmpty()){
-        val exercise = Exercise(eId, name, 0f, exType, 0)
-        database.child(name).setValue(exercise).addOnSuccessListener {
-            Toast.makeText(this, "Successfully saved!!", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, ExerciseListActivity::class.java)
-            startActivity(intent)
-            finish()
+    private fun createExercise(){
+
+        val exerciseName = binding.exerciseNameField.text.toString()
+        val kcalPerReps = HelperFunctions().parseFloatInput(binding.kcalInputValue.text.toString())
+        val exType = exerciseTypeFromString(binding.typeOfEx.selectedItem.toString())
+        val exp = HelperFunctions().parseIntInput(binding.expInputValue.text.toString())
+
+        val exerciseId = exerciseDatabase.push().key!!
+        if (exerciseName.isNotEmpty()){
+            val exercise = Exercise(exerciseId, exerciseName, kcalPerReps, exType, exp)
+            exerciseDatabase.child(exerciseId).setValue(exercise).addOnSuccessListener {
+                Toast.makeText(this, "Successfully saved!!", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, ExerciseListActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
         }
+        else
+            Toast.makeText(this, "Fill in all fields to continue", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun exerciseTypeFromString(typeString : String) : ExerciseType {
+        return when(typeString) {
+            "Arms" -> ExerciseType.ARMS
+            "Legs" -> ExerciseType.LEGS
+            "Chest" -> ExerciseType.CHEST
+            else -> ExerciseType.ABDOMEN
         }
-        else Toast.makeText(this, "Fill in all fields to continue!!", Toast.LENGTH_SHORT).show()
     }
 
     private fun showExercises(exercises: List<Exercise>) {
+
         binding.exercisesListLayout.removeAllViews()
-        val exercisesLayout = binding.exercisesListLayout
         for (exercise in exercises) {
 
-            val exerciseCard = createExerciseCard()
-            exerciseCard.setCardBackgroundColor(Color.RED)
-
-            val exerciseLayout = createExerciseCardConstraintLayout()
-
-            // Image
-            // TODO
-            
-            // Menu
-            val exerciseMenu = createExerciseMenuLinearLayout()
-
-            // Name
-            val exerciseName = createExerciseNameText(exercise)
-            exerciseMenu.addView(exerciseName)
+            val exerciseLayout = FragmentExerciseListBinding.inflate(layoutInflater)
+            exerciseLayout.exerciseNameList.text = exercise.name
             
             // Setup
             val set = ConstraintSet()
@@ -160,8 +129,7 @@ class ExerciseListActivity : AppCompatActivity() {
             set.connect(exerciseMenu.id, ConstraintSet.RIGHT, exerciseLayout.id, ConstraintSet.RIGHT, 0)
             set.applyTo(exerciseLayout)
 
-            exerciseCard.addView(exerciseLayout)
-            exercisesLayout.addView(exerciseCard)
+            binding.exercisesListLayout.addView(exerciseLayout)
         }
     }
 
