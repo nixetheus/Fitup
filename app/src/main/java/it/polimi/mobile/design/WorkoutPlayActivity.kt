@@ -12,6 +12,7 @@ import com.google.firebase.database.*
 import it.polimi.mobile.design.databinding.ActivityWorkoutPlayBinding
 import it.polimi.mobile.design.entities.Workout
 import it.polimi.mobile.design.entities.WorkoutExercise
+import it.polimi.mobile.design.helpers.HelperFunctions
 
 
 class WorkoutPlayActivity : AppCompatActivity() {
@@ -30,17 +31,6 @@ class WorkoutPlayActivity : AppCompatActivity() {
         workoutExercise= arrayListOf<WorkoutExercise>()
 
         chrono= binding.workoutTimeValue
-        chrono.onChronometerTickListener =
-            OnChronometerTickListener { chronometer ->
-                val time = SystemClock.elapsedRealtime() - chronometer.base
-                val h = (time / 3600000).toInt()
-                val m = (time - h * 3600000).toInt() / 60000
-                val s = (time - h * 3600000 - m * 60000).toInt() / 1000
-                val t =
-                    (if (h < 10) "0$h" else h).toString() + ":" + (if (m < 10) "0$m" else m) + ":" + if (s < 10) "0$s" else s
-                chronometer.text = t
-            }
-        chrono.base = SystemClock.elapsedRealtime()
         chrono.text = "00:00:00"
 
         var workout= intent.extras?.get("workout") as Workout
@@ -79,6 +69,11 @@ class WorkoutPlayActivity : AppCompatActivity() {
 
             if (workoutExercise.size!=0) {
                 binding.currentExerciseName.text = workoutExercise[i].exerciseName
+                binding.currentExerciseRepsValue.text=workoutExercise[i].reps.toString()
+                binding.currentExerciseRestValue.text=workoutExercise[i].rest.let {
+                    it?.let { it1 -> HelperFunctions().secondsToFormatString(it1.toInt()) }
+                }
+                binding.currentExerciseSetsValue.text=workoutExercise[i].sets.toString()
                 binding.startCurrentExerciseLayout.visibility= View.VISIBLE
             }
             else {
@@ -98,14 +93,19 @@ class WorkoutPlayActivity : AppCompatActivity() {
         binding.nextExerciseButton.setOnClickListener{
             if(i<workoutExercise.size-1){
                 i++
-                binding.currentExerciseName.text= workoutExercise[i].exerciseId
+                binding.currentExerciseName.text = workoutExercise[i].exerciseName
+                binding.currentExerciseRepsValue.text=workoutExercise[i].reps.toString()
+                binding.currentExerciseRestValue.text=workoutExercise[i].rest.let {
+                    it?.let { it1 -> HelperFunctions().secondsToFormatString(it1.toInt()) }
+                }
+                binding.currentExerciseSetsValue.text=workoutExercise[i].sets.toString()
             }
             else {
                 chrono.stop()
                 binding.startStopButton.text = "FINISH!!"
                 binding.startCurrentExerciseLayout.visibility = View.GONE
                 binding.startStopButton.setOnClickListener {
-                    val intent = Intent(this, CentralActivity::class.java)
+                    val intent = Intent(this, WorkoutEndActivity::class.java)
                     startActivity(intent)
                 }
             }
@@ -124,6 +124,17 @@ class WorkoutPlayActivity : AppCompatActivity() {
 
 
     private fun start(){
+        chrono.onChronometerTickListener =
+            OnChronometerTickListener { chronometer ->
+                val time = SystemClock.elapsedRealtime() - chronometer.base
+                val h = (time / 3600000).toInt()
+                val m = (time - h * 3600000).toInt() / 60000
+                val s = (time - h * 3600000 - m * 60000).toInt() / 1000
+                val t =
+                    (if (h < 10) "0$h" else h).toString() + ":" + (if (m < 10) "0$m" else m) + ":" + if (s < 10) "0$s" else s
+                chronometer.text = t
+            }
+        chrono.base = SystemClock.elapsedRealtime()
         chrono.start()
 
     }
