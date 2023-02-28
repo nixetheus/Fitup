@@ -13,6 +13,7 @@ import it.polimi.mobile.design.databinding.ActivityWorkoutPlayBinding
 import it.polimi.mobile.design.entities.Workout
 import it.polimi.mobile.design.entities.WorkoutExercise
 import it.polimi.mobile.design.helpers.HelperFunctions
+import kotlin.properties.Delegates
 
 
 class WorkoutPlayActivity : AppCompatActivity() {
@@ -21,6 +22,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
     private lateinit var chrono: Chronometer
     private lateinit var database: DatabaseReference
     private lateinit var workoutExercise: ArrayList<WorkoutExercise>
+    private var timeWhenStopped by Delegates.notNull<Long>()
     private var i=0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +31,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
         binding=ActivityWorkoutPlayBinding.inflate(layoutInflater)
         setContentView(binding.root)
         workoutExercise= arrayListOf<WorkoutExercise>()
-
+        timeWhenStopped=0
         chrono= binding.workoutTimeValue
         chrono.text = "00:00:00"
 
@@ -60,12 +62,20 @@ class WorkoutPlayActivity : AppCompatActivity() {
 
         })
         binding.beingTimeButton.setOnClickListener{
+
             start()
+
+            binding.nextExerciseButton.text="next"
+            binding.beingTimeButton.text=""
+            binding.beingTimeButton.isClickable=false
+            binding.nextExerciseButton.isClickable=true
 
         }
 
         binding.startStopButton.setOnClickListener{
             i=0
+            binding.nextExerciseButton.text=""
+            binding.nextExerciseButton.isClickable=false
 
             if (workoutExercise.size!=0) {
                 binding.currentExerciseName.text = workoutExercise[i].exerciseName
@@ -91,6 +101,12 @@ class WorkoutPlayActivity : AppCompatActivity() {
             }
         }
         binding.nextExerciseButton.setOnClickListener{
+            chrono.stop()
+            timeWhenStopped = chrono.base - SystemClock.elapsedRealtime();
+            binding.nextExerciseButton.text=""
+            binding.nextExerciseButton.isClickable=false
+            binding.beingTimeButton.text="begin"
+            binding.beingTimeButton.isClickable=true
             if(i<workoutExercise.size-1){
                 i++
                 binding.currentExerciseName.text = workoutExercise[i].exerciseName
@@ -101,7 +117,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
                 binding.currentExerciseSetsValue.text=workoutExercise[i].sets.toString()
             }
             else {
-                chrono.stop()
+
                 binding.startStopButton.text = "FINISH!!"
                 binding.startCurrentExerciseLayout.visibility = View.GONE
                 binding.startStopButton.setOnClickListener {
@@ -134,7 +150,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
                     (if (h < 10) "0$h" else h).toString() + ":" + (if (m < 10) "0$m" else m) + ":" + if (s < 10) "0$s" else s
                 chronometer.text = t
             }
-        chrono.base = SystemClock.elapsedRealtime()
+        chrono.base = SystemClock.elapsedRealtime() + timeWhenStopped;
         chrono.start()
 
     }
