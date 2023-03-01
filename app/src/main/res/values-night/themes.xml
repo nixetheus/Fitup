@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.MobileProject" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/deep_ocean</item>
+        <item name="colorPrimary">@color/good_gray</item>
         <item name="colorPrimaryVariant">@color/dark_night</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
@@ -14,7 +14,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimary</item>
         <!-- Customize your theme here. -->
-        <item name="android:navigationBarColor">?colorPrimaryVariant</item>
+        <item name="android:navigationBarColor">?colorPrimary</item>
         <item name="android:alertDialogTheme">@color/red_arms</item>
     </style>
 </resources>

@@ -94,9 +94,9 @@ class CentralActivity : AppCompatActivity() {
             workoutsLayout.bpmLabel.text = getString(R.string.bpm_data_label)
 
             // TODO: real color
-            val test = listOf(R.drawable.arms_background, R.drawable.core_background, R.drawable.legs_background,
+            /*val test = listOf(R.drawable.arms_background, R.drawable.core_background, R.drawable.legs_background,
                 R.drawable.mind_background)
-            workoutsLayout.workoutLayout.background = theme.getDrawable(test.random())
+            workoutsLayout.workoutLayout.background = theme.getDrawable(test.random())*/
 
             binding.workoutsLayout.addView(workoutsLayout.root)
 

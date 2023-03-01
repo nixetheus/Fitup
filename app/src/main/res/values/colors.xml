@@ -22,7 +22,9 @@
     <color name="lime_1">#BBDF59</color>
     <color name="petroleum_1">#027C83</color>
     <color name="petroleum_2">#014B50</color>
-    <color name="clean_sky_1">#2164E3</color>
-    <color name="clean_sky_2">#1A4597</color>
+    <color name="clean_sky_1">#450FC0</color>
+    <color name="clean_sky_2">#050933</color>
     <color name="pine_1">#3EC480</color>
+
+    <color name="good_gray">#0B0B0B</color>
 </resources>

@@ -131,7 +131,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="40dp"
-                android:layout_marginTop="35dp"
+                android:layout_marginTop="45dp"
                 android:fontFamily="@font/lato_bold"
                 android:text="@string/welcome_workouts"
                 android:textColor="?colorOnPrimary"
@@ -147,11 +147,11 @@
                     android:id="@+id/workoutsLayout"
                     android:layout_width="wrap_content"
                     android:layout_height="200dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="20dp"
                     android:orientation="horizontal"
                     android:paddingStart="25dp"
-                    android:paddingTop="20dp"
-                    android:paddingEnd="40dp"
-                    android:paddingBottom="20dp" />
+                    android:paddingEnd="40dp" />
             </HorizontalScrollView>
 
             <TextView
@@ -220,8 +220,8 @@
 
                     <ImageView
                         android:id="@+id/workoutsLinkImage"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:contentDescription="@string/none"
@@ -239,7 +239,7 @@
                         android:textAlignment="center"
                         android:textAllCaps="true"
                         android:textColor="?colorOnPrimary"
-                        android:textSize="12sp"
+                        android:textSize="10sp"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -261,8 +261,8 @@
 
                     <ImageView
                         android:id="@+id/statsLinkImage"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:contentDescription="@string/none"
@@ -279,7 +279,7 @@
                         android:textAlignment="center"
                         android:textAllCaps="true"
                         android:textColor="?colorOnPrimary"
-                        android:textSize="12sp"
+                        android:textSize="10sp"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -301,8 +301,8 @@
 
                     <ImageView
                         android:id="@+id/exercisesLinkImage"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:contentDescription="@string/none"
@@ -319,7 +319,7 @@
                         android:textAlignment="center"
                         android:textAllCaps="true"
                         android:textColor="?colorOnPrimary"
-                        android:textSize="12sp"
+                        android:textSize="10sp"
                         android:textStyle="bold" />
                 </LinearLayout>
 

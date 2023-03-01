@@ -70,5 +70,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     testImplementation "com.google.truth:truth:1.0.1"
     androidTestImplementation "com.google.truth:truth:1.0.1"
-    implementation files('../libs/spotify-app-remote-release-0.7.2.aar')
+    //implementation files('../libs/spotify-app-remote-release-0.7.2.aar')
 }
