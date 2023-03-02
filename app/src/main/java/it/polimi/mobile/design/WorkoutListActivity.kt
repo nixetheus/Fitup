@@ -180,7 +180,9 @@ class WorkoutListActivity : AppCompatActivity() {
             /*val test = listOf(R.drawable.arms_background, R.drawable.core_background, R.drawable.legs_background,
                 R.drawable.mind_background)
             workoutsLayout.workoutLayoutList.background = theme.getDrawable(test.random())
+
 */
+
             binding.workoutsListLayout.addView(workoutsLayout.root)
 
             workoutsLayout.workoutCardList.setOnClickListener {
