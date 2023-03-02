@@ -116,7 +116,7 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
         val cardDim = 110
         val card = CardView(context)
         card.radius = cardDim.toPx().toFloat()
-        card.background = getDrawable(context, R.drawable.gradient_0)
+        card.background = getDrawable(context, R.drawable.gradient_arms)
         card.foregroundGravity = CENTER_VERTICAL
 
         val valueTextView = TextView(context)

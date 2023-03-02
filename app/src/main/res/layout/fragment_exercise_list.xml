@@ -2,52 +2,62 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <androidx.cardview.widget.CardView
-
-        android:id="@+id/exerciseCard"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="75dp"
-        android:layout_marginBottom="15dp"
-        app:cardBackgroundColor="@color/red_arms"
-        app:cardCornerRadius="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/gradient_yoga"
+        tools:ignore="UselessParent">
 
-        <LinearLayout
-            android:id="@+id/exercisesLayout"
+        <androidx.cardview.widget.CardView
+
+            android:id="@+id/exerciseCard"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="75dp"
+            app:cardBackgroundColor="@android:color/transparent"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="0dp"
+            app:cardMaxElevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
-                android:id="@+id/exerciseNameListLayout"
+                android:id="@+id/exercisesLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingStart="12.5dp"
-                android:paddingTop="15dp"
-                android:paddingEnd="12.5dp"
-                android:paddingBottom="15dp">
+                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/exerciseNameList"
+                <LinearLayout
+                    android:id="@+id/exerciseNameListLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/lato"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="0dp"
-                    android:textAlignment="textStart"
-                    android:textColor="?colorOnSecondary"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="12.5dp"
+                    android:paddingTop="15dp"
+                    android:paddingEnd="12.5dp"
+                    android:paddingBottom="15dp">
 
+                    <TextView
+                        android:id="@+id/exerciseNameList"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/lato"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="0dp"
+                        android:textAlignment="textStart"
+                        android:textColor="?colorOnSecondary"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
 </LinearLayout>

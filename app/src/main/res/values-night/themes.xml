@@ -3,7 +3,7 @@
     <style name="Theme.MobileProject" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/good_gray</item>
-        <item name="colorPrimaryVariant">@color/dark_night</item>
+        <item name="colorPrimaryVariant">@color/good_gray_transparent</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/clean_sky_1</item>
