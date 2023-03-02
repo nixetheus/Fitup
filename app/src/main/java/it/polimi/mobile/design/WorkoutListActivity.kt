@@ -155,7 +155,7 @@ class WorkoutListActivity : AppCompatActivity() {
 
             val workoutsLayout = FragmentWorkoutListBinding.inflate(layoutInflater)
 
-            workoutsLayout.workoutDisplayName.text = workout.name
+            workoutsLayout.workoutDisplayNameList.text = workout.name
 
             var exp = 0f
             var kcalTot = 0F
@@ -168,28 +168,28 @@ class WorkoutListActivity : AppCompatActivity() {
             }
 
             // TODO: real values
-            workoutsLayout.exercisesValue.text = getString(R.string.null_value)
-            workoutsLayout.kcalValue.text = kcalTot.toString()
-            workoutsLayout.bpmValue.text = getString(R.string.null_value)
+            workoutsLayout.exercisesValueList.text = getString(R.string.null_value)
+            workoutsLayout.kcalValueList.text = kcalTot.toString()
+            workoutsLayout.bpmValueList.text = getString(R.string.null_value)
 
-            workoutsLayout.exercisesLabel.text = getString(R.string.number_exercises_label)
-            workoutsLayout.kcalLabel.text = getString(R.string.calories_data_label)
-            workoutsLayout.bpmLabel.text = getString(R.string.bpm_data_label)
+            workoutsLayout.exercisesLabelList.text = getString(R.string.number_exercises_label)
+            workoutsLayout.kcalLabelList.text = getString(R.string.calories_data_label)
+            workoutsLayout.bpmLabelList.text = getString(R.string.bpm_data_label)
 
             // TODO: real color
-            val test = listOf(R.drawable.arms_background, R.drawable.core_background, R.drawable.legs_background,
+            /*val test = listOf(R.drawable.arms_background, R.drawable.core_background, R.drawable.legs_background,
                 R.drawable.mind_background)
-            workoutsLayout.workoutLayout.background = theme.getDrawable(test.random())
-
+            workoutsLayout.workoutLayoutList.background = theme.getDrawable(test.random())
+*/
             binding.workoutsListLayout.addView(workoutsLayout.root)
 
-            workoutsLayout.workoutCard.setOnClickListener {
+            workoutsLayout.workoutCardList.setOnClickListener {
                 val intent = Intent(this, WorkoutPlayActivity::class.java)
                 intent.putExtra("workout", workout)
                 startActivity(intent)
             }
 
-            workoutsLayout.workoutCard.setOnLongClickListener {
+            workoutsLayout.workoutCardList.setOnLongClickListener {
 
                 binding.editWorkoutLayout.visibility = View.VISIBLE
                 binding.workoutMenuName.text = workout.name
@@ -197,7 +197,7 @@ class WorkoutListActivity : AppCompatActivity() {
                 animate.duration = 500
                 animate.fillAfter = true
                 binding.editWorkoutLayout.startAnimation(animate)
-                workoutsLayout.workoutCard.isLongClickable = false
+                workoutsLayout.workoutCardList.isLongClickable = false
 
                 binding.modifyWorkoutButton.setOnClickListener{
                     onModifyWorkout(workout, workoutsLayout)
@@ -215,7 +215,7 @@ class WorkoutListActivity : AppCompatActivity() {
         val intent = Intent(this, EditWorkoutActivity::class.java)
         intent.putExtra("workout", workout)
         startActivity(intent)
-        workoutsLayout.workoutCard.isLongClickable = true
+        workoutsLayout.workoutCardList.isLongClickable = true
         binding.editWorkoutLayout.visibility = View.GONE
     }
 
