@@ -1,10 +1,11 @@
-/*package it.polimi.mobile.design
+package it.polimi.mobile.design
 
 import android.content.Context
 import android.util.Log
 import com.spotify.android.appremote.api.ConnectionParams
 import com.spotify.android.appremote.api.Connector
 import com.spotify.android.appremote.api.SpotifyAppRemote
+
 
 object SpotifyService {
     private const val CLIENT_ID = "4b00cfb32e1c4f6ca9258787c206e864"
@@ -36,4 +37,3 @@ object SpotifyService {
         SpotifyAppRemote.connect(context, connectionParams, connectionListener)
     }
 }
-*/
