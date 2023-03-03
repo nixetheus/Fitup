@@ -78,7 +78,7 @@ class EditWorkoutActivity : AppCompatActivity() {
         }
 
         // Close add workout animation
-        binding.addWorkoutClose.setOnClickListener{
+        binding.addExerciseWorkoutClose.setOnClickListener{
             binding.addExerciseToWorkoutCard.visibility=View.GONE
             val closeAddExerciseMenuAnimation = TranslateAnimation(
                 0F, 0F, 0F, binding.addExerciseToWorkoutCard.height.toFloat())
@@ -116,9 +116,11 @@ class EditWorkoutActivity : AppCompatActivity() {
         val sets = HelperFunctions().parseIntInput(binding.setsInputValue.text.toString())
         val reps = HelperFunctions().parseIntInput(binding.repsInputValue.text.toString())
         val rest = HelperFunctions().parseIntInput(binding.restInputValue.text.toString())
+        val weight = HelperFunctions().parseFloatInput(binding.weightInputValue.text.toString())
+        val buffer = HelperFunctions().parseIntInput(binding.bufferInputValue.text.toString())
 
         val workoutExercise= WorkoutExercise(id, workoutId, exerciseId,
-            exerciseName, sets, reps, rest)
+            exerciseName, sets, reps, rest, weight, buffer)
 
         workoutExerciseDatabase = FirebaseDatabase.getInstance().getReference("WorkoutExercise")
         workoutExerciseDatabase.child(id).setValue(workoutExercise).addOnSuccessListener {
@@ -148,6 +150,8 @@ class EditWorkoutActivity : AppCompatActivity() {
             exerciseFragment.restValue.text = exercise.rest?.let {
                 HelperFunctions().secondsToFormatString(it)
             }
+            exerciseFragment.weightValue.text = exercise.weight.toString()
+            exerciseFragment.bufferValue.text = exercise.buffer.toString()
 
             binding.workoutExercisesList.addView(exerciseFragment.root)
         }

@@ -8,5 +8,6 @@ data class WorkoutExercise(
     val sets: Int? = null,
     val reps: Int? = null,
     val rest :Int? = null,
-    val weight: Float? = null
+    val weight: Float? = null,
+    val buffer: Int? = null
 )

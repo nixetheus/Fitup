@@ -103,7 +103,8 @@
     <string name="modify_workout">Modify</string>
     <string name="delete_workout">Delete</string>
     <!-- Add Exercise To Workout Menu -->
-    <string name="exercise_label">Exercise</string>
+    <string name="add_exercise_label">Add Exercise</string>
+    <string name="exercise_label">Exercise:</string>
     <string name="type_label">Type</string>
     <string name="calories_label">Kcal</string>
 

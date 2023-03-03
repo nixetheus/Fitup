@@ -10,7 +10,6 @@ data class Exercise(
     val type: ExerciseType? = null,
     val experiencePerReps: Int? = null
 
-
 )
 {
     override fun toString(): String {
