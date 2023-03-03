@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -13,6 +14,7 @@ import com.google.firebase.database.ValueEventListener
 import it.polimi.mobile.design.databinding.ActivityCentralBinding
 import it.polimi.mobile.design.databinding.FragmentWorkoutBinding
 import it.polimi.mobile.design.entities.Workout
+import it.polimi.mobile.design.enum.ExerciseType
 import it.polimi.mobile.design.helpers.DatabaseHelper
 
 
@@ -93,10 +95,18 @@ class CentralActivity : AppCompatActivity() {
             workoutsLayout.kcalLabel.text = getString(R.string.calories_data_label)
             workoutsLayout.bpmLabel.text = getString(R.string.bpm_data_label)
 
-            // TODO: real color
-            /*val test = listOf(R.drawable.arms_background, R.drawable.core_background, R.drawable.legs_background,
-                R.drawable.mind_background)
-            workoutsLayout.workoutLayout.background = theme.getDrawable(test.random())*/
+            when(workout.exercisesType?.let { getWorkoutType(it) }) {
+                0 -> workoutsLayout.workoutColorLayout.background =
+                    ResourcesCompat.getDrawable(resources, R.drawable.gradient_arms, applicationContext.theme)
+                1 -> workoutsLayout.workoutColorLayout.background =
+                    ResourcesCompat.getDrawable(resources, R.drawable.gradient_legs, applicationContext.theme)
+                2 -> workoutsLayout.workoutColorLayout.background =
+                    ResourcesCompat.getDrawable(resources, R.drawable.gradient_core, applicationContext.theme)
+                3 -> workoutsLayout.workoutColorLayout.background =
+                    ResourcesCompat.getDrawable(resources, R.drawable.gradient_yoga, applicationContext.theme)
+                else -> workoutsLayout.workoutColorLayout.background =
+                    ResourcesCompat.getDrawable(resources, R.drawable.gradient_arms, applicationContext.theme)
+            }
 
             binding.workoutsLayout.addView(workoutsLayout.root)
 
@@ -106,5 +116,20 @@ class CentralActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
+    }
+
+    private fun getWorkoutType(exercisesTypes: MutableList<Int>) : Int {
+
+        var top = 0
+        var score = 0
+        for (type in exercisesTypes.indices) {
+            if (exercisesTypes[type] > score) {
+                top = type
+                score = exercisesTypes[type]
+            }
+        }
+
+        return if ((score + 1) / (exercisesTypes.sum() + 1) >= 0.4) top
+        else ExerciseType.values().size
     }
 }

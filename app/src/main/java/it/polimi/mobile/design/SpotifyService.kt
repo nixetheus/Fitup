@@ -1,4 +1,4 @@
-package it.polimi.mobile.design
+/*package it.polimi.mobile.design
 
 import android.content.Context
 import android.util.Log
@@ -37,3 +37,4 @@ object SpotifyService {
         SpotifyAppRemote.connect(context, connectionParams, connectionListener)
     }
 }
+*/

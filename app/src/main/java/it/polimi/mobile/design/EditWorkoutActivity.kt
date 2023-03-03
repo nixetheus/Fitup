@@ -122,6 +122,21 @@ class EditWorkoutActivity : AppCompatActivity() {
         val workoutExercise= WorkoutExercise(id, workoutId, exerciseId,
             exerciseName, sets, reps, rest, weight, buffer)
 
+        // Update workout types
+        val workoutDatabase = FirebaseDatabase.getInstance().getReference("Workout")
+        if (workoutId != null) {
+
+            val newTypes = workout.exercisesType
+            exercise.type?.let {
+                if (newTypes != null) {
+                    newTypes[it.ordinal] = newTypes[it.ordinal] + 1
+                }
+            }
+            workout.exercisesType = newTypes
+
+            workout.name?.let { workoutDatabase.child(it).setValue(workout).addOnSuccessListener {} }
+        }
+
         workoutExerciseDatabase = FirebaseDatabase.getInstance().getReference("WorkoutExercise")
         workoutExerciseDatabase.child(id).setValue(workoutExercise).addOnSuccessListener {
 
@@ -132,6 +147,7 @@ class EditWorkoutActivity : AppCompatActivity() {
             finish()
             startActivity(intent)
         }
+
     }
 
     private fun showExerciseSpinner() {
