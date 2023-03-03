@@ -3,12 +3,16 @@ package it.polimi.mobile.design
 import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
+import android.util.Log
 import android.view.View
 import android.widget.Chronometer
 import android.widget.Chronometer.OnChronometerTickListener
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.*
+import com.spotify.android.appremote.api.ConnectionParams
+import com.spotify.android.appremote.api.Connector
+import com.spotify.android.appremote.api.SpotifyAppRemote
 import it.polimi.mobile.design.databinding.ActivityWorkoutPlayBinding
 import it.polimi.mobile.design.entities.Workout
 import it.polimi.mobile.design.entities.WorkoutExercise
@@ -24,6 +28,10 @@ class WorkoutPlayActivity : AppCompatActivity() {
     private lateinit var workoutExercise: ArrayList<WorkoutExercise>
     private var timeWhenStopped by Delegates.notNull<Long>()
     private var i=0
+    private val CLIENT_ID = "8db4d298653041b4b1850c09464182a3"
+    private val REDIRECT_URI = "mobile-app-login://callback"
+    private var mSpotifyAppRemote: SpotifyAppRemote? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val exp =0F
@@ -127,6 +135,31 @@ class WorkoutPlayActivity : AppCompatActivity() {
             }
         }
 
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val connectionParams = ConnectionParams.Builder(CLIENT_ID)
+            .setRedirectUri(REDIRECT_URI)
+            .showAuthView(true)
+            .build()
+        SpotifyAppRemote.connect(this, connectionParams,
+            object : Connector.ConnectionListener {
+                override fun onConnected(spotifyAppRemote: SpotifyAppRemote) {
+                    mSpotifyAppRemote = spotifyAppRemote
+                    Log.d("MainActivity", "Connected! Yay!")
+
+                    // Now you can start interacting with App Remote
+                    mSpotifyAppRemote!!.getPlayerApi().play("spotify:playlist:37i9dQZF1DX2sUQwD7tbmL");
+                }
+
+                override fun onFailure(throwable: Throwable) {
+                    Log.e("MainActivity", throwable.message, throwable)
+
+                    // Something went wrong when attempting to connect! Handle errors here
+                }
+            })
 
     }
     override fun onBackPressed() {

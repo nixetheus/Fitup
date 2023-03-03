@@ -16,3 +16,4 @@ rootProject.name = "MobileProject"
 include ':app'
 include ':libs'
 
+include ':app-remote-lib'
