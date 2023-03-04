@@ -131,11 +131,39 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/recentTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="45dp"
+                android:fontFamily="@font/lato_bold"
+                android:text="@string/recent_workouts"
+                android:textColor="?colorOnPrimary"
+                android:textSize="16sp" />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbarSize="0dp"
+                tools:ignore="SpeakableTextPresentCheck">
+
+                <LinearLayout
+                    android:id="@+id/workoutsLayoutRecent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:orientation="horizontal"
+                    android:paddingStart="25dp"
+                    android:paddingEnd="40dp" />
+            </HorizontalScrollView>
+
+            <TextView
                 android:id="@+id/choosenTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="40dp"
-                android:layout_marginTop="45dp"
+                android:layout_marginTop="15dp"
                 android:fontFamily="@font/lato_bold"
                 android:text="@string/welcome_workouts"
                 android:textColor="?colorOnPrimary"
@@ -144,6 +172,8 @@
             <HorizontalScrollView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingTop="30dp"
+                android:paddingBottom="15dp"
                 android:scrollbarSize="0dp"
                 tools:ignore="SpeakableTextPresentCheck">
 
@@ -151,8 +181,6 @@
                     android:id="@+id/workoutsLayout"
                     android:layout_width="wrap_content"
                     android:layout_height="200dp"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginBottom="20dp"
                     android:orientation="horizontal"
                     android:paddingStart="25dp"
                     android:paddingEnd="40dp" />
@@ -178,7 +206,7 @@
                 <LinearLayout
                     android:id="@+id/workoutsPopularLayout"
                     android:layout_width="wrap_content"
-                    android:layout_height="200dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
                     android:layout_marginBottom="20dp"
                     android:orientation="horizontal"
@@ -193,8 +221,9 @@
         android:id="@+id/linksLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/gradient_popup"
         android:orientation="vertical"
-        android:paddingTop="24dp"
+        android:paddingTop="50dp"
         android:paddingBottom="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

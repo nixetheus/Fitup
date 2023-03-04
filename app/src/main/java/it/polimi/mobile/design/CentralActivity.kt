@@ -13,6 +13,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import it.polimi.mobile.design.databinding.ActivityCentralBinding
 import it.polimi.mobile.design.databinding.FragmentWorkoutBinding
+import it.polimi.mobile.design.databinding.FragmentWorkoutRecentBinding
 import it.polimi.mobile.design.entities.Workout
 import it.polimi.mobile.design.enum.ExerciseType
 import it.polimi.mobile.design.helpers.DatabaseHelper
@@ -81,47 +82,82 @@ class CentralActivity : AppCompatActivity() {
     private fun showWorkouts(workouts: List<Workout>) {
 
         for (workout in workouts) {
+            showRecentWorkout(workout)
+            showChosenWorkout(workout)
+        }
+    }
 
-            val workoutsLayout = FragmentWorkoutBinding.inflate(layoutInflater)
+    private fun showRecentWorkout(workout: Workout) {
 
-            workoutsLayout.workoutDisplayName.text = workout.name
+        val workoutsLayout = FragmentWorkoutRecentBinding.inflate(layoutInflater)
 
-            // TODO: real values
-            workoutsLayout.exercisesValue.text = getString(R.string.null_value)
-            workoutsLayout.kcalValue.text = getString(R.string.null_value)
-            workoutsLayout.bpmValue.text = getString(R.string.null_value)
+        workoutsLayout.workoutDisplayName.text = workout.name
 
-            workoutsLayout.exercisesLabel.text = getString(R.string.number_exercises_label)
-            workoutsLayout.kcalLabel.text = getString(R.string.calories_data_label)
-            workoutsLayout.bpmLabel.text = getString(R.string.bpm_data_label)
+        when(workout.exercisesType?.let { getWorkoutType(it) }) {
+            0 -> workoutsLayout.colorTypeImage.setImageDrawable(
+                ResourcesCompat.getDrawable(resources, R.drawable.gradient_arms, applicationContext.theme))
+            1 -> workoutsLayout.colorTypeImage.setImageDrawable(
+                ResourcesCompat.getDrawable(resources, R.drawable.gradient_legs, applicationContext.theme))
+            2 -> workoutsLayout.colorTypeImage.setImageDrawable(
+                ResourcesCompat.getDrawable(resources, R.drawable.gradient_core, applicationContext.theme))
+            3 -> workoutsLayout.colorTypeImage.setImageDrawable(
+                ResourcesCompat.getDrawable(resources, R.drawable.gradient_yoga, applicationContext.theme))
+            else -> workoutsLayout.colorTypeImage.setImageDrawable(
+                ResourcesCompat.getDrawable(resources, R.drawable.gradient_default, applicationContext.theme))
+        }
 
-            when(workout.exercisesType?.let { getWorkoutType(it) }) {
-                0 -> workoutsLayout.workoutColorLayout.background =
-                    ResourcesCompat.getDrawable(resources, R.drawable.gradient_arms, applicationContext.theme)
-                1 -> workoutsLayout.workoutColorLayout.background =
-                    ResourcesCompat.getDrawable(resources, R.drawable.gradient_legs, applicationContext.theme)
-                2 -> workoutsLayout.workoutColorLayout.background =
-                    ResourcesCompat.getDrawable(resources, R.drawable.gradient_core, applicationContext.theme)
-                3 -> workoutsLayout.workoutColorLayout.background =
-                    ResourcesCompat.getDrawable(resources, R.drawable.gradient_yoga, applicationContext.theme)
-                else -> workoutsLayout.workoutColorLayout.background =
-                    ResourcesCompat.getDrawable(resources, R.drawable.gradient_arms, applicationContext.theme)
-            }
+        binding.workoutsLayoutRecent.addView(workoutsLayout.root)
 
-            binding.workoutsLayout.addView(workoutsLayout.root)
+        workoutsLayout.workoutCard.setOnClickListener {
+            val intent = Intent(this, WorkoutPlayActivity::class.java)
+            intent.putExtra("workout", workout)
+            startActivity(intent)
+        }
+    }
 
-            workoutsLayout.workoutCard.setOnClickListener {
-                val intent = Intent(this, WorkoutPlayActivity::class.java)
-                intent.putExtra("workout", workout)
-                startActivity(intent)
-            }
+    private fun showChosenWorkout(workout: Workout) {
+
+        val workoutsLayout = FragmentWorkoutBinding.inflate(layoutInflater)
+
+        workoutsLayout.workoutDisplayName.text = workout.name
+
+        // TODO: real values
+        workoutsLayout.exercisesValue.text = getString(R.string.null_value)
+        workoutsLayout.kcalValue.text = getString(R.string.null_value)
+        workoutsLayout.bpmValue.text = getString(R.string.null_value)
+
+        workoutsLayout.exercisesLabel.text = getString(R.string.number_exercises_label)
+        workoutsLayout.kcalLabel.text = getString(R.string.calories_data_label)
+        workoutsLayout.bpmLabel.text = getString(R.string.bpm_data_label)
+
+        when(workout.exercisesType?.let { getWorkoutType(it) }) {
+            0 -> workoutsLayout.workoutColorLayout.background =
+                ResourcesCompat.getDrawable(resources, R.drawable.gradient_arms, applicationContext.theme)
+            1 -> workoutsLayout.workoutColorLayout.background =
+                ResourcesCompat.getDrawable(resources, R.drawable.gradient_legs, applicationContext.theme)
+            2 -> workoutsLayout.workoutColorLayout.background =
+                ResourcesCompat.getDrawable(resources, R.drawable.gradient_core, applicationContext.theme)
+            3 -> workoutsLayout.workoutColorLayout.background =
+                ResourcesCompat.getDrawable(resources, R.drawable.gradient_yoga, applicationContext.theme)
+            else -> workoutsLayout.workoutColorLayout.background =
+                ResourcesCompat.getDrawable(resources, R.drawable.gradient_default, applicationContext.theme)
+        }
+
+        binding.workoutsLayout.addView(workoutsLayout.root)
+
+        workoutsLayout.workoutCard.setOnClickListener {
+            val intent = Intent(this, WorkoutPlayActivity::class.java)
+            intent.putExtra("workout", workout)
+            startActivity(intent)
         }
     }
 
     private fun getWorkoutType(exercisesTypes: MutableList<Int>) : Int {
 
-        var top = 0
+        var top = -1
         var score = 0
+
+        // TODO: not working as intended
         for (type in exercisesTypes.indices) {
             if (exercisesTypes[type] > score) {
                 top = type

@@ -45,6 +45,7 @@
 
     <!-- HOME -->
     <string name="welcome">Welcome,</string>
+    <string name="recent_workouts">Recent Workouts</string>
     <string name="welcome_workouts">Chosen For You</string>
     <string name="popular_workouts">Most Popular</string>
     <string name="level_label">Lvl</string>

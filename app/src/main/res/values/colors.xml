@@ -27,5 +27,6 @@
     <color name="pine_1">#3EC480</color>
 
     <color name="good_gray">#0B0B0B</color>
+    <color name="good_gray_light">#232323</color>
     <color name="good_gray_transparent">#E20B0B0B</color>
 </resources>

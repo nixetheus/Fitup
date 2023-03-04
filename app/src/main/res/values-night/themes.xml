@@ -6,7 +6,7 @@
         <item name="colorPrimaryVariant">@color/good_gray_transparent</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/clean_sky_1</item>
+        <item name="colorSecondary">@color/good_gray_light</item>
         <item name="colorSecondaryVariant">@color/clean_sky_2</item>
         <item name="colorOnSecondary">@color/white</item>
         <!-- Tertiary brand color. -->

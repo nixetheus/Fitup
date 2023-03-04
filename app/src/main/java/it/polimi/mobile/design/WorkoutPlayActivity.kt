@@ -10,9 +10,9 @@ import android.widget.Chronometer.OnChronometerTickListener
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.*
-//import com.spotify.android.appremote.api.ConnectionParams
-//import com.spotify.android.appremote.api.Connector
-//import com.spotify.android.appremote.api.SpotifyAppRemote
+import com.spotify.android.appremote.api.ConnectionParams
+import com.spotify.android.appremote.api.Connector
+import com.spotify.android.appremote.api.SpotifyAppRemote
 import it.polimi.mobile.design.databinding.ActivityWorkoutPlayBinding
 import it.polimi.mobile.design.entities.Workout
 import it.polimi.mobile.design.entities.WorkoutExercise
@@ -30,7 +30,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
     private var i=0
     private val CLIENT_ID = "8db4d298653041b4b1850c09464182a3"
     private val REDIRECT_URI = "mobile-app-login://callback"
-    //private var mSpotifyAppRemote: SpotifyAppRemote? = null
+    private var mSpotifyAppRemote: SpotifyAppRemote? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -140,7 +140,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        /*val connectionParams = ConnectionParams.Builder(CLIENT_ID)
+        val connectionParams = ConnectionParams.Builder(CLIENT_ID)
             .setRedirectUri(REDIRECT_URI)
             .showAuthView(true)
             .build()
@@ -159,7 +159,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
 
                     // Something went wrong when attempting to connect! Handle errors here
                 }
-            })*/
+            })
 
     }
     override fun onBackPressed() {
