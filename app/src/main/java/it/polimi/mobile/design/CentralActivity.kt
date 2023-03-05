@@ -17,6 +17,7 @@ import it.polimi.mobile.design.databinding.FragmentWorkoutRecentBinding
 import it.polimi.mobile.design.entities.Workout
 import it.polimi.mobile.design.enum.ExerciseType
 import it.polimi.mobile.design.helpers.DatabaseHelper
+import it.polimi.mobile.design.helpers.HelperFunctions
 
 
 class CentralActivity : AppCompatActivity() {
@@ -93,7 +94,7 @@ class CentralActivity : AppCompatActivity() {
 
         workoutsLayout.workoutDisplayName.text = workout.name
 
-        when(workout.exercisesType?.let { getWorkoutType(it) }) {
+        when(workout.exercisesType?.let { HelperFunctions().getWorkoutType(it) }) {
             0 -> workoutsLayout.colorTypeImage.setImageDrawable(
                 ResourcesCompat.getDrawable(resources, R.drawable.gradient_arms, applicationContext.theme))
             1 -> workoutsLayout.colorTypeImage.setImageDrawable(
@@ -130,7 +131,7 @@ class CentralActivity : AppCompatActivity() {
         workoutsLayout.kcalLabel.text = getString(R.string.calories_data_label)
         workoutsLayout.bpmLabel.text = getString(R.string.bpm_data_label)
 
-        when(workout.exercisesType?.let { getWorkoutType(it) }) {
+        when(workout.exercisesType?.let { HelperFunctions().getWorkoutType(it) }) {
             0 -> workoutsLayout.workoutColorLayout.background =
                 ResourcesCompat.getDrawable(resources, R.drawable.gradient_arms, applicationContext.theme)
             1 -> workoutsLayout.workoutColorLayout.background =
@@ -152,20 +153,5 @@ class CentralActivity : AppCompatActivity() {
         }
     }
 
-    private fun getWorkoutType(exercisesTypes: MutableList<Int>) : Int {
 
-        var top = -1
-        var score = 0
-
-        // TODO: not working as intended
-        for (type in exercisesTypes.indices) {
-            if (exercisesTypes[type] > score) {
-                top = type
-                score = exercisesTypes[type]
-            }
-        }
-
-        return if ((score + 1) / (exercisesTypes.sum() + 1) >= 0.4) top
-        else ExerciseType.values().size
-    }
 }

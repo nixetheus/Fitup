@@ -23,6 +23,7 @@ import it.polimi.mobile.design.entities.WorkoutExercise
 import it.polimi.mobile.design.enum.ExerciseType
 import it.polimi.mobile.design.enum.WorkoutType
 import it.polimi.mobile.design.helpers.DatabaseHelper
+import it.polimi.mobile.design.helpers.HelperFunctions
 
 
 class WorkoutListActivity : AppCompatActivity() {
@@ -178,7 +179,7 @@ class WorkoutListActivity : AppCompatActivity() {
             workoutsLayout.kcalLabelList.text = getString(R.string.calories_data_label)
             workoutsLayout.bpmLabelList.text = getString(R.string.bpm_data_label)
 
-            when(workout.exercisesType?.let { getWorkoutType(it) }) {
+            when(workout.exercisesType?.let {  HelperFunctions().getWorkoutType(it) }) {
                 0 -> workoutsLayout.workoutColorLayout.background =
                     ResourcesCompat.getDrawable(resources, R.drawable.gradient_arms, applicationContext.theme)
                 1 -> workoutsLayout.workoutColorLayout.background =
@@ -188,7 +189,7 @@ class WorkoutListActivity : AppCompatActivity() {
                 3 -> workoutsLayout.workoutColorLayout.background =
                     ResourcesCompat.getDrawable(resources, R.drawable.gradient_yoga, applicationContext.theme)
                 else -> workoutsLayout.workoutColorLayout.background =
-                    ResourcesCompat.getDrawable(resources, R.drawable.gradient_arms, applicationContext.theme)
+                    ResourcesCompat.getDrawable(resources, R.drawable.gradient_default, applicationContext.theme)
             }
 
             binding.workoutsListLayout.addView(workoutsLayout.root)
@@ -233,8 +234,8 @@ class WorkoutListActivity : AppCompatActivity() {
 
         binding.editWorkoutLayout.visibility = View.GONE
 
-        val workoutExercise = database.reference.child("WorkoutExercise").
-        orderByChild("workoutId").equalTo(workout.workoutId)
+        val workoutExercise = database.reference.child("WorkoutExercise").orderByChild("workoutId")
+            .equalTo(workout.workoutId)
 
         workoutExercise.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -242,14 +243,15 @@ class WorkoutListActivity : AppCompatActivity() {
                     exerciseSnap.ref.removeValue()
                 }
             }
+
             override fun onCancelled(databaseError: DatabaseError) {
                 Log.e(ContentValues.TAG, "onCancelled", databaseError.toException())
             }
         })
 
 
-        val workoutToRemove = database.reference.child("Workout").
-        orderByChild("workoutId").equalTo(workout.workoutId)
+        val workoutToRemove =
+            database.reference.child("Workout").orderByChild("workoutId").equalTo(workout.workoutId)
 
         workoutToRemove.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -257,6 +259,7 @@ class WorkoutListActivity : AppCompatActivity() {
                     workoutSnapshot.ref.removeValue()
                 }
             }
+
             override fun onCancelled(databaseError: DatabaseError) {
                 Log.e(ContentValues.TAG, "onCancelled", databaseError.toException())
             }
@@ -264,21 +267,6 @@ class WorkoutListActivity : AppCompatActivity() {
 
         val intent = Intent(this, WorkoutListActivity::class.java)
         startActivity(intent)
-    }
-
-    private fun getWorkoutType(exercisesTypes: MutableList<Int>) : Int {
-
-        var top = 0
-        var score = -1
-        for (type in exercisesTypes.indices) {
-            if (exercisesTypes[type] > score) {
-                top = type
-                score = exercisesTypes[type]
-            }
-        }
-
-        return if ((score + 1) / (exercisesTypes.sum() + 1) >= 0.4) top
-        else ExerciseType.values().size
     }
 
 }

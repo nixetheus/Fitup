@@ -90,7 +90,7 @@
             android:background="@drawable/gradient_popup"
             android:orientation="vertical"
             android:paddingStart="40dp"
-            android:paddingTop="175dp"
+            android:paddingTop="275dp"
             android:paddingEnd="40dp"
             android:paddingBottom="40dp"
             android:visibility="invisible"
@@ -99,7 +99,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="25dp"
+                android:layout_marginBottom="30dp"
                 android:orientation="horizontal"
                 android:paddingTop="10dp"
                 tools:ignore="UseCompoundDrawables">
@@ -123,6 +123,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="@font/lato"
+                    android:letterSpacing="0.05"
                     android:text="@string/missing"
                     android:textAlignment="center"
                     android:textColor="?colorOnPrimary"
@@ -149,14 +150,16 @@
                 android:fontFamily="@font/lato_bold"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
-                android:minHeight="40dp"
+                android:minHeight="35dp"
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp"
                 android:stateListAnimator="@null"
                 android:text="@string/modify_workout"
                 android:textAlignment="center"
-                android:textAllCaps="false"
                 android:textColor="?colorOnPrimary"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
+                app:iconPadding="0dp"
                 tools:ignore="DuplicateSpeakableTextCheck,TouchTargetSizeCheck" />
 
             <Button
@@ -167,14 +170,16 @@
                 android:fontFamily="@font/lato_bold"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
-                android:minHeight="40dp"
+                android:minHeight="35dp"
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp"
                 android:stateListAnimator="@null"
                 android:text="@string/delete_workout"
                 android:textAlignment="center"
-                android:textAllCaps="false"
                 android:textColor="?colorOnPrimary"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
+                app:iconPadding="0dp"
                 tools:ignore="TouchTargetSizeCheck" />
         </LinearLayout>
 
@@ -202,7 +207,7 @@
             android:background="@drawable/gradient_popup"
             android:orientation="vertical"
             android:paddingStart="40dp"
-            android:paddingTop="225dp"
+            android:paddingTop="450dp"
             android:paddingEnd="40dp"
             android:paddingBottom="40dp">
 

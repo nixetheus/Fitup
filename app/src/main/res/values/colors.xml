@@ -10,7 +10,7 @@
 
     <color name="strong_willed_yellow">#FFFFD600</color>
     <color name="charcoal_graphite">#1E1E1E</color>
-    <color name="dreamy_blue"> #FF4C56F7</color>
+    <color name="lilla"> #6C63FF</color>
     <color name="dark_night">#141847</color>
     <color name="deep_ocean"> #FF01020E</color>
 
@@ -27,6 +27,6 @@
     <color name="pine_1">#3EC480</color>
 
     <color name="good_gray">#0B0B0B</color>
-    <color name="good_gray_light">#232323</color>
-    <color name="good_gray_transparent">#E20B0B0B</color>
+    <color name="good_gray_light">#F2232323</color>
+    <color name="good_gray_transparent">#D90B0B0B</color>
 </resources>

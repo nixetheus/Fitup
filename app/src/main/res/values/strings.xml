@@ -26,6 +26,7 @@
     <string name="welcome_title">Welcome</string>
     <string name="welcome_sub">Your fitness journey\n starts here</string>
     <string name="welcome_image">Welcome Image</string>
+    <string name="pass_forgot">Forgot your password?</string>
     <string name="google_login_btn">Sign In With Google</string>
     <string name="facebook_login_btn">Continue With Facebook</string>
     <string name="login_btn">Login</string>

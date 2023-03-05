@@ -1,6 +1,8 @@
 package it.polimi.mobile.design.helpers
 
 import android.text.format.DateUtils
+import android.util.Log
+import it.polimi.mobile.design.enum.ExerciseType
 
 class HelperFunctions {
 
@@ -17,5 +19,13 @@ class HelperFunctions {
         if (text.isNotEmpty())
             return text.toFloat()
         return 0f
+    }
+
+    fun getWorkoutType(exercisesTypes: MutableList<Int>) : Int {
+        val orderedIndices =
+            exercisesTypes.indices.sortedBy { type -> exercisesTypes[type] }.reversed()
+        return if (exercisesTypes[orderedIndices[0]] > exercisesTypes[orderedIndices[1]])
+            orderedIndices[0]
+        else -1
     }
 }

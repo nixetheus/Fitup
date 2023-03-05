@@ -5,7 +5,7 @@
         android:centerColor="?colorPrimaryVariant"
         android:endColor="?colorPrimary"
         android:angle="-90"
-        android:centerY="0.375"
+        android:centerY="0.65"
         android:type="linear"/>
     <corners
         android:topLeftRadius="15dp"

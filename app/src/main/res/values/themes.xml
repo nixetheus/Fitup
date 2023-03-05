@@ -11,6 +11,8 @@
         <item name="colorOnSecondary">@color/white</item>
         <!-- Tertiary brand color. -->
         <item name="colorTertiary">@color/white</item>
+        <!-- Accent brand color. -->
+        <item name="colorAccent">@color/lilla</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimary</item>
         <!-- Customize your theme here. -->

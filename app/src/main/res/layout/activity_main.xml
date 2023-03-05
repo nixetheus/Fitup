@@ -69,14 +69,14 @@
         <Button
             android:id="@+id/SignInBtn"
             style="@null"
-            android:stateListAnimator="@null"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="?colorPrimary"
+            android:backgroundTint="?colorAccent"
             android:fontFamily="@font/lato"
             android:insetTop="0dp"
             android:insetBottom="0dp"
             android:minHeight="53dp"
+            android:stateListAnimator="@null"
             android:text="@string/login_btn"
             android:textAlignment="center"
             android:textColor="?colorOnPrimary"
@@ -89,7 +89,6 @@
         <Button
             android:id="@+id/SignUpbtn"
             style="@null"
-            android:stateListAnimator="@null"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
@@ -102,14 +101,17 @@
             android:paddingTop="10dp"
             android:paddingRight="0dp"
             android:paddingBottom="10dp"
+            android:stateListAnimator="@null"
             android:text="@string/signup_btn"
             android:textAlignment="center"
             android:textColor="?colorOnPrimary"
             android:textSize="17sp"
             android:textStyle="bold"
+            android:visibility="gone"
             app:cornerRadius="5dp"
             app:rippleColor="@null"
-            tools:ignore="TextContrastCheck" />
+            tools:ignore="TextContrastCheck"
+            tools:visibility="gone" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
