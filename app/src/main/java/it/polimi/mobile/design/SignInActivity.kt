@@ -30,7 +30,7 @@ class SignInActivity : AppCompatActivity() {
     private var auth =  FirebaseAuth.getInstance()
     private lateinit var database: DatabaseReference
     private lateinit var binding: ActivitySignInBinding
-    private var buttonFacebookLogin = binding.facebookLogin
+
     private lateinit var mGoogleSignInClient: GoogleSignInClient
     private var callbackManager = CallbackManager.Factory.create()
 
@@ -44,7 +44,7 @@ class SignInActivity : AppCompatActivity() {
         binding = ActivitySignInBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        buttonFacebookLogin.setPermissions("email", "public_profile")
+        binding.facebookLogin.setPermissions("email", "public_profile")
         createRequest()
 
         binding.signupLogin.setOnClickListener {
@@ -94,7 +94,7 @@ class SignInActivity : AppCompatActivity() {
             }
         }
 
-        buttonFacebookLogin.
+        binding.facebookLogin.
         registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
 
             override fun onSuccess(result: LoginResult) {

@@ -61,7 +61,7 @@ dependencies {
     
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.0'
-    implementation files('file:///home/nicog97/Scaricati/android-sdk-0.7.2-appremote_v1.2.3-auth/app-remote-lib/spotify-app-remote-release-0.7.2.aar ')
+    //implementation files('file:///home/nicog97/Scaricati/android-sdk-0.7.2-appremote_v1.2.3-auth/app-remote-lib/spotify-app-remote-release-0.7.2.aar ')
 
 
 
