@@ -8,5 +8,5 @@ data class User(
     val weight: Float? = null,
     val age: Int? = null,
     val gender: Gender? = null,
-    val exp: Int? = null
+    val exp: Float? = null
 )

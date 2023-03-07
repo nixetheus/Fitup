@@ -43,7 +43,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val exp =0F
+        val experience =0F
         super.onCreate(savedInstanceState)
         binding=ActivityWorkoutPlayBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -53,6 +53,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
         chrono.text = "00:00:00"
 
         var workout= intent.extras?.get("workout") as Workout
+        var exp= intent.extras?.get("exp") as Float
         binding.playWorkoutName.text=workout.name
         database=FirebaseDatabase.getInstance().getReference("WorkoutExercise")
         database.addValueEventListener(object : ValueEventListener {
@@ -167,6 +168,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
 
                 binding.startCurrentExerciseLayout.visibility = View.GONE
                 binding.startStopButton.setOnClickListener {
+
                     val workoutToRemove =
                         db.reference.child("Workout").orderByChild("workoutId").equalTo(workout.workoutId)
 

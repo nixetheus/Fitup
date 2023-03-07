@@ -21,6 +21,7 @@ import it.polimi.mobile.design.entities.WorkoutExercise
 import it.polimi.mobile.design.enum.ExerciseType
 import it.polimi.mobile.design.helpers.DatabaseHelper
 import it.polimi.mobile.design.helpers.HelperFunctions
+import kotlin.properties.Delegates
 
 
 class CentralActivity : AppCompatActivity() {
@@ -28,6 +29,7 @@ class CentralActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCentralBinding
     private var firebaseAuth = FirebaseAuth.getInstance()
     private val databaseInstance = FirebaseDatabase.getInstance()
+    private var exp:Float = 0.0f
 
     private lateinit var user:User
     private var exerciseDatabase = FirebaseDatabase.getInstance().getReference("Exercise")
@@ -105,6 +107,15 @@ class CentralActivity : AppCompatActivity() {
         val workoutsLayout = FragmentWorkoutRecentBinding.inflate(layoutInflater)
 
         workoutsLayout.workoutDisplayName.text = workout.name
+        exp = 0f
+        var kcalTot = 0F
+        for(workoutExercise in workoutExerciseList.filter { we -> we.workoutId == workout.workoutId }) {
+            for (exercise in exerciseArrayList.filter { ex -> ex.eid == workoutExercise.exerciseId})
+            {
+                exp += (workoutExercise.reps!! * workoutExercise.sets!!) * exercise.experiencePerReps!!
+                kcalTot += (workoutExercise.reps * exercise.caloriesPerRep!!) * workoutExercise.sets
+            }
+        }
 
         when(workout.exercisesType?.let { HelperFunctions().getWorkoutType(it) }) {
             0 -> workoutsLayout.colorTypeImage.setImageDrawable(
@@ -124,6 +135,7 @@ class CentralActivity : AppCompatActivity() {
         workoutsLayout.workoutCard.setOnClickListener {
             val intent = Intent(this, WorkoutPlayActivity::class.java)
             intent.putExtra("workout", workout)
+            intent.putExtra("exp", exp)
 
             startActivity(intent)
         }
@@ -135,7 +147,7 @@ class CentralActivity : AppCompatActivity() {
         val workoutsLayout = FragmentWorkoutBinding.inflate(layoutInflater)
 
         workoutsLayout.workoutDisplayName.text = workout.name
-        var exp = 0f
+        exp = 0f
         var kcalTot = 0F
         for(workoutExercise in workoutExerciseList.filter { we -> we.workoutId == workout.workoutId }) {
             for (exercise in exerciseArrayList.filter { ex -> ex.eid == workoutExercise.exerciseId})
@@ -172,6 +184,7 @@ class CentralActivity : AppCompatActivity() {
         workoutsLayout.workoutCard.setOnClickListener {
             val intent = Intent(this, WorkoutPlayActivity::class.java)
             intent.putExtra("workout", workout)
+            intent.putExtra("exp", exp)
             startActivity(intent)
         }
     }
