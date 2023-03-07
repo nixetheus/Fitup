@@ -76,7 +76,7 @@ class ExerciseListActivity : AppCompatActivity() {
         val exerciseName = binding.exerciseNameField.text.toString()
         val kcalPerReps = HelperFunctions().parseFloatInput(binding.kcalInputValue.text.toString())
         val exType = exerciseTypeFromString(binding.typeOfEx.selectedItem.toString())
-        val exp = HelperFunctions().parseIntInput(binding.expInputValue.text.toString())
+        val exp = HelperFunctions().parseFloatInput(binding.expInputValue.text.toString())
 
         val exerciseId = exerciseDatabase.push().key!!
         if (exerciseName.isNotEmpty()){

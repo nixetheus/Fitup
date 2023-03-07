@@ -21,6 +21,7 @@ import it.polimi.mobile.design.entities.WorkoutExercise
 import it.polimi.mobile.design.enum.ExerciseType
 import it.polimi.mobile.design.helpers.DatabaseHelper
 import it.polimi.mobile.design.helpers.HelperFunctions
+import kotlin.properties.Delegates
 
 
 class CentralActivity : AppCompatActivity() {
@@ -28,6 +29,7 @@ class CentralActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCentralBinding
     private var firebaseAuth = FirebaseAuth.getInstance()
     private val databaseInstance = FirebaseDatabase.getInstance()
+    private var exp:Float = 0.0f
 
     private var exerciseDatabase = FirebaseDatabase.getInstance().getReference("Exercise")
     private var workoutExerciseDatabase = FirebaseDatabase.getInstance().getReference("WorkoutExercise")
@@ -42,7 +44,7 @@ class CentralActivity : AppCompatActivity() {
 
         binding = ActivityCentralBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        configDatabases()
         showUser()
         createBindings()
         workoutsCallback()
@@ -50,7 +52,7 @@ class CentralActivity : AppCompatActivity() {
 
     private fun workoutsCallback() {
         val workoutsSchema = databaseInstance.getReference("Workout")
-        workoutsSchema.addValueEventListener(object : ValueEventListener {
+        workoutsSchema.orderByChild("ranking").limitToFirst(5).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 showWorkouts(
                     databaseHelperInstance!!.getWorkoutsFromSnapshot(snapshot))
@@ -90,7 +92,7 @@ class CentralActivity : AppCompatActivity() {
     }
 
     private fun showWorkouts(workouts: List<Workout>) {
-
+        binding.workoutsLayout.removeAllViews()
         for (workout in workouts) {
             showRecentWorkout(workout)
             showChosenWorkout(workout)
@@ -99,9 +101,19 @@ class CentralActivity : AppCompatActivity() {
 
     private fun showRecentWorkout(workout: Workout) {
 
+
         val workoutsLayout = FragmentWorkoutRecentBinding.inflate(layoutInflater)
 
         workoutsLayout.workoutDisplayName.text = workout.name
+        exp = 0f
+        var kcalTot = 0F
+        for(workoutExercise in workoutExerciseList.filter { we -> we.workoutId == workout.workoutId }) {
+            for (exercise in exerciseArrayList.filter { ex -> ex.eid == workoutExercise.exerciseId})
+            {
+                exp += (workoutExercise.reps!! * workoutExercise.sets!!) * exercise.experiencePerReps!!
+                kcalTot += (workoutExercise.reps * exercise.caloriesPerRep!!) * workoutExercise.sets
+            }
+        }
 
         when(workout.exercisesType?.let { HelperFunctions().getWorkoutType(it) }) {
             0 -> workoutsLayout.colorTypeImage.setImageDrawable(
@@ -121,6 +133,7 @@ class CentralActivity : AppCompatActivity() {
         workoutsLayout.workoutCard.setOnClickListener {
             val intent = Intent(this, WorkoutPlayActivity::class.java)
             intent.putExtra("workout", workout)
+            intent.putExtra("exp", exp)
 
             startActivity(intent)
         }
@@ -132,10 +145,19 @@ class CentralActivity : AppCompatActivity() {
         val workoutsLayout = FragmentWorkoutBinding.inflate(layoutInflater)
 
         workoutsLayout.workoutDisplayName.text = workout.name
+        exp = 0f
+        var kcalTot = 0F
+        for(workoutExercise in workoutExerciseList.filter { we -> we.workoutId == workout.workoutId }) {
+            for (exercise in exerciseArrayList.filter { ex -> ex.eid == workoutExercise.exerciseId})
+            {
+                exp += (workoutExercise.reps!! * workoutExercise.sets!!) * exercise.experiencePerReps!!
+                kcalTot += (workoutExercise.reps * exercise.caloriesPerRep!!) * workoutExercise.sets
+            }
+        }
 
         // TODO: real values
-        workoutsLayout.exercisesValue.text = ""
-        workoutsLayout.kcalValue.text = ""
+        workoutsLayout.exercisesValue.text = exp.toString()
+        workoutsLayout.kcalValue.text = kcalTot.toString()
         workoutsLayout.bpmValue.text = getString(R.string.null_value)
 
         workoutsLayout.exercisesLabel.text = getString(R.string.number_exercises_label)
@@ -160,37 +182,29 @@ class CentralActivity : AppCompatActivity() {
         workoutsLayout.workoutCard.setOnClickListener {
             val intent = Intent(this, WorkoutPlayActivity::class.java)
             intent.putExtra("workout", workout)
+            intent.putExtra("exp", exp)
             startActivity(intent)
         }
     }
-    private fun calculateWorkoutData(workout: Workout) {
+    private fun configDatabases() {
 
-        var exp = 0f
-        var kcalTot = 0F
-        workoutExerciseDatabase.addValueEventListener(object :ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                workoutExerciseList = DatabaseHelper().getWorkoutsExercisesFromSnapshot(snapshot,
-                    workout.workoutId.toString())
-            }
-            override fun onCancelled(error: DatabaseError) {
-                Log.w("Firebase", "Couldn't retrieve data...")
-            }
-        })
         exerciseDatabase.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                exerciseArrayList = databaseHelperInstance!!.getExercisesFromSnapshot(snapshot)
+                exerciseArrayList = DatabaseHelper().getExercisesFromSnapshot(snapshot)
             }
             override fun onCancelled(error: DatabaseError) {
                 Log.w("Firebase", "Couldn't retrieve data...")
             }
         })
-        for(workoutExercise in workoutExerciseList) {
-            for (exercise in exerciseArrayList.filter { ex -> ex.eid == workoutExercise.exerciseId})
-            {
-                exp += (workoutExercise.reps!! * workoutExercise.sets!!) * exercise.experiencePerReps!!
-                kcalTot += (workoutExercise.reps * exercise.caloriesPerRep!!) * workoutExercise.sets
+
+        workoutExerciseDatabase.addValueEventListener(object :ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                workoutExerciseList = DatabaseHelper().getAllWorkoutsExercisesFromSnapshot(snapshot)
             }
-        }
+            override fun onCancelled(error: DatabaseError) {
+                Log.w("Firebase", "Couldn't retrieve data...")
+            }
+        })
     }
 
 

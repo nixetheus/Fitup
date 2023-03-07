@@ -1,5 +1,6 @@
 package it.polimi.mobile.design
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -52,8 +53,9 @@ class EditWorkoutActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 workoutExerciseList = DatabaseHelper().getWorkoutsExercisesFromSnapshot(snapshot,
                         workout.workoutId.toString())
-                showExerciseCards(workoutExerciseList)
                 calculateWorkoutData()
+                showExerciseCards(workoutExerciseList)
+
             }
             override fun onCancelled(error: DatabaseError) {
                 Log.w("Firebase", "Couldn't retrieve data...")
@@ -186,6 +188,11 @@ class EditWorkoutActivity : AppCompatActivity() {
         }
         binding.kcalOfWorkout.text = kcalTot.toString()
         binding.expOfWorkout.text= exp.toString()
+    }
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val intent = Intent(this, WorkoutListActivity::class.java)
+        startActivity(intent)
     }
 }
 

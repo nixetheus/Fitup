@@ -36,7 +36,7 @@ class HomeActivity : AppCompatActivity() {
         val gender = if (binding.gender.selectedItem == "Male") Gender.MALE else Gender.FEMALE
 
         if (username.isNotEmpty()) {
-            val newUser = User(uid, username, weight, age ,gender, 0)
+            val newUser = User(uid, username, weight, age ,gender, 0F)
             userDatabase.child(uid).setValue(newUser).addOnSuccessListener {
                 val intent = Intent(this, CentralActivity::class.java)
                 startActivity(intent)

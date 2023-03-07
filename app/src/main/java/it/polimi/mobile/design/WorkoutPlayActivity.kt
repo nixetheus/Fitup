@@ -1,5 +1,6 @@
 package it.polimi.mobile.design
 
+import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
@@ -9,6 +10,7 @@ import android.widget.Chronometer
 import android.widget.Chronometer.OnChronometerTickListener
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.spotify.android.appremote.api.ConnectionParams
@@ -28,6 +30,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
     private lateinit var binding:ActivityWorkoutPlayBinding
     private lateinit var chrono: Chronometer
     private lateinit var database: DatabaseReference
+    private var db = FirebaseDatabase.getInstance()
     private lateinit var workoutExercise: ArrayList<WorkoutExercise>
     private var timeWhenStopped by Delegates.notNull<Long>()
     private var i=0
@@ -40,7 +43,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val exp =0F
+        val experience =0F
         super.onCreate(savedInstanceState)
         binding=ActivityWorkoutPlayBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -50,6 +53,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
         chrono.text = "00:00:00"
 
         var workout= intent.extras?.get("workout") as Workout
+        var exp= intent.extras?.get("exp") as Float
         binding.playWorkoutName.text=workout.name
         database=FirebaseDatabase.getInstance().getReference("WorkoutExercise")
         database.addValueEventListener(object : ValueEventListener {
@@ -99,6 +103,34 @@ class WorkoutPlayActivity : AppCompatActivity() {
                 }
                 binding.currentExerciseSetsValue.text=workoutExercise[i].sets.toString()
                 binding.startCurrentExerciseLayout.visibility= View.VISIBLE
+                val connectionParams = ConnectionParams.Builder(CLIENT_ID)
+                    .setRedirectUri(REDIRECT_URI)
+                    .showAuthView(true)
+                    .build()
+                SpotifyAppRemote.connect(this, connectionParams,
+                    object : Connector.ConnectionListener {
+                        override fun onConnected(spotifyAppRemote: SpotifyAppRemote) {
+                            mSpotifyAppRemote = spotifyAppRemote
+                            Log.d("Play Workout", "Connected! Yay!")
+
+                            // Now you can start interacting with App Remote
+
+                            mSpotifyAppRemote!!.getPlayerApi().play("spotify:playlist:37i9dQZF1DX2sUQwD7tbmL");
+                            spotifyAppRemote.playerApi.subscribeToPlayerState().setEventCallback {
+                                val track: Track = it.track
+                                Log.d("Play Workout", track.name + " by " + track.artist.name)
+                            }
+                        }
+
+                        override fun onFailure(throwable: Throwable) {
+                            Log.e("MainActivity", throwable.message, throwable)
+
+
+
+                            // Something went wrong when attempting to connect! Handle errors here
+                        }
+
+                    })
             }
             else {
                 Toast.makeText(
@@ -136,6 +168,22 @@ class WorkoutPlayActivity : AppCompatActivity() {
 
                 binding.startCurrentExerciseLayout.visibility = View.GONE
                 binding.startStopButton.setOnClickListener {
+
+                    val workoutToRemove =
+                        db.reference.child("Workout").orderByChild("workoutId").equalTo(workout.workoutId)
+
+                    workoutToRemove.addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(dataSnapshot: DataSnapshot) {
+                            for (workoutSnapshot in dataSnapshot.children) {
+                                workoutSnapshot.ref.child("ranking").setValue(ServerValue.increment(-1))
+                            }
+                        }
+
+                        override fun onCancelled(databaseError: DatabaseError) {
+                            Log.e(ContentValues.TAG, "onCancelled", databaseError.toException())
+                        }
+                    })
+
                     userDatabase.child(firebaseAuth.uid.toString()).child("exp").setValue(exp.toInt())
                     mSpotifyAppRemote?.playerApi?.pause()
                     mSpotifyAppRemote?.let {
@@ -154,34 +202,8 @@ class WorkoutPlayActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        val connectionParams = ConnectionParams.Builder(CLIENT_ID)
-            .setRedirectUri(REDIRECT_URI)
-            .showAuthView(true)
-            .build()
-        SpotifyAppRemote.connect(this, connectionParams,
-            object : Connector.ConnectionListener {
-                override fun onConnected(spotifyAppRemote: SpotifyAppRemote) {
-                    mSpotifyAppRemote = spotifyAppRemote
-                    Log.d("Play Workout", "Connected! Yay!")
+        var workout= intent.extras?.get("workout") as Workout
 
-                    // Now you can start interacting with App Remote
-
-                    mSpotifyAppRemote!!.getPlayerApi().play("spotify:playlist:37i9dQZF1DX2sUQwD7tbmL");
-                    spotifyAppRemote.playerApi.subscribeToPlayerState().setEventCallback {
-                        val track: Track = it.track
-                        Log.d("Play Workout", track.name + " by " + track.artist.name)
-                    }
-                }
-
-                override fun onFailure(throwable: Throwable) {
-                    Log.e("MainActivity", throwable.message, throwable)
-
-
-
-                    // Something went wrong when attempting to connect! Handle errors here
-                }
-
-            })
 
     }
     override fun onBackPressed() {

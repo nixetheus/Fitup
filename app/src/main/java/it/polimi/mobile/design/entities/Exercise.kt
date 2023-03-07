@@ -8,7 +8,7 @@ data class Exercise(
     val name: String? = null,
     val caloriesPerRep: Float? = null,
     val type: ExerciseType? = null,
-    val experiencePerReps: Int? = null
+    val experiencePerReps: Float? = null
 
 )
 {
