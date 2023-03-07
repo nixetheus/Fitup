@@ -10,4 +10,11 @@
     <style name="Widget.Theme.MobileProject.ButtonBar.Fullscreen" parent="">
         <item name="android:buttonBarStyle">?android:attr/buttonBarStyle</item>
     </style>
+
+    <style name="EditTextTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorControlNormal">?colorOnPrimary</item>
+        <item name="colorControlActivated">?colorOnPrimary</item>
+        <item name="colorControlHighlight">?colorOnPrimary</item>
+        <item name="colorBackgroundFloating">@color/red_arms</item>
+    </style>
 </resources>

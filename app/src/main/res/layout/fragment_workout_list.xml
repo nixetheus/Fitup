@@ -17,6 +17,7 @@
             android:id="@+id/workoutCardList"
             android:layout_width="match_parent"
             android:layout_height="180dp"
+            android:hapticFeedbackEnabled="true"
             app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="5dp"
             app:cardElevation="0dp"

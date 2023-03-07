@@ -92,6 +92,7 @@
         </activity>
         <activity
             android:name=".EditWorkoutActivity"
+            android:windowSoftInputMode="adjustPan"
             android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"
@@ -99,6 +100,7 @@
         </activity>
         <activity
             android:name=".StatsActivity"
+            android:windowSoftInputMode="adjustPan"
             android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"
@@ -106,6 +108,7 @@
         </activity>
         <activity
             android:name=".ExerciseListActivity"
+            android:windowSoftInputMode="adjustPan"
             android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"
@@ -113,6 +116,7 @@
         </activity>
         <activity
             android:name=".WorkoutListActivity"
+            android:windowSoftInputMode="adjustPan"
             android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"
@@ -129,6 +133,7 @@
         <activity
             android:name=".SignInActivity"
             android:exported="false"
+            android:windowSoftInputMode="adjustPan"
             tools:ignore="Instantiatable" >
             <meta-data
                 android:name="android.app.lib_name"
@@ -137,6 +142,7 @@
         <activity
             android:name=".HomeActivity"
             android:exported="false"
+            android:windowSoftInputMode="adjustPan"
             tools:ignore="Instantiatable" >
             <meta-data
                 android:name="android.app.lib_name"
@@ -145,6 +151,7 @@
         <activity
             android:name=".SignUpActivity"
             android:exported="false"
+            android:windowSoftInputMode="adjustPan"
             tools:ignore="Instantiatable" >
             <meta-data
                 android:name="android.app.lib_name"
