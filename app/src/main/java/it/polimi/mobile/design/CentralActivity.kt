@@ -52,7 +52,7 @@ class CentralActivity : AppCompatActivity() {
 
     private fun workoutsCallback() {
         val workoutsSchema = databaseInstance.getReference("Workout")
-        workoutsSchema.addValueEventListener(object : ValueEventListener {
+        workoutsSchema.orderByChild("ranking").limitToFirst(5).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 showWorkouts(
                     databaseHelperInstance!!.getWorkoutsFromSnapshot(snapshot))
@@ -92,7 +92,7 @@ class CentralActivity : AppCompatActivity() {
     }
 
     private fun showWorkouts(workouts: List<Workout>) {
-
+        binding.workoutsLayout.removeAllViews()
         for (workout in workouts) {
             showRecentWorkout(workout)
             showChosenWorkout(workout)
@@ -100,6 +100,7 @@ class CentralActivity : AppCompatActivity() {
     }
 
     private fun showRecentWorkout(workout: Workout) {
+
 
         val workoutsLayout = FragmentWorkoutRecentBinding.inflate(layoutInflater)
 

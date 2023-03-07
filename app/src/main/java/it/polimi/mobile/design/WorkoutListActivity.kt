@@ -137,7 +137,7 @@ class WorkoutListActivity : AppCompatActivity() {
 
         val wId = databaseWorkout.push().key!!
         if(name.isNotEmpty()) {
-            val workout = Workout(wId, uid, name, WorkoutType.RELAX, "hip hop", MutableList(4){0})
+            val workout = Workout(wId, uid, name, WorkoutType.RELAX, "hip hop",0, MutableList(4){0})
             databaseWorkout.child(name).setValue(workout).addOnSuccessListener {
                 Toast.makeText(this, "Successfully saved!!", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, WorkoutListActivity::class.java)
