@@ -49,9 +49,9 @@ class WorkoutListActivity : AppCompatActivity() {
         binding = ActivityWorkoutListBinding.inflate(layoutInflater)
         setContentView(binding.root)
         showWorkouts(workoutArrayList)
-
-        setupUI()
         configDatabases()
+        setupUI()
+
         setupAnimations()
         binding.confirmAddWorkoutBtn.setOnClickListener{ createWorkout() }
         binding.searchWorkout.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
@@ -64,6 +64,7 @@ class WorkoutListActivity : AppCompatActivity() {
             }
         })
     }
+
 
     private fun configDatabases() {
 
@@ -137,7 +138,7 @@ class WorkoutListActivity : AppCompatActivity() {
 
         val wId = databaseWorkout.push().key!!
         if(name.isNotEmpty()) {
-            val workout = Workout(wId, uid, name, WorkoutType.RELAX, "hip hop",0, MutableList(4){0})
+            val workout = Workout(wId, uid, name, WorkoutType.RELAX, "hip hop",0,false, MutableList(4){0})
             databaseWorkout.child(name).setValue(workout).addOnSuccessListener {
                 Toast.makeText(this, "Successfully saved!!", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, WorkoutListActivity::class.java)
@@ -171,7 +172,7 @@ class WorkoutListActivity : AppCompatActivity() {
             }
 
             // TODO: real values
-            workoutsLayout.exercisesValueList.text = getString(R.string.null_value)
+            workoutsLayout.exercisesValueList.text = exp.toString()
             workoutsLayout.kcalValueList.text = kcalTot.toString()
             workoutsLayout.bpmValueList.text = getString(R.string.null_value)
 
@@ -268,5 +269,12 @@ class WorkoutListActivity : AppCompatActivity() {
         val intent = Intent(this, WorkoutListActivity::class.java)
         startActivity(intent)
     }
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val intent = Intent(this, CentralActivity::class.java)
+        startActivity(intent)
+    }
+
+
 
 }

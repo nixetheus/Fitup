@@ -44,7 +44,7 @@ class CentralActivity : AppCompatActivity() {
 
         binding = ActivityCentralBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        configDatabases()
         showUser()
         createBindings()
         workoutsCallback()
@@ -135,10 +135,19 @@ class CentralActivity : AppCompatActivity() {
         val workoutsLayout = FragmentWorkoutBinding.inflate(layoutInflater)
 
         workoutsLayout.workoutDisplayName.text = workout.name
+        var exp = 0f
+        var kcalTot = 0F
+        for(workoutExercise in workoutExerciseList.filter { we -> we.workoutId == workout.workoutId }) {
+            for (exercise in exerciseArrayList.filter { ex -> ex.eid == workoutExercise.exerciseId})
+            {
+                exp += (workoutExercise.reps!! * workoutExercise.sets!!) * exercise.experiencePerReps!!
+                kcalTot += (workoutExercise.reps * exercise.caloriesPerRep!!) * workoutExercise.sets
+            }
+        }
 
         // TODO: real values
-        workoutsLayout.exercisesValue.text = ""
-        workoutsLayout.kcalValue.text = ""
+        workoutsLayout.exercisesValue.text = exp.toString()
+        workoutsLayout.kcalValue.text = kcalTot.toString()
         workoutsLayout.bpmValue.text = getString(R.string.null_value)
 
         workoutsLayout.exercisesLabel.text = getString(R.string.number_exercises_label)
@@ -166,34 +175,25 @@ class CentralActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
-    private fun calculateWorkoutData(workout: Workout) {
+    private fun configDatabases() {
 
-        var exp = 0f
-        var kcalTot = 0F
-        workoutExerciseDatabase.addValueEventListener(object :ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                workoutExerciseList = DatabaseHelper().getWorkoutsExercisesFromSnapshot(snapshot,
-                    workout.workoutId.toString())
-            }
-            override fun onCancelled(error: DatabaseError) {
-                Log.w("Firebase", "Couldn't retrieve data...")
-            }
-        })
         exerciseDatabase.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                exerciseArrayList = databaseHelperInstance!!.getExercisesFromSnapshot(snapshot)
+                exerciseArrayList = DatabaseHelper().getExercisesFromSnapshot(snapshot)
             }
             override fun onCancelled(error: DatabaseError) {
                 Log.w("Firebase", "Couldn't retrieve data...")
             }
         })
-        for(workoutExercise in workoutExerciseList) {
-            for (exercise in exerciseArrayList.filter { ex -> ex.eid == workoutExercise.exerciseId})
-            {
-                exp += (workoutExercise.reps!! * workoutExercise.sets!!) * exercise.experiencePerReps!!
-                kcalTot += (workoutExercise.reps * exercise.caloriesPerRep!!) * workoutExercise.sets
+
+        workoutExerciseDatabase.addValueEventListener(object :ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                workoutExerciseList = DatabaseHelper().getAllWorkoutsExercisesFromSnapshot(snapshot)
             }
-        }
+            override fun onCancelled(error: DatabaseError) {
+                Log.w("Firebase", "Couldn't retrieve data...")
+            }
+        })
     }
 
 

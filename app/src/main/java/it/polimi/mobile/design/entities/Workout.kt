@@ -11,6 +11,7 @@ data class Workout(
     val type: WorkoutType? = null,
     val spotifyPlaylistLink: String?=null,
     var ranking:Int?=null,
+    var favorite:Boolean?=false,
     var exercisesType: MutableList<Int>? = MutableList(ExerciseType.values().size) { 0 }
 ): java.io.Serializable {
     override fun equals(other: Any?): Boolean {
