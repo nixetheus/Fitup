@@ -89,6 +89,7 @@ class WorkoutListActivity : AppCompatActivity() {
     private fun setupUI() {
         databaseWorkout.addValueEventListener(object :ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
+                workoutArrayList.clear()
                 showWorkouts(databaseHelperInstance!!.getWorkoutsFromSnapshot(snapshot))
             }
             override fun onCancelled(error: DatabaseError) {

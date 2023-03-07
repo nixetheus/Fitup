@@ -29,13 +29,11 @@ class CentralActivity : AppCompatActivity() {
     private var firebaseAuth = FirebaseAuth.getInstance()
     private val databaseInstance = FirebaseDatabase.getInstance()
 
-    private lateinit var user:User
     private var exerciseDatabase = FirebaseDatabase.getInstance().getReference("Exercise")
     private var workoutExerciseDatabase = FirebaseDatabase.getInstance().getReference("WorkoutExercise")
     private val databaseHelperInstance = DatabaseHelper().getInstance()
 
     private var exerciseArrayList = ArrayList<Exercise>()
-    private var exerciseInWorkout = ArrayList<Exercise>()
     private var workoutExerciseList = ArrayList<WorkoutExercise>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
