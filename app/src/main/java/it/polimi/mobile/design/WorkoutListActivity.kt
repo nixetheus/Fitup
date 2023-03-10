@@ -21,7 +21,6 @@ import it.polimi.mobile.design.entities.Exercise
 import it.polimi.mobile.design.entities.Workout
 import it.polimi.mobile.design.entities.WorkoutExercise
 import it.polimi.mobile.design.enum.ExerciseType
-import it.polimi.mobile.design.enum.WorkoutType
 import it.polimi.mobile.design.helpers.DatabaseHelper
 import it.polimi.mobile.design.helpers.HelperFunctions
 
@@ -48,7 +47,6 @@ class WorkoutListActivity : AppCompatActivity() {
 
         binding = ActivityWorkoutListBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        showWorkouts(workoutArrayList)
         configDatabases()
         setupUI()
 
@@ -58,8 +56,9 @@ class WorkoutListActivity : AppCompatActivity() {
             override fun onQueryTextSubmit(p0: String?): Boolean { return false }
             override fun onQueryTextChange(p0: String?): Boolean {
                 showWorkouts(workoutArrayList.filter {
-                    workout ->  workout.name!!.contains(p0.toString())
-                        || workout.type.toString().contains(p0.toString()) })
+                    workout ->  workout.name!!.lowercase().contains(p0.toString().lowercase())
+                        || ExerciseType.values()[HelperFunctions()
+                    .getWorkoutType(workout.exercisesType!!)].toString().lowercase().contains(p0.toString().lowercase()) })
                 return false
             }
         })
@@ -90,8 +89,8 @@ class WorkoutListActivity : AppCompatActivity() {
     private fun setupUI() {
         databaseWorkout.addValueEventListener(object :ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
-                workoutArrayList.clear()
-                showWorkouts(databaseHelperInstance!!.getWorkoutsFromSnapshot(snapshot))
+                workoutArrayList = databaseHelperInstance!!.getWorkoutsFromSnapshot(snapshot)
+                showWorkouts(workoutArrayList)
             }
             override fun onCancelled(error: DatabaseError) {
                 Log.w("Firebase", "Couldn't retrieve data...")
@@ -139,7 +138,7 @@ class WorkoutListActivity : AppCompatActivity() {
 
         val wId = databaseWorkout.push().key!!
         if(name.isNotEmpty()) {
-            val workout = Workout(wId, uid, name, WorkoutType.RELAX, "hip hop",0,false, MutableList(4){0})
+            val workout = Workout(wId, uid, name, "hip hop", 0, false, MutableList(4){0})
             databaseWorkout.child(name).setValue(workout).addOnSuccessListener {
                 Toast.makeText(this, "Successfully saved!!", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, WorkoutListActivity::class.java)

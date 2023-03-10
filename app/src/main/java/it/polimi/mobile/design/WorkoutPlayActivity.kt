@@ -53,7 +53,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
         chrono.text = "00:00:00"
 
         var workout= intent.extras?.get("workout") as Workout
-        var exp= intent.extras?.get("exp") as Float
+        //var exp= intent.extras?.get("exp") as Float
         binding.playWorkoutName.text=workout.name
         database=FirebaseDatabase.getInstance().getReference("WorkoutExercise")
         database.addValueEventListener(object : ValueEventListener {
@@ -184,7 +184,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
                         }
                     })
 
-                    userDatabase.child(firebaseAuth.uid.toString()).child("exp").setValue(exp.toInt())
+                    //userDatabase.child(firebaseAuth.uid.toString()).child("exp").setValue(workout..toInt())
                     mSpotifyAppRemote?.playerApi?.pause()
                     mSpotifyAppRemote?.let {
 

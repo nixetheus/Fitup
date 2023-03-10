@@ -1,7 +1,0 @@
-package it.polimi.mobile.design.enum
-
-enum class WorkoutType {
-    SPEED,
-    STRENGTH,
-    RELAX
-}

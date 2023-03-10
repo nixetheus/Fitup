@@ -36,7 +36,8 @@ class ExerciseListActivity : AppCompatActivity() {
 
         exerciseDatabase.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                showExercises(databaseHelperInstance!!.getExercisesFromSnapshot(snapshot))
+                exerciseArrayList = databaseHelperInstance!!.getExercisesFromSnapshot(snapshot)
+                showExercises(exerciseArrayList)
             }
             override fun onCancelled(error: DatabaseError) {
                 Log.w("Firebase", "Couldn't retrieve data...")
@@ -64,8 +65,8 @@ class ExerciseListActivity : AppCompatActivity() {
             }
             override fun onQueryTextChange(p0: String?): Boolean {
                 showExercises(exerciseArrayList.filter { exercise ->
-                    exercise.name!!.contains(p0!!) || exercise.type.toString().contains(p0)
-                })
+                    exercise.name!!.lowercase().contains(p0!!.lowercase())
+                            || exercise.type.toString().lowercase().contains(p0.lowercase())})
                 return false
             }
         })

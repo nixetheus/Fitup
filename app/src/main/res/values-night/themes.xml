@@ -18,5 +18,7 @@
         <!-- Customize your theme here. -->
         <item name="android:navigationBarColor">?colorPrimary</item>
         <item name="android:alertDialogTheme">@color/red_arms</item>
+        <item name="autoCompleteTextViewStyle">?colorOnPrimary</item>
+        <item name="android:textCursorDrawable">@color/white</item>
     </style>
 </resources>

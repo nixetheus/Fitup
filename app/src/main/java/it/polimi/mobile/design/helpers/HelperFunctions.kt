@@ -26,6 +26,6 @@ class HelperFunctions {
             exercisesTypes.indices.sortedBy { type -> exercisesTypes[type] }.reversed()
         return if (exercisesTypes[orderedIndices[0]] > exercisesTypes[orderedIndices[1]])
             orderedIndices[0]
-        else -1
+        else ExerciseType.FULL_BODY.ordinal
     }
 }

@@ -4,5 +4,6 @@ enum class ExerciseType {
     ARMS,
     LEGS,
     ABDOMEN,
-    CHEST
+    CHEST,
+    FULL_BODY
 }
