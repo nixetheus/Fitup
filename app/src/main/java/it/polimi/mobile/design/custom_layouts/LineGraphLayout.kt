@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.*
 import android.util.AttributeSet
+import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
@@ -31,7 +32,7 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
     private var minX: LocalDateTime = LocalDateTime.ofEpochSecond(0, 0, ZoneOffset.MIN)
     private var maxX: LocalDateTime = LocalDateTime.ofEpochSecond(0, 0, ZoneOffset.MIN)
 
-    private var dataPoints: List<DataPoint> = listOf()
+    var dataPoints: List<DataPoint> = listOf()
     set(points) {
         field = points
 
@@ -58,10 +59,12 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        drawLines(canvas)
-        drawAuxiliaryLines(canvas)
-        drawIntegralArea(canvas)
-        drawMinMaxMid(canvas)
+        if (dataPoints.isNotEmpty()) {
+            drawLines(canvas)
+            drawAuxiliaryLines(canvas)
+            drawIntegralArea(canvas)
+            drawMinMaxMid(canvas)
+        }
     }
 
     private fun getEdges() {
@@ -74,10 +77,11 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private fun drawDataPoints() {
+    fun drawDataPoints() {
 
         val dataPointSize = Constant.DATA_BUTTON_SIZE
-        for (point in dataPoints.subList(1, dataPoints.size)) {
+        Log.d("", dataPoints.toString())
+        for (point in dataPoints) {
 
             val pointView = LineGraphDataView(context)
             pointView.dataValue = point.yCoordinate

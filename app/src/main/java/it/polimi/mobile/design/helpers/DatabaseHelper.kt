@@ -2,10 +2,7 @@ package it.polimi.mobile.design.helpers
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
-import it.polimi.mobile.design.entities.Exercise
-import it.polimi.mobile.design.entities.User
-import it.polimi.mobile.design.entities.Workout
-import it.polimi.mobile.design.entities.WorkoutExercise
+import it.polimi.mobile.design.entities.*
 
 
 class DatabaseHelper() {
@@ -80,6 +77,18 @@ class DatabaseHelper() {
             return snapshot.getValue(User::class.java)
         }
         return User()
+    }
+
+    fun getPointsFromSnapshot(snapshot: DataSnapshot) : List<DataPoint> {
+        val points = ArrayList<DataPoint>()
+        if (snapshot.exists()) {
+            for (child in snapshot.children) {
+                val point = child.getValue(DataPoint::class.java)
+                if (point != null)
+                    points.add(point)
+            }
+        }
+        return points
     }
 
 }
