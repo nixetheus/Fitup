@@ -59,6 +59,11 @@ class ExerciseListActivity : AppCompatActivity() {
             binding.addExerciseCard.visibility = View.GONE
         }
 
+        binding.homeButton.setOnClickListener{
+            val intent = Intent(this, CentralActivity::class.java)
+            startActivity(intent)
+        }
+
         binding.searchExercise.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(p0: String?): Boolean {
                 return false

@@ -96,6 +96,11 @@ class WorkoutListActivity : AppCompatActivity() {
                 Log.w("Firebase", "Couldn't retrieve data...")
             }
         })
+
+        binding.homeButton.setOnClickListener{
+            val intent = Intent(this, CentralActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun setupAnimations() {
