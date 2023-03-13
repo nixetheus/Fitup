@@ -10,6 +10,7 @@ import it.polimi.mobile.design.databinding.ActivityCentralBinding
 import it.polimi.mobile.design.databinding.ActivityStatsBinding
 import it.polimi.mobile.design.entities.DataPoint
 import it.polimi.mobile.design.helpers.DatabaseHelper
+import java.time.LocalDateTime
 
 class StatsActivity : AppCompatActivity() {
 
@@ -35,8 +36,9 @@ class StatsActivity : AppCompatActivity() {
         binding.addDataBtn.setOnClickListener {
             pointsDatabase.child(pointId).get().addOnSuccessListener { pointsSnapshot ->
                 //val points = databaseHelperInstance!!.getPointsFromSnapshot(pointsSnapshot)
-                val points = listOf(DataPoint())
-                binding.graphVisualizer.dataPoints = points
+                val points = listOf(DataPoint(), DataPoint(yCoordinate = 20f, xCoordinate = LocalDateTime.MAX),
+                    DataPoint(yCoordinate = 15f, xCoordinate = LocalDateTime.now()))
+                binding.graphVisualizer.dataPoints = points.sortedBy { it.xCoordinate }
                 binding.graphVisualizer.drawDataPoints()
             }
         }

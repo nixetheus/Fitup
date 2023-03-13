@@ -1,14 +1,17 @@
 package it.polimi.mobile.design.custom_layouts
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.*
 import android.util.AttributeSet
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
+import android.view.View.OnTouchListener
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
@@ -17,6 +20,8 @@ import it.polimi.mobile.design.R
 import it.polimi.mobile.design.custom_views.LineGraphDataView
 import it.polimi.mobile.design.entities.DataPoint
 import it.polimi.mobile.design.helpers.Constant
+import java.lang.Integer.max
+import java.lang.Integer.min
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.temporal.ChronoUnit
@@ -24,6 +29,7 @@ import java.time.temporal.ChronoUnit
 
 class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(context, attrs) {
 
+    private var w = 0;
     private val titleStrip = 50.toPx()
     private val fakePadding = 40.toPx()
 
@@ -37,7 +43,6 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
         field = points
 
         getEdges()
-        //drawDataPoints()
     }
 
     init {
@@ -52,16 +57,17 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
         post{drawDataPoints()}
     }
 
+    @SuppressLint("DrawAllocation")
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        setMeasuredDimension((dataPoints.size * 100).toPx(), heightMeasureSpec)
+        setMeasuredDimension(w, heightMeasureSpec)
     }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         if (dataPoints.isNotEmpty()) {
             drawLines(canvas)
-            drawAuxiliaryLines(canvas)
+            drawAuxiliaryLine(canvas)
             drawIntegralArea(canvas)
             drawMinMaxMid(canvas)
         }
@@ -80,7 +86,8 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
     fun drawDataPoints() {
 
         val dataPointSize = Constant.DATA_BUTTON_SIZE
-        Log.d("", dataPoints.toString())
+        w = max((dataPoints.size * 80).toPx(), context.resources.displayMetrics.widthPixels)
+
         for (point in dataPoints) {
 
             val pointView = LineGraphDataView(context)
@@ -94,7 +101,7 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
             params.topMargin =
                 (getRelativeY(point.yCoordinate).toFloat() - (dataPointSize / 2f)).toInt()
 
-            pointView.setOnTouchListener(View.OnTouchListener { _, motionEvent ->
+            pointView.setOnTouchListener(OnTouchListener { _, motionEvent ->
                 return@OnTouchListener pointTouchHandler(params.leftMargin, params.topMargin,
                     point.yCoordinate, motionEvent)
             })
@@ -165,10 +172,10 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
 
     }
 
-    private fun drawAuxiliaryLines(canvas: Canvas) {
+    private fun drawAuxiliaryLine(canvas: Canvas) {
 
         val graphPaint = Paint()
-        graphPaint.strokeWidth = 7.5f
+        graphPaint.strokeWidth = 5f
         graphPaint.color = Color.argb(0.15f, 1f, 1f, 1f)
         graphPaint.style = Paint.Style.FILL
 
@@ -180,37 +187,12 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
         graphPaint.strokeCap = Paint.Cap.BUTT
 
         canvas.drawLine(
-            getRelativeX(pointZero.xCoordinate).toFloat(),
+            fakePadding.toFloat(),
             height.toFloat() - 25,
             getRelativeX(dataPoints.elementAt(dataPoints.size - 1).xCoordinate).toFloat(),
             height.toFloat() - 25,
             graphPaint
         )
-
-        canvas.drawLine(
-            getRelativeX(pointZero.xCoordinate).toFloat(),
-            height.toFloat() - 25,
-            getRelativeX(pointZero.xCoordinate).toFloat(),
-            150f,
-            graphPaint
-        )
-
-        graphPaint.style = Paint.Style.FILL_AND_STROKE
-
-        canvas.drawCircle(
-            getRelativeX(dataPoints.elementAt(dataPoints.size - 1).xCoordinate).toFloat(),
-            height.toFloat() - 25,
-            graphPaint.strokeWidth,
-            graphPaint
-        )
-
-        canvas.drawCircle(
-            getRelativeX(pointZero.xCoordinate).toFloat(),
-            150f,
-            graphPaint.strokeWidth,
-            graphPaint
-        )
-
     }
 
     private fun drawIntegralArea(canvas: Canvas) {
@@ -276,7 +258,7 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
     private fun getRelativeX(dimensionX: LocalDateTime): Int {
         val percentage = if (maxX == minX) 0.5f else
             ChronoUnit.DAYS.between(minX, dimensionX).toFloat() / ChronoUnit.DAYS.between(minX, maxX)
-        return (percentage * (width - 2 * fakePadding) + fakePadding).toInt()
+        return (percentage * (w - 2 * fakePadding) + fakePadding).toInt()
     }
 
     private fun getRelativeY(dimensionY: Float): Int {
