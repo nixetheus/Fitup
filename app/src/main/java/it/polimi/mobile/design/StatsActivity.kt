@@ -1,16 +1,20 @@
 package it.polimi.mobile.design
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.FirebaseDatabase
-import it.polimi.mobile.design.databinding.ActivityCentralBinding
 import it.polimi.mobile.design.databinding.ActivityStatsBinding
 import it.polimi.mobile.design.entities.DataPoint
+import it.polimi.mobile.design.enum.GraphType
 import it.polimi.mobile.design.helpers.DatabaseHelper
 import java.time.LocalDateTime
+import java.util.*
+
 
 class StatsActivity : AppCompatActivity() {
 
@@ -27,6 +31,7 @@ class StatsActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setupBindings()
+        setupSpinners()
     }
 
     private fun setupBindings() {
@@ -42,5 +47,24 @@ class StatsActivity : AppCompatActivity() {
                 binding.graphVisualizer.drawDataPoints()
             }
         }
+    }
+
+    private fun setupSpinners() {
+
+        // Main Spinner
+        val adapter = ArrayAdapter(this,android.R.layout.simple_spinner_item, GraphType.values())
+        binding.mainGraphSpinner.adapter = adapter
+        binding.mainGraphSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                changeSubSpinner()
+            }
+        }
+
+        // Sub Spinner
+    }
+
+    private fun changeSubSpinner() {
+
     }
 }

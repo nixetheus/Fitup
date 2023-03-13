@@ -131,6 +131,8 @@
     <string name="latest_label">Latest</string>
     <string name="diff_label">+/-</string>
     <string name="new_value">Value</string>
+    <string name="orm">One Rep Max</string>
+    <string name="body_comp">Body Composition</string>
 
     <!-- RESET -->
     <string name="reset_label">Reset Your Password</string>
