@@ -53,7 +53,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
         chrono.text = "00:00:00"
 
         var workout= intent.extras?.get("workout") as Workout
-        //var exp= intent.extras?.get("exp") as Float
+        var exp= intent.extras?.get("exp") as Float
         binding.playWorkoutName.text=workout.name
         database=FirebaseDatabase.getInstance().getReference("WorkoutExercise")
         database.addValueEventListener(object : ValueEventListener {
@@ -192,6 +192,9 @@ class WorkoutPlayActivity : AppCompatActivity() {
                     }
 
                     val intent = Intent(this, WorkoutEndActivity::class.java)
+                    intent.putExtra("exp", exp)
+                    intent.putExtra("time", chrono.base)
+                    intent.putExtra("number of exercises", i)
                     startActivity(intent)
                 }
             }
