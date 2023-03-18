@@ -152,7 +152,8 @@ class StatsActivity : AppCompatActivity() {
     private fun setupSpinners() {
 
         // Main Spinner
-        val adapter = ArrayAdapter(this,android.R.layout.simple_spinner_item, GraphType.values())
+        val adapter = ArrayAdapter(this, R.layout.fragment_spinner_item, GraphType.values())
+        adapter.setDropDownViewResource(R.layout.fragment_spinner_dropdown_item)
         binding.mainGraphSpinner.adapter = adapter
         binding.mainGraphSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -170,7 +171,8 @@ class StatsActivity : AppCompatActivity() {
 
             val graphs =
                 DatabaseHelper().getGraphsFromSnapshot(graphsSnapshot).filter { it.graphType == index}
-            val adapter = ArrayAdapter(this,android.R.layout.simple_spinner_item, graphs)
+            val adapter = ArrayAdapter(this, R.layout.fragment_spinner_item, graphs)
+            adapter.setDropDownViewResource(R.layout.fragment_spinner_dropdown_item)
             binding.secondaryGraphSpinner.adapter = adapter
             graphs[0].graphId?.let {
                 currentGraph = graphs[0]

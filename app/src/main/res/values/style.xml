@@ -17,4 +17,13 @@
         <item name="colorControlHighlight">?colorOnPrimary</item>
         <item name="colorBackgroundFloating">@color/red_arms</item>
     </style>
+
+    <style name="spinnerItemStyle" parent="android:Widget.TextView.SpinnerItem">
+
+    </style>
+
+    <style name="spinnerDropDownItemStyle" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
+        <item name="android:background">?colorPrimary</item>
+    </style>
+
 </resources>
