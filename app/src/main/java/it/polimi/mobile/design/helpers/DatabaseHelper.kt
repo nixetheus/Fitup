@@ -91,4 +91,16 @@ class DatabaseHelper() {
         return points
     }
 
+    fun getGraphsFromSnapshot(snapshot: DataSnapshot) : List<Graph> {
+        val graphs = ArrayList<Graph>()
+        if (snapshot.exists()) {
+            for (child in snapshot.children) {
+                val graph = child.getValue(Graph::class.java)
+                if (graph != null)
+                    graphs.add(graph)
+            }
+        }
+        return graphs
+    }
+
 }
