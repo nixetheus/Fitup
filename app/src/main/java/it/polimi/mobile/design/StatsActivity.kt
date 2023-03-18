@@ -1,6 +1,7 @@
 package it.polimi.mobile.design
 
 import android.annotation.SuppressLint
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.animation.TranslateAnimation
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.ScrollView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -15,12 +17,15 @@ import com.google.firebase.database.FirebaseDatabase
 import it.polimi.mobile.design.databinding.ActivityStatsBinding
 import it.polimi.mobile.design.entities.DataPoint
 import it.polimi.mobile.design.entities.Graph
-import it.polimi.mobile.design.entities.Workout
 import it.polimi.mobile.design.enum.GraphType
 import it.polimi.mobile.design.helpers.DatabaseHelper
 import it.polimi.mobile.design.helpers.HelperFunctions
+import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import java.util.*
 
 
@@ -33,6 +38,7 @@ class StatsActivity : AppCompatActivity() {
     private var pointsDatabase = FirebaseDatabase.getInstance().getReference("Points")
     private var graphsDatabase = FirebaseDatabase.getInstance().getReference("Graphs")
 
+    private val myCalendar : Calendar = Calendar.getInstance()
     private var currentGraph: Graph = Graph()
 
     @SuppressLint("MissingInflatedId")
@@ -44,9 +50,16 @@ class StatsActivity : AppCompatActivity() {
 
         setupBindings()
         setupSpinners()
+        setupDatePicker()
+        binding.graphScroll.scrollTo(binding.graphScroll.scrollX, 0)
     }
 
     private fun setupBindings() {
+
+        binding.homeButton.setOnClickListener{
+            val intent = Intent(this, CentralActivity::class.java)
+            startActivity(intent)
+        }
 
         binding.addDataBtn.setOnClickListener{
             binding.addDataCard.visibility = View.VISIBLE
@@ -76,11 +89,15 @@ class StatsActivity : AppCompatActivity() {
         val uId = firebaseAuth.uid.toString()
         val pId = pointsDatabase.push().key!!
         val value = HelperFunctions().parseFloatInput(binding.dataInputValue.text.toString())
-        // TODO: date selector
+        val dateValue = binding.dateInputValue.text.toString()
+
+        val formatter = DateTimeFormatter.ofPattern("dd/MM/yy")
+        val dt = LocalDate.parse(dateValue, formatter)
 
         if (value > 0) {
-            val dataPoint = DataPoint(uId, pId, currentGraph.graphId, LocalDateTime.now()
-                .toEpochSecond(ZoneOffset.UTC), value)
+            val dataPoint = DataPoint(uId, pId, currentGraph.graphId,
+                ChronoUnit.DAYS.between(LocalDate.ofEpochDay(0), dt) * 86400, value)
+            binding.addDataCard.visibility = View.INVISIBLE
             pointsDatabase.child(pId).setValue(dataPoint).addOnSuccessListener {
                 val intent = Intent(this, StatsActivity::class.java)
                 startActivity(intent)
@@ -92,6 +109,8 @@ class StatsActivity : AppCompatActivity() {
     }
 
     private fun displayData() {
+
+        binding.dataInputLabel.text = currentGraph.graphMeasure
 
         // Display Graph Data
         graphsDatabase.get().addOnSuccessListener { graphsSnapshot ->
@@ -108,19 +127,24 @@ class StatsActivity : AppCompatActivity() {
             Log.w("Data:", points.toString())
             binding.graphVisualizer.dataPoints = points
             binding.graphVisualizer.drawDataPoints()
+            binding.graphScroll.fullScroll(ScrollView.FOCUS_RIGHT)
 
             if (points.isNotEmpty()) {
 
-                val latest = points.last().ycoordinate.toString() + currentGraph.graphMeasure
+                val latest = points.last().ycoordinate.toString()
                 binding.latestPointValue.text = latest
+                binding.latestPointMeasure.text = currentGraph.graphMeasure
 
                 binding.differenceValue.text =
-                    if (points.size == 1) "0.0" + currentGraph.graphMeasure
+                    if (points.size == 1) "0.0 " + currentGraph.graphMeasure
                     else (points.last().ycoordinate!! - points[points.size - 2]
-                        .ycoordinate!!).toString() + currentGraph.graphMeasure
+                        .ycoordinate!!).toString()
+                binding.differenceValueMeasure.text = currentGraph.graphMeasure
             } else {
                 binding.latestPointValue.text = resources.getString(R.string.null_value)
                 binding.differenceValue.text = resources.getString(R.string.null_value)
+                binding.latestPointMeasure.text = ""
+                binding.differenceValueMeasure.text = ""
             }
         }
     }
@@ -163,5 +187,37 @@ class StatsActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun setupDatePicker() {
+
+        val dateInput = binding.dateInputValue
+
+        val myFormat = "dd/MM/yy"
+        val dateFormat = SimpleDateFormat(myFormat, Locale.US)
+        binding.dateInputValue.setText(dateFormat.format(Date()))
+
+        val date =
+            DatePickerDialog.OnDateSetListener { _, year, month, day ->
+                myCalendar.set(Calendar.YEAR, year)
+                myCalendar.set(Calendar.MONTH, month)
+                myCalendar.set(Calendar.DAY_OF_MONTH, day)
+                updateLabel()
+            }
+        dateInput.setOnClickListener {
+            DatePickerDialog(
+                this@StatsActivity,
+                date,
+                myCalendar.get(Calendar.YEAR),
+                myCalendar.get(Calendar.MONTH),
+                myCalendar.get(Calendar.DAY_OF_MONTH)
+            ).show()
+        }
+    }
+
+    private fun updateLabel() {
+        val myFormat = "dd/MM/yy"
+        val dateFormat = SimpleDateFormat(myFormat, Locale.US)
+        binding.dateInputValue.setText(dateFormat.format(myCalendar.time))
     }
 }

@@ -133,6 +133,9 @@
     <string name="new_value">Value</string>
     <string name="orm">One Rep Max</string>
     <string name="body_comp">Body Composition</string>
+    <string name="add_data_title">Add Data</string>
+    <string name="add_data_value_label">--</string>
+    <string name="add_data_date_label">Date</string>
 
     <!-- RESET -->
     <string name="reset_label">Reset Your Password</string>

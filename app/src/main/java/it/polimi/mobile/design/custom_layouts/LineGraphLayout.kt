@@ -31,7 +31,7 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
 
     private var w = 0
     private val titleStrip = 50.toPx()
-    private val fakePadding = 40.toPx()
+    private val fakePadding = 30.toPx()
 
     private var minY: Float = 0f
     private var maxY: Float = 0f
@@ -85,7 +85,8 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
 
         cleanPoints()
         val dataPointSize = Constant.DATA_BUTTON_SIZE
-        w = max((dataPoints.size * 100).toPx(), context.resources.displayMetrics.widthPixels)
+        w = max((min(dataPoints.size, Constant.MAX_SIZE_GRAPH) * 100).toPx(),
+            context.resources.displayMetrics.widthPixels)
 
         for (point in dataPoints) {
 
