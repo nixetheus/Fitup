@@ -164,7 +164,7 @@ class WorkoutListActivity : AppCompatActivity() {
 
             val workoutsLayout = FragmentWorkoutListBinding.inflate(layoutInflater)
 
-            workoutsLayout.workoutDisplayNameList.text = workout.name
+            workoutsLayout.workoutDisplayNameList.text = workout.name!!.replaceFirstChar { it.uppercaseChar() }
 
             var exp = 0f
             var kcalTot = 0F
@@ -209,7 +209,7 @@ class WorkoutListActivity : AppCompatActivity() {
             workoutsLayout.workoutCardList.setOnLongClickListener {
 
                 binding.editWorkoutLayout.visibility = View.VISIBLE
-                binding.workoutMenuName.text = workout.name
+                binding.workoutMenuName.text = workout.name!!.replaceFirstChar { it.uppercaseChar() }
                 val animate = TranslateAnimation(0F, 0F, binding.addWorkoutCard.height.toFloat(), 0F)
                 animate.duration = 500
                 animate.fillAfter = true

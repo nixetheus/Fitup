@@ -1,9 +1,13 @@
 package it.polimi.mobile.design
 
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.res.TypedArray
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.auth.FirebaseAuth
@@ -12,6 +16,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import it.polimi.mobile.design.databinding.ActivityCentralBinding
+import it.polimi.mobile.design.databinding.FragmentFilterBinding
 import it.polimi.mobile.design.databinding.FragmentWorkoutBinding
 import it.polimi.mobile.design.databinding.FragmentWorkoutRecentBinding
 import it.polimi.mobile.design.entities.Exercise
@@ -38,6 +43,8 @@ class CentralActivity : AppCompatActivity() {
     private var exerciseArrayList = ArrayList<Exercise>()
     private var workoutExerciseList = ArrayList<WorkoutExercise>()
 
+    private var filters = arrayListOf<Int>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -48,6 +55,7 @@ class CentralActivity : AppCompatActivity() {
         showUser()
         createBindings()
         workoutsCallback()
+        showFilters()
     }
 
     private fun workoutsCallback() {
@@ -69,7 +77,7 @@ class CentralActivity : AppCompatActivity() {
             usersSchema.child(userId).get().addOnSuccessListener { userSnapshot ->
                 val user = databaseHelperInstance!!.getUserFromSnapshot(userSnapshot)
                 binding.usernameText.text = user!!.username
-                binding.userLevelValue.text = user.exp.toString()
+                binding.userLevelValue.text = (user.exp!! / 10).toInt().toString()
             }
         }
     }
@@ -96,8 +104,45 @@ class CentralActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("Recycle")
+    private fun showFilters() {
+
+        for (typeFilter in ExerciseType.values()) {
+
+            val filterLayout = FragmentFilterBinding.inflate(layoutInflater)
+            filterLayout.filterDisplayName.text = typeFilter.name.lowercase().replaceFirstChar { it.uppercaseChar() }
+            binding.filtersLayout.addView(filterLayout.root)
+
+
+            val attrs = intArrayOf(R.attr.colorSecondary)
+            val ta = obtainStyledAttributes(R.style.Theme_MobileProject, attrs)
+
+            filterLayout.filterCard.setOnClickListener {
+                if (typeFilter.ordinal !in filters) {
+                    filters.add(typeFilter.ordinal)
+                    filterLayout.filterDisplayName.setBackgroundColor(resources.getColor(R.color.lilla, applicationContext.theme))
+                } else {
+                    filters.remove(typeFilter.ordinal)
+                    filterLayout.filterDisplayName.setBackgroundColor(ta.getColor(0, Color.BLACK))
+                }
+                applyFilter()
+            }
+        }
+    }
+
+    private fun applyFilter() {
+        val workoutsSchema = databaseInstance.getReference("Workout")
+        workoutsSchema.orderByChild("ranking").limitToFirst(5).get().addOnSuccessListener { graphsSnapshot ->
+            val workouts = DatabaseHelper().getWorkoutsFromSnapshot(graphsSnapshot)
+            if (filters.isEmpty()) showWorkouts(workouts)
+            else showWorkouts(workouts.filter {
+                    filters.contains(HelperFunctions().getWorkoutType(it.exercisesType!!))})
+        }
+    }
+
     private fun showWorkouts(workouts: List<Workout>) {
         binding.workoutsLayout.removeAllViews()
+        binding.workoutsLayoutRecent.removeAllViews()
         for (workout in workouts) {
             showRecentWorkout(workout)
             showChosenWorkout(workout)
@@ -109,7 +154,7 @@ class CentralActivity : AppCompatActivity() {
 
         val workoutsLayout = FragmentWorkoutRecentBinding.inflate(layoutInflater)
 
-        workoutsLayout.workoutDisplayName.text = workout.name
+        workoutsLayout.workoutDisplayName.text = workout.name!!.replaceFirstChar { it.uppercaseChar() }
         exp = 0f
         var kcalTot = 0F
         for(workoutExercise in workoutExerciseList.filter { we -> we.workoutId == workout.workoutId }) {
@@ -149,7 +194,7 @@ class CentralActivity : AppCompatActivity() {
 
         val workoutsLayout = FragmentWorkoutBinding.inflate(layoutInflater)
 
-        workoutsLayout.workoutDisplayName.text = workout.name
+        workoutsLayout.workoutDisplayName.text = workout.name!!.replaceFirstChar { it.uppercaseChar() }
         exp = 0f
         var kcalTot = 0F
         for(workoutExercise in workoutExerciseList.filter { we -> we.workoutId == workout.workoutId }) {

@@ -86,7 +86,7 @@
                             android:text="@string/missing"
                             android:textAllCaps="true"
                             android:textColor="?colorOnPrimary"
-                            android:textSize="16sp"
+                            android:textSize="15sp"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -94,7 +94,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginEnd="64dp"
+                        android:layout_marginEnd="40dp"
                         android:layout_weight="1"
                         android:foregroundGravity="center"
                         android:gravity="center|center_vertical"
@@ -122,13 +122,31 @@
                             android:fontFamily="@font/lato"
                             android:text="@string/missing"
                             android:textColor="?colorOnPrimary"
-                            android:textSize="24sp"
+                            android:textSize="22sp"
                             android:textStyle="bold" />
 
                     </LinearLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>
+
+            <HorizontalScrollView
+                android:id="@+id/filtersScroll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:scrollbarSize="0dp"
+                tools:ignore="SpeakableTextPresentCheck">
+
+                <LinearLayout
+                    android:id="@+id/filtersLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal"
+                    android:paddingStart="25dp"
+                    android:paddingEnd="40dp" />
+            </HorizontalScrollView>
 
             <TextView
                 android:id="@+id/recentTitle"
@@ -153,6 +171,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="20dp"
+                    android:minHeight="50dp"
                     android:orientation="horizontal"
                     android:paddingStart="25dp"
                     android:paddingEnd="40dp" />
@@ -172,7 +191,7 @@
             <HorizontalScrollView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="30dp"
+                android:paddingTop="20dp"
                 android:paddingBottom="15dp"
                 android:scrollbarSize="0dp"
                 tools:ignore="SpeakableTextPresentCheck">

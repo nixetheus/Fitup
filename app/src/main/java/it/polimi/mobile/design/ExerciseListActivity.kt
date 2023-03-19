@@ -113,7 +113,7 @@ class ExerciseListActivity : AppCompatActivity() {
         for (exercise in exercises) {
 
             val exerciseLayout = FragmentExerciseListBinding.inflate(layoutInflater)
-            exerciseLayout.exerciseNameList.text = exercise.name
+            exerciseLayout.exerciseNameList.text = exercise.name!!.replaceFirstChar { it.uppercaseChar() }
             binding.exercisesListLayout.addView(exerciseLayout.root)
         }
     }
