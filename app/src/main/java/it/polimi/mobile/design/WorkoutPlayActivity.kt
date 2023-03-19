@@ -71,7 +71,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
                         }
                     }
 
-
+                    binding.workoutLayoutPlay.exercises = workoutExercise
                 }
 
             override fun onCancelled(error: DatabaseError) {

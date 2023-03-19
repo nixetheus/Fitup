@@ -243,10 +243,13 @@
 
                 <Spinner
                     android:id="@+id/typeOfEx"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="15dp"
                     android:entries="@array/type_exercise"
                     android:minHeight="48dp"
+                    android:textAlignment="center"
                     tools:ignore="SpeakableTextPresentCheck" />
 
                 <TextView

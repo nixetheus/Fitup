@@ -28,4 +28,7 @@ class HelperFunctions {
             orderedIndices[0]
         else ExerciseType.FULL_BODY.ordinal
     }
+
+    fun Double.format(digits: Int) = "%.${digits}f".format(this)
+
 }

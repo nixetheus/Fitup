@@ -148,6 +148,7 @@
             android:orientation="vertical">
 
             <it.polimi.mobile.design.custom_layouts.WorkoutLayout
+                android:id="@+id/workoutLayoutPlay"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 

@@ -56,6 +56,8 @@ class EditWorkoutActivity : AppCompatActivity() {
                 calculateWorkoutData()
                 showExerciseCards(workoutExerciseList)
 
+                if (workoutExerciseList.isNotEmpty()) binding.noExercisesLayout.visibility = View.GONE
+
             }
             override fun onCancelled(error: DatabaseError) {
                 Log.w("Firebase", "Couldn't retrieve data...")
@@ -67,16 +69,15 @@ class EditWorkoutActivity : AppCompatActivity() {
 
     private fun setupWorkoutUI() {
 
-        binding.workoutName.text = workout.name
+        binding.workoutName.text = workout.name!!.replaceFirstChar { it.uppercaseChar() }
 
         // Add workout animation
-        binding.openAddExerciseLayout.setOnClickListener{
-            binding.addExerciseToWorkoutCard.visibility = View.VISIBLE
-            val openAddExerciseMenuAnimation = TranslateAnimation(
-                0F, 0F, binding.addExerciseToWorkoutCard.height.toFloat(), 0F)
-            openAddExerciseMenuAnimation.duration = 500
-            openAddExerciseMenuAnimation.fillAfter = true
-            binding.addExerciseToWorkoutCard.startAnimation(openAddExerciseMenuAnimation)
+        binding.openAddExerciseLayout.setOnClickListener {
+            showAddExercise()
+        }
+
+        binding.noExerciseButton.setOnClickListener {
+            showAddExercise()
         }
 
         // Close add workout animation
@@ -89,6 +90,15 @@ class EditWorkoutActivity : AppCompatActivity() {
             binding.addExerciseToWorkoutCard.startAnimation(closeAddExerciseMenuAnimation)
 
         }
+    }
+
+    private fun showAddExercise() {
+        binding.addExerciseToWorkoutCard.visibility = View.VISIBLE
+        val openAddExerciseMenuAnimation = TranslateAnimation(
+            0F, 0F, binding.addExerciseToWorkoutCard.height.toFloat(), 0F)
+        openAddExerciseMenuAnimation.duration = 500
+        openAddExerciseMenuAnimation.fillAfter = true
+        binding.addExerciseToWorkoutCard.startAnimation(openAddExerciseMenuAnimation)
     }
 
     private fun setupExercisesUI() {

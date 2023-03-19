@@ -81,6 +81,8 @@
     <string name="rest_label">Rest</string>
     <string name="weight_label">Kg</string>
     <string name="buffer_label">Buffer</string>
+    <string name="add_exercises_please">Let\'s start building your workout</string>
+    <string name="add_exercises_please_btn">Add to this workout</string>
 
     <!-- SETTINGS -->
     <string name="settings_title">Settings</string>
@@ -136,6 +138,8 @@
     <string name="add_data_title">Add Data</string>
     <string name="add_data_value_label">--</string>
     <string name="add_data_date_label">Date</string>
+    <string name="add_data_please">Let\'s start tracking</string>
+    <string name="add_data_please_btn">Add to this graph</string>
 
     <!-- RESET -->
     <string name="reset_label">Reset Your Password</string>

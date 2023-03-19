@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.RelativeLayout
 import it.polimi.mobile.design.custom_views.MinimizedExerciseView
 import it.polimi.mobile.design.entities.Exercise
+import it.polimi.mobile.design.entities.WorkoutExercise
 import it.polimi.mobile.design.helpers.Constant
 
 
@@ -18,11 +19,7 @@ class WorkoutLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(con
     private val distanceY = 100.toPx()
     private val fakePadding = 90.toPx()
 
-    private var exercises: List<Exercise> = listOf()
-        set(exercises) {
-            field = exercises
-            // TODO
-        }
+    var exercises: List<WorkoutExercise> = listOf()
 
     init {
 

@@ -62,14 +62,11 @@ class StatsActivity : AppCompatActivity() {
         }
 
         binding.addDataBtn.setOnClickListener{
-            binding.addDataCard.visibility = View.VISIBLE
-            val animate = TranslateAnimation(0F, 0F, binding.addDataCard.height.toFloat(), 0F)
+            showAddData()
+        }
 
-            animate.duration = 500
-            animate.fillAfter = true
-            binding.addDataCard.startAnimation(animate)
-            binding.addDataBtn.isClickable = false
-            binding.addDataClose.isClickable = true
+        binding.noDataButton.setOnClickListener{
+            showAddData()
         }
 
         binding.addDataClose.setOnClickListener{
@@ -82,6 +79,17 @@ class StatsActivity : AppCompatActivity() {
         }
 
         binding.confirmAddDataBtn.setOnClickListener{ createData() }
+    }
+
+    private fun showAddData() {
+        binding.addDataCard.visibility = View.VISIBLE
+        val animate = TranslateAnimation(0F, 0F, binding.addDataCard.height.toFloat(), 0F)
+
+        animate.duration = 500
+        animate.fillAfter = true
+        binding.addDataCard.startAnimation(animate)
+        binding.addDataBtn.isClickable = false
+        binding.addDataClose.isClickable = true
     }
 
     private fun createData(){
@@ -136,18 +144,25 @@ class StatsActivity : AppCompatActivity() {
                 binding.latestPointMeasure.text = currentGraph.graphMeasure
 
                 binding.differenceValue.text =
-                    if (points.size == 1) "0.0 " + currentGraph.graphMeasure
+                    if (points.size == 1) "0.0"
                     else (points.last().ycoordinate!! - points[points.size - 2]
-                        .ycoordinate!!).toString()
+                        .ycoordinate!!).format(1)
                 binding.differenceValueMeasure.text = currentGraph.graphMeasure
+
+                binding.noDataLayout.visibility = View.GONE
+                binding.graphCard.visibility = View.VISIBLE
             } else {
                 binding.latestPointValue.text = resources.getString(R.string.null_value)
                 binding.differenceValue.text = resources.getString(R.string.null_value)
                 binding.latestPointMeasure.text = ""
                 binding.differenceValueMeasure.text = ""
+                binding.noDataLayout.visibility = View.VISIBLE
+                binding.graphCard.visibility = View.GONE
             }
         }
     }
+
+    private fun Float.format(digits: Int) = "%.${digits}f".format(this)
 
     private fun setupSpinners() {
 

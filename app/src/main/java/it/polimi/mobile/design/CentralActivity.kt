@@ -89,6 +89,11 @@ class CentralActivity : AppCompatActivity() {
             val intent = Intent(this, WorkoutListActivity::class.java)
             startActivity(intent)
         }
+
+        binding.userImage.setOnClickListener{
+            val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun showWorkouts(workouts: List<Workout>) {
