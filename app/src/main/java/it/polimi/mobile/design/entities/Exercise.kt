@@ -9,7 +9,6 @@ data class Exercise(
     val caloriesPerRep: Float? = null,
     val type: ExerciseType? = null,
     val experiencePerReps: Float? = null
-
 )
 {
     override fun toString(): String {

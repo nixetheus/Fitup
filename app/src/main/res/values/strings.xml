@@ -60,8 +60,8 @@
 
     <string name="search_workouts">Search Workouts</string>
     <string name="search_exercises">Search Exercises</string>
-    <string name="list_workouts_title">Your Workouts</string>
-    <string name="list_exercises_title">Your Exercises</string>
+    <string name="list_workouts_title">Workouts</string>
+    <string name="list_exercises_title">Exercises</string>
     <string name="add_workout_title">Create Workout</string>
     <string name="add_exercise_title">Create Exercise</string>
     <string name="add_workout_hint">Workout Name</string>
@@ -70,6 +70,8 @@
     <string name="add_confirm">Add</string>
     <string name="workout_list_exercises_title">Exercises</string>
     <string name="exp_exercises_label">Exp</string>
+    <string name="experience_reps_label">Exp/Rep</string>
+    <string name="calories_reps_label">Kcal/Rep</string>
 
     <!-- WORKOUT DETAIL -->
     <string name="missing">--</string>

@@ -1,6 +1,8 @@
 package it.polimi.mobile.design
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -12,6 +14,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import it.polimi.mobile.design.databinding.ActivityExerciseListBinding
 import it.polimi.mobile.design.databinding.FragmentExerciseListBinding
+import it.polimi.mobile.design.databinding.FragmentFilterBinding
 import it.polimi.mobile.design.entities.Exercise
 import it.polimi.mobile.design.enum.ExerciseType
 import it.polimi.mobile.design.helpers.DatabaseHelper
@@ -24,6 +27,7 @@ class ExerciseListActivity : AppCompatActivity() {
     private val databaseHelperInstance = DatabaseHelper().getInstance()
 
     private var exerciseArrayList = ArrayList<Exercise>()
+    private var filters = arrayListOf<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -44,6 +48,39 @@ class ExerciseListActivity : AppCompatActivity() {
             }
         })
 
+        showFilters()
+
+    }
+
+    @SuppressLint("Recycle")
+    private fun showFilters() {
+
+        for (typeFilter in ExerciseType.values()) {
+
+            val filterLayout = FragmentFilterBinding.inflate(layoutInflater)
+            filterLayout.filterDisplayName.text = typeFilter.name.lowercase().replaceFirstChar { it.uppercaseChar() }
+            binding.filtersLayout.addView(filterLayout.root)
+
+
+            val attrs = intArrayOf(R.attr.colorSecondary)
+            val ta = obtainStyledAttributes(R.style.Theme_MobileProject, attrs)
+
+            filterLayout.filterCard.setOnClickListener {
+                if (typeFilter.ordinal !in filters) {
+                    filters.add(typeFilter.ordinal)
+                    filterLayout.filterDisplayName.setBackgroundColor(resources.getColor(R.color.lilla, applicationContext.theme))
+                } else {
+                    filters.remove(typeFilter.ordinal)
+                    filterLayout.filterDisplayName.setBackgroundColor(ta.getColor(0, Color.BLACK))
+                }
+                applyFilter()
+            }
+        }
+    }
+
+    private fun applyFilter() {
+        if (filters.isEmpty()) showExercises(exerciseArrayList)
+        else showExercises(exerciseArrayList.filter { filters.contains(it.type!!.ordinal)})
     }
 
     private fun setBindings() {
@@ -114,6 +151,11 @@ class ExerciseListActivity : AppCompatActivity() {
 
             val exerciseLayout = FragmentExerciseListBinding.inflate(layoutInflater)
             exerciseLayout.exerciseNameList.text = exercise.name!!.replaceFirstChar { it.uppercaseChar() }
+            exerciseLayout.caloriesRepsValue.text = exercise.caloriesPerRep!!.toString()
+            exerciseLayout.experienceValue.text = exercise.experiencePerReps!!.toString()
+
+            exerciseLayout.exercisesLayout.setBackgroundColor(
+                HelperFunctions().getExerciseBackground(exercise.type!!, resources, applicationContext))
             binding.exercisesListLayout.addView(exerciseLayout.root)
         }
     }

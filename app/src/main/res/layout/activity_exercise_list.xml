@@ -76,12 +76,29 @@
 
             </LinearLayout>
 
+            <HorizontalScrollView
+                android:id="@+id/filtersScroll"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="50dp"
+                android:scrollbarSize="0dp"
+                tools:ignore="SpeakableTextPresentCheck">
+
+                <LinearLayout
+                    android:id="@+id/filtersLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="40dp" />
+            </HorizontalScrollView>
+
             <LinearLayout
                 android:id="@+id/exercisesListLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="50dp"
-                android:orientation="vertical"/>
+                android:layout_marginTop="30dp"
+                android:orientation="vertical" />
         </LinearLayout>
     </ScrollView>
 
