@@ -25,6 +25,12 @@ import java.lang.Integer.min
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.temporal.ChronoUnit
+import android.content.res.TypedArray
+import android.util.TypedValue
+import androidx.core.graphics.alpha
+import androidx.core.graphics.blue
+import androidx.core.graphics.green
+import androidx.core.graphics.red
 
 
 class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(context, attrs) {
@@ -129,10 +135,14 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
 
     private fun drawValueBubble(x: Int, y: Int, value: Float) {
 
+        // Get color
+        val accentColor = TypedValue()
+        context.theme.resolveAttribute (androidx.appcompat.R.attr.colorAccent, accentColor, true)
+
         val cardDim = 110
         val card = CardView(context)
-        card.radius = cardDim.toPx().toFloat()
-        card.background = getDrawable(context, R.drawable.gradient_arms)
+        card.radius = cardDim.toPx().toFloat() * 2
+        card.setCardBackgroundColor(accentColor.data)
         card.foregroundGravity = CENTER_VERTICAL
 
         val valueTextView = TextView(context)
@@ -202,10 +212,14 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
 
     private fun drawIntegralArea(canvas: Canvas) {
 
+        // Get color
+        val accentColor = TypedValue()
+        context.theme.resolveAttribute (androidx.appcompat.R.attr.colorAccent, accentColor, true)
+
         val graphPaint = Paint()
         graphPaint.strokeWidth = 7.5f
         graphPaint.style = Paint.Style.FILL
-        graphPaint.color = Color.argb(0.15f, 1f, 1f, 1f)
+        graphPaint.color = accentColor.data
 
         // POLYGON
         val graphPath = Path()
