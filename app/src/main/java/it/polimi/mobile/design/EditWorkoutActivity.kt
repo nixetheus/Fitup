@@ -181,6 +181,13 @@ class EditWorkoutActivity : AppCompatActivity() {
             exerciseFragment.weightValue.text = exercise.weight.toString()
             exerciseFragment.bufferValue.text = exercise.buffer.toString()
 
+            // TODO: BUGGED
+            /*exerciseDatabase.child(exercise.exerciseId!!).get().addOnSuccessListener {
+                val ex = DatabaseHelper().getExercisesFromSnapshot(it)[0]
+                exerciseFragment.workoutExercisesList.setBackgroundColor(
+                    HelperFunctions().getExerciseBackground(ex.type!!, resources, applicationContext))
+            }*/
+
             binding.workoutExercisesList.addView(exerciseFragment.root)
         }
     }

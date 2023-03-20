@@ -102,6 +102,11 @@ class CentralActivity : AppCompatActivity() {
             val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
         }
+
+        binding.trophyLink.setOnClickListener{
+            val intent = Intent(this, AchievementsActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     @SuppressLint("Recycle")
