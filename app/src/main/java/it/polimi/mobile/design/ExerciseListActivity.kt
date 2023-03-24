@@ -147,15 +147,16 @@ class ExerciseListActivity : AppCompatActivity() {
     private fun showExercises(exercises: List<Exercise>) {
 
         binding.exercisesListLayout.removeAllViews()
-        for (exercise in exercises) {
+        for (exercise in exercises.sortedWith(compareBy({ it.type }, { it.name!!.length }))) {
 
             val exerciseLayout = FragmentExerciseListBinding.inflate(layoutInflater)
             exerciseLayout.exerciseNameList.text = exercise.name!!.replaceFirstChar { it.uppercaseChar() }
             exerciseLayout.caloriesRepsValue.text = exercise.caloriesPerRep!!.toString()
             exerciseLayout.experienceValue.text = exercise.experiencePerReps!!.toString()
 
-            exerciseLayout.exercisesLayout.setBackgroundColor(
+            /*exerciseLayout.exercisesLayout.setBackgroundColor(
                 HelperFunctions().getExerciseBackground(exercise.type!!, resources, applicationContext))
+             */
             binding.exercisesListLayout.addView(exerciseLayout.root)
         }
     }

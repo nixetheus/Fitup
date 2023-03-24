@@ -103,4 +103,28 @@ class DatabaseHelper() {
         return graphs
     }
 
+    fun getAchievementsFromSnapshot(snapshot: DataSnapshot) : List<Achievement> {
+        val achievements = ArrayList<Achievement>()
+        if (snapshot.exists()) {
+            for (child in snapshot.children) {
+                val achievement = child.getValue(Achievement::class.java)
+                if (achievement != null)
+                    achievements.add(achievement)
+            }
+        }
+        return achievements
+    }
+
+    fun getUserAchievementsFromSnapshot(snapshot: DataSnapshot) : List<UserAchievements> {
+        val userAchievements = ArrayList<UserAchievements>()
+        if (snapshot.exists()) {
+            for (child in snapshot.children) {
+                val userAchievement = child.getValue(UserAchievements::class.java)
+                if (userAchievement != null)
+                    userAchievements.add(userAchievement)
+            }
+        }
+        return userAchievements
+    }
+
 }

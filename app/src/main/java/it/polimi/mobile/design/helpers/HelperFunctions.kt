@@ -41,7 +41,7 @@ class HelperFunctions {
             1 -> ResourcesCompat.getColor(resources, R.color.blue_legs, context.theme)
             2 -> ResourcesCompat.getColor(resources, R.color.yellow_core, context.theme)
             3 -> ResourcesCompat.getColor(resources, R.color.green_spirit, context.theme)
-            else -> ResourcesCompat.getColor(resources, R.color.red_arms, context.theme)
+            else -> ResourcesCompat.getColor(resources, R.color.exercise_default, context.theme)
         }
     }
 

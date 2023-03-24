@@ -14,11 +14,11 @@
     <color name="dark_night">#141847</color>
     <color name="deep_ocean"> #FF01020E</color>
 
-    <color name="red_arms">#77ED0202</color>
-    <color name="yellow_core">#DDEDAA02</color>
-    <color name="blue_legs">#175FDC</color>
-    <color name="green_spirit">#19EDC3</color>
-    <color name="exercise_default">#CDB3D4</color>
+    <color name="red_arms">#F50057</color>
+    <color name="yellow_core">#FFC400</color>
+    <color name="blue_legs">#2979FF</color>
+    <color name="green_spirit">#DC1DE9AF</color>
+    <color name="exercise_default">#C900FF</color>
 
     <color name="lime_1">#BBDF59</color>
     <color name="petroleum_1">#027C83</color>
@@ -26,6 +26,10 @@
     <color name="clean_sky_1">#450FC0</color>
     <color name="clean_sky_2">#050933</color>
     <color name="pine_1">#3EC480</color>
+
+    <color name="gold">#D4AF37</color>
+    <color name="silver">#89898B</color>
+    <color name="bronze">#B08D57</color>
 
     <color name="good_gray">#0B0B0B</color>
     <color name="good_gray_light">#F2232323</color>

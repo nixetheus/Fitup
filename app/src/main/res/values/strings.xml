@@ -148,4 +148,8 @@
     <string name="confirm_label">Confirm Email</string>
     <string name="reset_btn">Reset</string>
 
+    <!-- ACHIEVEMENTS DETAIL -->
+    <string name="achievements_title">Achievements</string>
+    <string name="completed_label">Completed</string>
+
 </resources>

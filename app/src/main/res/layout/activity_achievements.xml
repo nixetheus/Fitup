@@ -6,4 +6,102 @@
     android:layout_height="match_parent"
     tools:context=".AchievementsActivity">
 
+    <ScrollView
+        android:id="@+id/achievementsScroll"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="?colorPrimary"
+        android:contentDescription="@string/none"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ScrollViewCount">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?colorPrimary"
+            android:orientation="vertical"
+            android:padding="40dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="35dp"
+                android:layout_marginBottom="10dp"
+                android:foregroundGravity="center_vertical"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/achievementsTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/lato"
+                    android:letterSpacing="0.03"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="60dp"
+                    android:text="@string/achievements_title"
+                    android:textAlignment="viewStart"
+                    android:textColor="?colorOnPrimary"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/homeButton"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/null_value"
+                    android:cropToPadding="false"
+                    android:foregroundGravity="clip_vertical"
+                    app:srcCompat="@drawable/home_icon" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/achievementsNumberLayout"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/achievementsNumberValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="0.5dp"
+                    android:fontFamily="@font/lato"
+                    android:letterSpacing="0.05"
+                    android:text="@string/missing"
+                    android:textAlignment="viewStart"
+                    android:textAllCaps="false"
+                    android:textColor="?colorOnPrimary"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/achievementsNumberLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="@string/completed_label"
+                    android:textAlignment="viewStart"
+                    android:textAllCaps="true"
+                    android:textColor="?colorOnPrimary"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/achievementsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="40dp"
+                android:orientation="vertical"></LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,5 +8,7 @@ data class User(
     val weight: Float? = null,
     val age: Int? = null,
     val gender: Gender? = null,
-    val exp: Float? = null
+    val exp: Float? = null,
+    val workoutsCounters: Map<String, Int>? = mapOf(),
+    val exercisesCounters: Map<String, Int>? = mapOf()
 )
