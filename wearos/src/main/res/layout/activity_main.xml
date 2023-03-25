@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.wear.widget.BoxInsetLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/box_inset_layout_padding"
+    tools:context=".MainActivity"
+    tools:deviceIds="wear">
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+
+        android:layout_height="match_parent"
+
+        android:gravity="center_horizontal"
+
+        android:orientation="vertical"
+
+        app:boxedEdges="all">
+        <TextView
+
+            android:id="@+id/workoutName"
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+            android:text="Fitup"/>
+
+        <Button
+
+            android:id="@+id/talkClick"
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+
+            android:text="Start"
+            android:visibility="gone"/>
+
+        <TextView
+
+            android:id="@+id/exerciseName"
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"/>
+        <Chronometer
+            android:id="@+id/workoutTimeValue"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="00:00:00"
+            android:textAllCaps="true"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+</androidx.wear.widget.BoxInsetLayout>

@@ -2,7 +2,7 @@ package it.polimi.mobile.design.entities
 
 import it.polimi.mobile.design.enum.ExerciseType
 
-
+@kotlinx.serialization.Serializable
 data class Workout(
     val workoutId: String? = null,
     val userId: String? = null,
