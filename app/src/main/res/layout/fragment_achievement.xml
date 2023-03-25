@@ -85,7 +85,7 @@
                             android:fontFamily="@font/lato"
                             android:gravity="center_vertical"
                             android:textAlignment="textStart"
-                            android:textColor="?colorOnSecondary"
+                            android:textColor="?colorOnPrimary"
                             android:textSize="18sp"
                             android:textStyle="bold" />
 

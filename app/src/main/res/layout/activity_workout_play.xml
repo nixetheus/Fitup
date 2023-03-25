@@ -8,124 +8,105 @@
     tools:context=".WorkoutPlayActivity">
 
     <LinearLayout
-        android:id="@+id/statsOverlay"
+        android:id="@+id/buttonsLayout"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/primary_gradient"
+        android:layout_height="155dp"
+        android:layout_marginEnd="24dp"
+        android:gravity="center"
         android:orientation="vertical"
-        android:padding="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/spotifyButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center|end"
+            android:layout_marginBottom="15dp"
+            app:cardCornerRadius="35dp"
+            app:cardElevation="0dp"
+            app:cardMaxElevation="0dp">
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/spotify_icon_rgb" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/wearOsButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center|end"
+            app:cardCornerRadius="35dp"
+            app:cardElevation="0dp"
+            app:cardMaxElevation="0dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/playUI"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="45dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
+            android:id="@+id/emptyLayout1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="5dp"
-            android:orientation="horizontal">
+            android:layout_weight="1"
+            android:orientation="vertical"></LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/statsOverlay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="0.5"
+            android:background="@drawable/primary_gradient"
+            android:foregroundGravity="center"
+            android:gravity="center"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/playWorkoutName"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:fontFamily="@font/lato_bold"
                 android:gravity="center_vertical"
                 android:text="@string/missing"
-                android:textAlignment="viewStart"
+                android:textAlignment="center"
                 android:textColor="?colorOnPrimary"
-                android:textSize="28sp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
-
-            <LinearLayout
-                android:id="@+id/expLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="end"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/workoutExpLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginEnd="5dp"
-                    android:fontFamily="@font/lato_bold"
-                    android:gravity="center_vertical"
-                    android:text="@string/exp_label"
-                    android:textAllCaps="true"
-                    android:textColor="?colorOnPrimary"
-                    android:textSize="12sp"
-                    android:textStyle="normal" />
-
-                <TextView
-                    android:id="@+id/workoutExpValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:fontFamily="@font/lato_bold"
-                    android:gravity="center_vertical"
-                    android:text="@string/missing"
-                    android:textAllCaps="true"
-                    android:textColor="?colorOnPrimary"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
 
             <Chronometer
                 android:id="@+id/workoutTimeValue"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:fontFamily="@font/lato_bold"
                 android:gravity="center_vertical"
+                android:letterSpacing="0.015"
                 android:text="@string/missing_time"
                 android:textAlignment="viewStart"
                 android:textAllCaps="true"
                 android:textColor="?colorOnPrimary"
-                android:textSize="20sp"
+                android:textSize="75sp"
                 android:textStyle="bold" />
 
-            <LinearLayout
-                android:id="@+id/nextUpLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="end"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/nextUpLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginEnd="5dp"
-                    android:fontFamily="@font/lato_bold"
-                    android:gravity="center_vertical"
-                    android:text="@string/next_up_label"
-                    android:textAllCaps="true"
-                    android:textColor="?colorOnPrimary"
-                    android:textSize="12sp"
-                    android:textStyle="normal" />
-
-                <TextView
-                    android:id="@+id/nextUpValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:fontFamily="@font/lato_bold"
-                    android:gravity="center_vertical"
-                    android:text="@string/missing"
-                    android:textAllCaps="true"
-                    android:textColor="?colorOnPrimary"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/emptyLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"></LinearLayout>
 
     </LinearLayout>
 
@@ -135,11 +116,13 @@
         android:layout_height="0dp"
         android:elevation="-100dp"
         android:scrollbarSize="0dp"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="SpeakableTextPresentCheck">
+        tools:ignore="SpeakableTextPresentCheck"
+        tools:visibility="invisible">
 
         <LinearLayout
             android:id="@+id/workoutAdventureLayout"
@@ -170,18 +153,22 @@
         android:text="@string/start_button"
         android:textColor="?colorOnPrimary"
         android:textSize="17sp"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="invisible" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/currentExerciseOverlay"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:visibility="invisible"
         app:cardBackgroundColor="@android:color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="invisible">
 
         <LinearLayout
             android:id="@+id/startCurrentExerciseLayout"

@@ -32,6 +32,11 @@ android {
     buildFeatures {
         viewBinding true
     }
+    compileOptions {
+        sourceCompatibility kotlin_version
+        targetCompatibility kotlin_version
+    }
+    buildToolsVersion '30.0.3'
 }
 
 dependencies {

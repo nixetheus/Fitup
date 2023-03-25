@@ -67,7 +67,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
         workoutExercise= arrayListOf<WorkoutExercise>()
         timeWhenStopped=0
         chrono= binding.workoutTimeValue
-        chrono.text = "00:00:00"
+        chrono.text = "00:00"
         myHandler = Handler { msg ->
             val stuff = msg.data
             stuff.getString("messageText")?.let { messageText(it) }

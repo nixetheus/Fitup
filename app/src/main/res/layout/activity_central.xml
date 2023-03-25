@@ -107,12 +107,12 @@
                             android:id="@+id/userLevelLabel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginEnd="10dp"
+                            android:layout_marginEnd="5dp"
                             android:fontFamily="@font/lato"
                             android:text="@string/level_label"
                             android:textAllCaps="true"
                             android:textColor="?colorOnPrimary"
-                            android:textSize="16sp"
+                            android:textSize="14sp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -122,7 +122,7 @@
                             android:fontFamily="@font/lato"
                             android:text="@string/missing"
                             android:textColor="?colorOnPrimary"
-                            android:textSize="22sp"
+                            android:textSize="21sp"
                             android:textStyle="bold" />
 
                         <ImageView
