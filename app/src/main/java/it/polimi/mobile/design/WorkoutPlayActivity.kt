@@ -1,8 +1,9 @@
 package it.polimi.mobile.design
 
-import android.content.ContentValues
-import android.content.Intent
+import android.content.*
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
 import android.os.SystemClock
 import android.util.Log
 import android.view.View
@@ -10,7 +11,12 @@ import android.widget.Chronometer
 import android.widget.Chronometer.OnChronometerTickListener
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.res.ResourcesCompat
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.Tasks
+import com.google.android.gms.wearable.Node
+import com.google.android.gms.wearable.Wearable
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.spotify.android.appremote.api.ConnectionParams
@@ -22,6 +28,9 @@ import it.polimi.mobile.design.entities.Workout
 import it.polimi.mobile.design.entities.WorkoutExercise
 import it.polimi.mobile.design.helpers.DatabaseHelper
 import it.polimi.mobile.design.helpers.HelperFunctions
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import java.util.concurrent.ExecutionException
 import kotlin.properties.Delegates
 
 
@@ -32,18 +41,26 @@ class WorkoutPlayActivity : AppCompatActivity() {
     private lateinit var database: DatabaseReference
     private var db = FirebaseDatabase.getInstance()
     private lateinit var workoutExercise: ArrayList<WorkoutExercise>
+    private lateinit var workout: Workout
     private var timeWhenStopped by Delegates.notNull<Long>()
     private var i=0
+    private lateinit var mGoogleApiClient:GoogleApiClient
     private val CLIENT_ID = "8db4d298653041b4b1850c09464182a3"
     private val REDIRECT_URI = "mobile-app-login://callback"
     private var mSpotifyAppRemote: SpotifyAppRemote? = null
     private var firebaseAuth = FirebaseAuth.getInstance()
     private var userDatabase = FirebaseDatabase.getInstance().getReference("Users")
     private val databaseHelperInstance = DatabaseHelper().getInstance()
+    val START_ACTIVITY_PATH = "/start/MainActivity"
+    private var notificationId:Int=0;
+    protected var myHandler: Handler? = null
+
+    var receivedMessageNumber = 1
+
+    var sentMessageNumber = 1
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val experience =0F
         super.onCreate(savedInstanceState)
         binding=ActivityWorkoutPlayBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -51,9 +68,25 @@ class WorkoutPlayActivity : AppCompatActivity() {
         timeWhenStopped=0
         chrono= binding.workoutTimeValue
         chrono.text = "00:00:00"
+        myHandler = Handler { msg ->
+            val stuff = msg.data
+            stuff.getString("messageText")?.let { messageText(it) }
+            true
+        }
 
-        var workout= intent.extras?.get("workout") as Workout
-        var exp= intent.extras?.get("exp") as Float
+        val messageFilter = IntentFilter(Intent.ACTION_SEND)
+
+        val messageReceiver = Receiver()
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(messageReceiver, messageFilter);
+
+        binding.currentExerciseName.setOnClickListener(){
+
+        }
+
+        workout= intent.extras?.get("workout") as Workout
+        val exp= intent.extras?.get("exp") as Float
+        talkClick()
         binding.playWorkoutName.text=workout.name
         database=FirebaseDatabase.getInstance().getReference("WorkoutExercise")
         database.addValueEventListener(object : ValueEventListener {
@@ -80,6 +113,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
 
         })
         binding.beingTimeButton.setOnClickListener{
+
 
             start()
 
@@ -115,7 +149,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
 
                             // Now you can start interacting with App Remote
 
-                            mSpotifyAppRemote!!.getPlayerApi().play("spotify:playlist:37i9dQZF1DX2sUQwD7tbmL");
+                            mSpotifyAppRemote!!.playerApi.play("spotify:playlist:37i9dQZF1DX2sUQwD7tbmL");
                             spotifyAppRemote.playerApi.subscribeToPlayerState().setEventCallback {
                                 val track: Track = it.track
                                 Log.d("Play Workout", track.name + " by " + track.artist.name)
@@ -199,8 +233,6 @@ class WorkoutPlayActivity : AppCompatActivity() {
                 }
             }
         }
-
-
     }
 
     override fun onStart() {
@@ -233,7 +265,86 @@ class WorkoutPlayActivity : AppCompatActivity() {
         chrono.base = SystemClock.elapsedRealtime() + timeWhenStopped;
         chrono.start()
 
+
+    }
+
+    fun messageText(newinfo: String) {
+        if (newinfo.compareTo("") != 0) {
+            binding.currentExerciseName
+                .append(
+                """
+                
+                $newinfo
+                """.trimIndent()
+            )
+        }
     }
 
 
+    //Define a nested class that extends BroadcastReceiver//
+     inner class Receiver : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+//Upon receiving each message from the wearable, display the following text//
+            val message = "I just received a message from the wearable " + receivedMessageNumber++
+            binding.currentExerciseName.text = message
+        }
+    }
+
+    fun talkClick() {
+        val message = workout.name.toString()
+        //binding.currentExerciseName.text = message
+
+//Sending a message can block the main UI thread, so use a new thread//
+        NewThread("/my_path", workout).start()
+    }
+
+    //Use a Bundle to encapsulate our message//
+    fun sendmessage(messageText: String?) {
+        val bundle = Bundle()
+        bundle.putString("messageText", messageText)
+        val msg: Message = myHandler!!.obtainMessage()
+        msg.data = bundle
+        myHandler!!.sendMessage(msg)
+    }
+
+
+   inner class NewThread     //Constructor for sending information to the Data Layer//
+        (var path: String, var workout: Workout) : Thread() {
+        override fun run() {
+
+//Retrieve the connected devices, known as nodes//
+            val wearableList: Task<List<Node>> =
+                Wearable.getNodeClient(applicationContext).connectedNodes
+            try {
+                val nodes: List<Node> = Tasks.await<List<Node>>(wearableList)
+                for (node in nodes) {
+                    val sendMessageTask: Task<Int> =  //Send the message//
+                        Wearable.getMessageClient(this@WorkoutPlayActivity)
+                            .sendMessage(node.id, path, Json.encodeToString(workout).toByteArray())
+                    try {
+
+//Block on a task and get the result synchronously//
+                        val result = Tasks.await<Int>(sendMessageTask)
+                       sendmessage(workout.workoutId)
+
+
+                        //if the Task fails, then…..//
+                    } catch (exception: ExecutionException) {
+
+                        //TO DO: Handle the exception//
+                    } catch (exception: InterruptedException) {
+
+                        //TO DO: Handle the exception//
+                    }
+                }
+            } catch (exception: ExecutionException) {
+
+                //TO DO: Handle the exception//
+            } catch (exception: InterruptedException) {
+
+                //TO DO: Handle the exception//
+            }
+        }
+    }
 }
+

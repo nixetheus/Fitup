@@ -1,5 +1,6 @@
 package it.polimi.mobile.design
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
@@ -9,6 +10,7 @@ import it.polimi.mobile.design.databinding.ActivityWorkoutPlayBinding
 
 class WorkoutEndActivity : AppCompatActivity() {
     private lateinit var binding:ActivityWorkoutEndBinding
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityWorkoutEndBinding.inflate(layoutInflater)
