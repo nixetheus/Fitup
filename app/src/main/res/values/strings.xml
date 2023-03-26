@@ -123,6 +123,8 @@
     <string name="current_exercise_label">Current Exercise</string>
     <string name="begin_exercise_button">Begin</string>
     <string name="next_up_button">Next</string>
+    <string name="spotify_button_label">Spotify</string>
+    <string name="wearos_button_label">Sync</string>
 
     <!-- FINISH -->
     <string name="congrats_main">You\'ve Done It!</string>
