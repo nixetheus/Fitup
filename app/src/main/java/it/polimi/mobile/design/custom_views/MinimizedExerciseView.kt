@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.RectF
 import android.graphics.drawable.ColorDrawable
 import android.util.AttributeSet
 import android.view.View
@@ -12,7 +13,7 @@ import it.polimi.mobile.design.helpers.Constant
 
 class MinimizedExerciseView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
 
-    private val dataPointSize = Constant.DATA_BUTTON_SIZE
+    private val radius = Constant.EXERCISE_VIEW_R
 
     init {
         setOnClickListener {
@@ -23,23 +24,23 @@ class MinimizedExerciseView(context: Context, attrs: AttributeSet? = null) : Vie
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        drawCircle(canvas)
+        drawCircle3D(canvas)
     }
 
-    private fun drawCircle(canvas: Canvas) {
+    private fun drawCircle3D(canvas: Canvas) {
 
         val pointPaint = Paint()
-        pointPaint.strokeWidth = dataPointSize.toFloat() / 10
+        pointPaint.strokeWidth = radius / 30f
         pointPaint.strokeCap = Paint.Cap.ROUND
 
         pointPaint.color = Color.BLACK
         pointPaint.style = Paint.Style.FILL
-        canvas.drawCircle((dataPointSize / 2f), (dataPointSize / 2f),
-            pointPaint.strokeWidth * 2.75f, pointPaint)
+        canvas.drawOval(RectF(0f, radius / 4f, radius.toFloat(),
+            radius * (3f / 4f)), pointPaint)
 
         pointPaint.color = Color.WHITE
         pointPaint.style = Paint.Style.STROKE
-        canvas.drawCircle((dataPointSize / 2f), (dataPointSize / 2f),
-            pointPaint.strokeWidth * 2.75f, pointPaint)
+        canvas.drawOval(RectF(0f, radius / 4f, radius.toFloat(),
+            radius * (3f / 4f)), pointPaint)
     }
 }

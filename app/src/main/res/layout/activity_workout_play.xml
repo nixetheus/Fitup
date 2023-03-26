@@ -11,11 +11,11 @@
         android:id="@+id/buttonsLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="172dp"
         android:gravity="center"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
@@ -228,35 +228,36 @@
 
     </LinearLayout>
 
-    <ScrollView
+    <HorizontalScrollView
         android:id="@+id/playWorkoutScrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:elevation="-100dp"
+        android:contentDescription="@string/null_value"
         android:scrollbarSize="0dp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/currentExerciseOverlay"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="SpeakableTextPresentCheck"
-        tools:visibility="invisible">
+        app:layout_constraintTop_toBottomOf="@+id/playUI">
 
         <LinearLayout
             android:id="@+id/workoutAdventureLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <it.polimi.mobile.design.custom_layouts.WorkoutLayout
                 android:id="@+id/workoutLayoutPlay"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingStart="100dp"
+                android:paddingTop="75dp"
+                android:paddingEnd="50dp">
 
             </it.polimi.mobile.design.custom_layouts.WorkoutLayout>
 
         </LinearLayout>
-    </ScrollView>
+    </HorizontalScrollView>
 
     <Button
         android:id="@+id/startStopButton"

@@ -16,15 +16,10 @@ import it.polimi.mobile.design.helpers.Constant
 
 class WorkoutLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(context, attrs) {
 
-    private val distanceY = 100.toPx()
-    private val fakePadding = 90.toPx()
-
+    private val distanceX = 150.toPx()
     var exercises: List<WorkoutExercise> = listOf()
 
     init {
-
-        setPadding(0, 0, 0, 400)
-
         setWillNotDraw(false)
         exercises = listOf()
         post{drawExercises()}
@@ -36,33 +31,27 @@ class WorkoutLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(con
     }
 
     private fun drawExercises() {
-
-        val dataPointSize = Constant.DATA_BUTTON_SIZE
         for (exerciseIndex in exercises.indices) {
 
             val exerciseView = MinimizedExerciseView(context)
-
             exerciseView.id = View.generateViewId()
 
-            val params = LayoutParams(dataPointSize, dataPointSize)
-            params.leftMargin = (fakePadding / 2) + (exerciseIndex % 2) * (width - 2 * fakePadding) +
-                    ((fakePadding / 2) - dataPointSize) + dataPointSize / 2
-            params.topMargin = (fakePadding * 2) + exerciseIndex * distanceY + (distanceY / 2) -
-                    (Constant.DATA_BUTTON_SIZE / 2)
+            val params = LayoutParams(Constant.EXERCISE_VIEW_R, Constant.EXERCISE_VIEW_R)
+            params.leftMargin = distanceX * exerciseIndex
 
             addView(exerciseView, params)
         }
-
     }
 
     private fun drawLines(canvas: Canvas) {
 
-        val linesPaint = Paint()
+        /*val linesPaint = Paint()
         linesPaint.strokeWidth = 7.5f
         linesPaint.color = Color.WHITE
         linesPaint.style = Paint.Style.STROKE
         linesPaint.strokeCap = Paint.Cap.ROUND
 
+        val fakePadding = 10
         for (exerciseIndex in 0 until exercises.size - 1) {
 
             // Draw bottom
@@ -91,7 +80,7 @@ class WorkoutLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(con
             fakePadding + ((exercises.size - 1) % 2) * (width - 2f  * fakePadding),
             (fakePadding * 2) + ((exercises.size - 1) + 1) * distanceY.toFloat() - (distanceY / 2),
             linesPaint
-        )
+        )*/
     }
 
     private fun Int.toPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
