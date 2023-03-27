@@ -38,7 +38,7 @@ class MinimizedExerciseView(context: Context, attrs: AttributeSet? = null) : Vie
         context.theme.resolveAttribute (R.attr.colorOnPrimary, colorOnPrimary, true)
 
         val colorPrimary = TypedValue()
-        context.theme.resolveAttribute (R.attr.colorPrimary, colorPrimary, true)
+        context.theme.resolveAttribute (androidx.appcompat.R.attr.colorPrimary, colorPrimary, true)
 
 
         val pointPaint = Paint()

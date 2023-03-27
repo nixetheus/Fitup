@@ -2,6 +2,7 @@
 <resources>
 
     <style name="AppTheme" parent="Theme.AppCompat.DayNight">
+        <item name="colorPrimary">?colorPrimary</item>
         <item name="colorOnPrimary">?colorOnPrimary</item>
     </style>
 
