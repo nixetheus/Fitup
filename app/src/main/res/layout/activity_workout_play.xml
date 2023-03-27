@@ -7,114 +7,36 @@
     android:background="?colorPrimary"
     tools:context=".WorkoutPlayActivity">
 
-    <LinearLayout
-        android:id="@+id/buttonsLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="172dp"
-        android:gravity="center"
-        android:orientation="vertical"
+    <HorizontalScrollView
+        android:id="@+id/playWorkoutScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:contentDescription="@string/null_value"
+        android:scrollbarSize="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/currentExerciseOverlay"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/playUI">
 
         <LinearLayout
-            android:id="@+id/spotifyLayout"
+            android:id="@+id/workoutAdventureLayout"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/spotifyButton"
-                android:layout_width="47.5dp"
-                android:layout_height="47.5dp"
-                android:layout_gravity="center|center_horizontal|end"
-                app:cardCornerRadius="35dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp">
+            <it.polimi.mobile.design.custom_layouts.WorkoutLayout
+                android:id="@+id/workoutLayoutPlay"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingStart="125dp"
+                android:paddingTop="75dp"
+                android:paddingEnd="50dp">
 
-                <ImageView
-                    android:id="@+id/spotifyIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/null_value"
-                    app:srcCompat="@drawable/spotify_icon_rgb" />
-            </androidx.cardview.widget.CardView>
-
-            <TextView
-                android:id="@+id/spotifyLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="2dp"
-                android:fontFamily="@font/lato"
-                android:text="@string/spotify_button_label"
-                android:textAlignment="center"
-                android:textAllCaps="false"
-                android:textColor="?colorOnPrimary"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                android:visibility="gone" />
+            </it.polimi.mobile.design.custom_layouts.WorkoutLayout>
 
         </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/wearOsLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/wearOsBorder"
-                android:layout_width="47.5dp"
-                android:layout_height="47.5dp"
-                android:layout_gravity="center|center_vertical"
-                app:cardBackgroundColor="?colorOnPrimary"
-                app:cardCornerRadius="26dp"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp">
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/wearOsButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center|center_vertical"
-                    android:layout_margin="1.5dp"
-                    app:cardBackgroundColor="?colorPrimary"
-                    app:cardCornerRadius="35dp"
-                    app:cardElevation="0dp"
-                    app:cardMaxElevation="0dp">
-
-                    <ImageView
-                        android:id="@+id/imageView4"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center|center_vertical"
-                        android:layout_marginStart="1.5dp"
-                        android:padding="3.5dp"
-                        app:srcCompat="@drawable/smartwatch" />
-                </androidx.cardview.widget.CardView>
-            </androidx.cardview.widget.CardView>
-
-            <TextView
-                android:id="@+id/wearOsLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="2dp"
-                android:fontFamily="@font/lato"
-                android:text="@string/wearos_button_label"
-                android:textAlignment="center"
-                android:textAllCaps="false"
-                android:textColor="?colorOnPrimary"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                android:visibility="gone" />
-
-        </LinearLayout>
-
-    </LinearLayout>
+    </HorizontalScrollView>
 
     <LinearLayout
         android:id="@+id/playUI"
@@ -228,36 +150,114 @@
 
     </LinearLayout>
 
-    <HorizontalScrollView
-        android:id="@+id/playWorkoutScrollView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:contentDescription="@string/null_value"
-        android:scrollbarSize="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/currentExerciseOverlay"
-        app:layout_constraintEnd_toEndOf="parent"
+    <LinearLayout
+        android:id="@+id/buttonsLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/playUI">
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:id="@+id/workoutAdventureLayout"
+            android:id="@+id/spotifyLayout"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
             android:orientation="vertical">
 
-            <it.polimi.mobile.design.custom_layouts.WorkoutLayout
-                android:id="@+id/workoutLayoutPlay"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:paddingStart="100dp"
-                android:paddingTop="75dp"
-                android:paddingEnd="50dp">
+            <androidx.cardview.widget.CardView
+                android:id="@+id/spotifyButton"
+                android:layout_width="47.5dp"
+                android:layout_height="47.5dp"
+                android:layout_gravity="center|center_horizontal|end"
+                app:cardCornerRadius="35dp"
+                app:cardElevation="0dp"
+                app:cardMaxElevation="0dp">
 
-            </it.polimi.mobile.design.custom_layouts.WorkoutLayout>
+                <ImageView
+                    android:id="@+id/spotifyIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/null_value"
+                    app:srcCompat="@drawable/spotify_icon_rgb" />
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/spotifyLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/lato"
+                android:text="@string/spotify_button_label"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="?colorOnPrimary"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
 
         </LinearLayout>
-    </HorizontalScrollView>
+
+        <LinearLayout
+            android:id="@+id/wearOsLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/wearOsBorder"
+                android:layout_width="47.5dp"
+                android:layout_height="47.5dp"
+                android:layout_gravity="center|center_vertical"
+                app:cardBackgroundColor="?colorOnPrimary"
+                app:cardCornerRadius="26dp"
+                app:cardElevation="0dp"
+                app:cardMaxElevation="0dp">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/wearOsButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center|center_vertical"
+                    android:layout_margin="1.5dp"
+                    app:cardBackgroundColor="?colorPrimary"
+                    app:cardCornerRadius="35dp"
+                    app:cardElevation="0dp"
+                    app:cardMaxElevation="0dp">
+
+                    <ImageView
+                        android:id="@+id/imageView4"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center|center_vertical"
+                        android:layout_marginStart="1.5dp"
+                        android:padding="3.5dp"
+                        app:srcCompat="@drawable/smartwatch" />
+                </androidx.cardview.widget.CardView>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/wearOsLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/lato"
+                android:text="@string/wearos_button_label"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="?colorOnPrimary"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/startStopButton"

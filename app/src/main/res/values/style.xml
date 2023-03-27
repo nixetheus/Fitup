@@ -2,6 +2,7 @@
 <resources>
 
     <style name="AppTheme" parent="Theme.AppCompat.DayNight">
+        <item name="colorOnPrimary">?colorOnPrimary</item>
     </style>
 
     <style name="Widget.Theme.MobileProject.ActionBar.Fullscreen" parent="Widget.AppCompat.ActionBar">
