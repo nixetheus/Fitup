@@ -16,12 +16,15 @@ import it.polimi.mobile.design.helpers.Constant
 class MinimizedExerciseView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
 
     private val radius = Constant.EXERCISE_VIEW_R
+    private val insideColor = TypedValue()
 
     init {
         setOnClickListener {
-            Toast.makeText(context, "TODO", Toast.LENGTH_SHORT).show()
+            setFinishedColor()
+            invalidate()
         }
         background = ColorDrawable(Color.TRANSPARENT)
+        context.theme.resolveAttribute (androidx.appcompat.R.attr.colorPrimary, insideColor, true)
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -42,19 +45,23 @@ class MinimizedExerciseView(context: Context, attrs: AttributeSet? = null) : Vie
 
 
         val pointPaint = Paint()
-        pointPaint.strokeWidth = radius / 30f
+        pointPaint.strokeWidth = radius / 20f
         pointPaint.strokeCap = Paint.Cap.ROUND
 
-        pointPaint.color = accentColor.data
+        pointPaint.color = insideColor.data
         pointPaint.style = Paint.Style.FILL
-        canvas.drawOval(RectF(radius / 30f, radius / 4f,
-            radius.toFloat() - radius / 30f, radius * (3f / 4f)),
+        canvas.drawOval(RectF(pointPaint.strokeWidth, pointPaint.strokeWidth,
+            radius.toFloat() - pointPaint.strokeWidth, radius / 2f - pointPaint.strokeWidth),
             pointPaint)
 
         pointPaint.color = colorOnPrimary.data
         pointPaint.style = Paint.Style.STROKE
-        canvas.drawOval(RectF(radius / 30f, radius / 4f,
-            radius.toFloat() - radius / 30f, radius * (3f / 4f)),
+        canvas.drawOval(RectF(pointPaint.strokeWidth, pointPaint.strokeWidth,
+            radius.toFloat() - pointPaint.strokeWidth, radius / 2f - pointPaint.strokeWidth),
             pointPaint)
+    }
+
+    private fun setFinishedColor() {
+        context.theme.resolveAttribute (androidx.appcompat.R.attr.colorAccent, insideColor, true)
     }
 }

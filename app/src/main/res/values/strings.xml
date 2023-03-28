@@ -125,6 +125,7 @@
     <string name="next_up_button">Next</string>
     <string name="spotify_button_label">Spotify</string>
     <string name="wearos_button_label">Sync</string>
+    <string name="courage_text">Defeat The Monster</string>
 
     <!-- FINISH -->
     <string name="congrats_main">You\'ve Done It!</string>
