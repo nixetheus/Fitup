@@ -8,26 +8,36 @@ import it.polimi.mobile.design.entities.Workout
 
 
 class MessageService : WearableListenerService() {
+    private var messageIntent: Intent ?=null
 
     override fun onMessageReceived(messageEvent: MessageEvent) {
         super.onMessageReceived(messageEvent)
 
 
         //If the message’s path equals "/my_path"...//
-        if (messageEvent.path == "/my_path") {
+        when (messageEvent.path) {
+            "/my_path" -> {
 
-//...retrieve the message//
-            val message = String(messageEvent.data)
-            val workout=Workout(messageEvent.data.toString())
-            val messageIntent = Intent()
-            messageIntent.action = Intent.ACTION_SEND
-            messageIntent.putExtra("message", message)
-            //messageIntent.putExtra("workout",workout)
+    //...retrieve the message//
+                val message = String(messageEvent.data)
+                messageIntent=Intent()
+                messageIntent!!.action = Intent.ACTION_SEND
+                messageIntent!!.putExtra("message", message)
 
-//Broadcast the received Data Layer messages locally//
-            LocalBroadcastManager.getInstance(this).sendBroadcast(messageIntent)
-        } else {
-            super.onMessageReceived(messageEvent)
+
+    //Broadcast the received Data Layer messages locally//
+                LocalBroadcastManager.getInstance(this).sendBroadcast(messageIntent!!)
+            }
+            "/start" -> {
+                val start = String(messageEvent.data)
+                messageIntent=Intent()
+                messageIntent!!.action = Intent.ACTION_SEND
+                messageIntent!!.putExtra("start", start)
+                LocalBroadcastManager.getInstance(this).sendBroadcast(messageIntent!!)
+            }
+            else -> {
+                super.onMessageReceived(messageEvent)
+            }
         }
 
     }

@@ -20,13 +20,19 @@ class MessageService : WearableListenerService() {
 
 //Broadcast the received Data Layer messages locally//
             LocalBroadcastManager.getInstance(this).sendBroadcast(messageIntent!!)
-        } else {
+        }
+        else if (messageEvent.path == "/exercise"){
+            val message = String(messageEvent.data)
+            messageIntent = Intent()
+            messageIntent!!.action = Intent.ACTION_SEND
+            messageIntent!!.putExtra("exercise", message)
+            LocalBroadcastManager.getInstance(this).sendBroadcast(messageIntent!!)
+
+        }
+        else {
             super.onMessageReceived(messageEvent)
         }
 
-    }
-    fun getMessageIntent(): String {
-        return this.messageIntent.toString()
     }
 
 }

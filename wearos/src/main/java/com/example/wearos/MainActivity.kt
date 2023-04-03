@@ -3,13 +3,22 @@ package com.example.wearos
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.BroadcastReceiver
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.os.Bundle
-import android.os.Handler
+import android.os.SystemClock
+import android.util.Log
+
 import android.view.View
+import android.view.WindowManager
 import android.widget.Button
+import android.widget.Chronometer
 import android.widget.TextView
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.wearos.databinding.ActivityMainBinding
@@ -17,47 +26,63 @@ import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.android.gms.wearable.*
 import java.util.concurrent.ExecutionException
-//import it.polimi.mobile.design.entities.Workout
+import kotlin.properties.Delegates
 
 
-
-class MainActivity : Activity() /*, DataClient.OnDataChangedListener*/ {
+class MainActivity : Activity() , SensorEventListener {
 
 
     private var exerciseName: TextView? = null
     private var workoutName: TextView?= null
-
-
+    private var sensorManager: SensorManager? = null
+    private var mHeartSensor: Sensor? = null
+    private lateinit var chrono: Chronometer
+    private var timeWhenStopped by Delegates.notNull<Long>()
     private var talkButton: Button? = null
 
     var receivedMessageNumber = 1
 
     var sentMessageNumber = 1
+    var bpm: Float = 0.0f
+
 
     private lateinit var binding: ActivityMainBinding
-
-    protected var myHandler: Handler? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        talkButton=binding.talkClick
+        talkButton=binding.startButton
         workoutName=binding.workoutName
         exerciseName=binding.exerciseName
+        timeWhenStopped=0
+        chrono=binding.workoutTimeValue
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
+
+
+        this.sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager?;
+        mHeartSensor = sensorManager?.getDefaultSensor(Sensor.TYPE_HEART_RATE)
+        sensorManager?.registerListener(
+            this,
+            mHeartSensor,
+            SensorManager.SENSOR_DELAY_FASTEST
+        )
+
 
 
 
         //Create an OnClickListener//
         talkButton!!.setOnClickListener {
-            val onClickMessage = "I just sent the handheld a message " + sentMessageNumber++
-            exerciseName!!.text = onClickMessage
+            if (talkButton!!.text=="Start"){
+            SendMessage("/start", "start").start()
 
-//Use the same path//
-            val datapath = "/my_path"
-            SendMessage(datapath, onClickMessage).start()
+            startChronometer()
+            talkButton!!.text="next"}
+            if (talkButton!!.text=="next"){
+                SendMessage("/my_path", "next").start()
+            }
         }
         val newFilter = IntentFilter(Intent.ACTION_SEND)
 
@@ -71,16 +96,73 @@ class MainActivity : Activity() /*, DataClient.OnDataChangedListener*/ {
 
 
 
+    @SuppressLint("SetTextI18n")
+    override fun onSensorChanged(event: SensorEvent?) {
+        if (event?.values!!.isNotEmpty()) {
+            bpm = event.values[0]
+            binding.bmp.text= "" + event.values[0].toInt() + " bpm"
+            SendMessage("/my_path", bpm.toString()).start()
+            //SendMessage("/ciao", bpm.toString()).start()
+
+
+        }
+
+
+
+    }
+    private fun startChronometer(){
+        chrono.onChronometerTickListener =
+            Chronometer.OnChronometerTickListener { chronometer ->
+                val time = SystemClock.elapsedRealtime() - chronometer.base
+                val h = (time / 3600000).toInt()
+                val m = (time - h * 3600000).toInt() / 60000
+                val s = (time - h * 3600000 - m * 60000).toInt() / 1000
+                val t =
+                    (if (h < 10) "0$h" else h).toString() + ":" + (if (m < 10) "0$m" else m) + ":" + if (s < 10) "0$s" else s
+                chronometer.text = t
+            }
+        chrono.base = SystemClock.elapsedRealtime() + timeWhenStopped;
+        chrono.start()
+
+
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        Log.d(TAG, "onAccuracyChanged - accuracy: $accuracy");
+    }
+
+    override fun onPause() {
+        sensorManager?.unregisterListener(this)
+        super.onPause()
+    }
+
+
+
+
 
     inner class Receiver : BroadcastReceiver() {
         @SuppressLint("SetTextI18n")
         override fun onReceive(context: Context?, intent: Intent?) {
 
 //Display the following when a new message is received//
+            if (intent?.extras?.get("message")!=null){
             val onMessageReceived =
                 intent?.extras?.get("message") as String
-            workoutName?.text = "ready for ${onMessageReceived} workout?"
-            talkButton?.visibility =View.VISIBLE
+                if (onMessageReceived=="exit"){
+                    onBackPressed()
+                }
+
+                else {
+                    workoutName?.text = "ready for $onMessageReceived workout?"
+
+
+                    talkButton?.visibility  = View.VISIBLE
+                }}
+            if (intent?.extras?.get("exercise")!=null) {
+                val exercise =
+                    intent?.extras?.get("exercise") as String
+                binding.exerciseName.text=exercise
+            }
         }
     }
 
