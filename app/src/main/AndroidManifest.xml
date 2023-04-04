@@ -59,7 +59,8 @@
 
 
 
-                <data android:scheme="wear" android:host="*" android:pathPrefix="/my_path" />
+                <data android:scheme="wear" android:host="*" android:pathPrefix="" />
+
 
             </intent-filter>
 

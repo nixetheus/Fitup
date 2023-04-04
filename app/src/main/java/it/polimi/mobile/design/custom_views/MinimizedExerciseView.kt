@@ -60,7 +60,6 @@ class MinimizedExerciseView(context: Context, attrs: AttributeSet? = null) : Vie
             radius.toFloat() - pointPaint.strokeWidth, radius / 2f - pointPaint.strokeWidth),
             pointPaint)
     }
-
     private fun setFinishedColor() {
         context.theme.resolveAttribute (androidx.appcompat.R.attr.colorAccent, insideColor, true)
     }
