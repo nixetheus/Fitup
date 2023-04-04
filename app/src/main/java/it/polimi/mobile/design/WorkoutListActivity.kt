@@ -203,6 +203,7 @@ class WorkoutListActivity : AppCompatActivity() {
             workoutsLayout.workoutCardList.setOnClickListener {
                 val intent = Intent(this, WorkoutPlayActivity::class.java)
                 intent.putExtra("workout", workout)
+                intent.putExtra("exp", exp)
                 startActivity(intent)
             }
 

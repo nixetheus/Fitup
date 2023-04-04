@@ -26,8 +26,6 @@ import it.polimi.mobile.design.entities.Workout
 import it.polimi.mobile.design.entities.WorkoutExercise
 import it.polimi.mobile.design.helpers.DatabaseHelper
 import it.polimi.mobile.design.helpers.HelperFunctions
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import java.util.concurrent.ExecutionException
 import kotlin.properties.Delegates
 
@@ -64,6 +62,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
         binding=ActivityWorkoutPlayBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.decorView.windowInsetsController!!.hide(WindowInsets.Type.navigationBars())
         }
@@ -97,7 +96,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
 
         workout= intent.extras?.get("workout") as Workout
         exp= intent.extras?.get("exp") as Float
-        talkClick()
+        sendWorkoutNameToWearable()
         binding.playWorkoutName.text=workout.name
         database=FirebaseDatabase.getInstance().getReference("WorkoutExercise")
         database.addValueEventListener(object : ValueEventListener {
@@ -123,15 +122,10 @@ class WorkoutPlayActivity : AppCompatActivity() {
             }
 
         })
-        binding.beingTimeButton.setOnClickListener{
+        binding.playPauseButton.setOnClickListener{
 
 
-            startChronometer()
-
-            binding.nextExerciseButton.text="next"
-            binding.beingTimeButton.text=""
-            binding.beingTimeButton.isClickable=false
-            binding.nextExerciseButton.isClickable=true
+            playExercise()
 
         }
 
@@ -165,11 +159,21 @@ class WorkoutPlayActivity : AppCompatActivity() {
                 }
             }
         }
-        binding.nextExerciseButton.setOnClickListener{
+        binding.nextButton.setOnClickListener{
             nextExercise(exp)
 
         }
     }
+
+    private fun playExercise() {
+        startChronometer()
+
+        binding.nextExerciseButton.text="next"
+        binding.beingTimeButton.text=""
+        binding.beingTimeButton.isClickable=false
+        binding.nextExerciseButton.isClickable=true
+    }
+
     fun nextExercise(exp:Float){
         chrono.stop()
         timeWhenStopped = chrono.base - SystemClock.elapsedRealtime();
@@ -262,7 +266,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
     }
     override fun onBackPressed() {
         super.onBackPressed()
-        NewThread("/my_path", "exit").start()
+        //NewThread("/my_path", "exit").start()
 
         val intent = Intent(this, CentralActivity::class.java)
         startActivity(intent)
@@ -310,6 +314,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
                 val message = intent?.extras?.get("message") as String
                 if (message == "start") {
                     startChronometer()
+                    startSpotify()
 
                 } else if (message=="next")
                 {nextExercise(exp)}
@@ -320,6 +325,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
                 if (workoutExercise.size!=0){
                     NewThread("/exercise", workoutExercise[i].exerciseName.toString()).start()
                     startChronometer()
+                    startSpotify()
                 }
 
 
@@ -328,18 +334,13 @@ class WorkoutPlayActivity : AppCompatActivity() {
         }
     }
 
-    fun talkClick() {
-        val message = workout.name.toString()
-        //binding.currentExerciseName.text = message
+    fun sendWorkoutNameToWearable() {
 
-
-//Sending a message can block the main UI thread, so use a new thread//
         workout.name?.let { NewThread("/my_path", it).start() }
-
     }
 
     //Use a Bundle to encapsulate our message//
-    fun sendmessage(messageText: String?) {
+    fun sendMessage(messageText: String?) {
         val bundle = Bundle()
         bundle.putString("messageText", messageText)
         val msg: Message = myHandler!!.obtainMessage()
@@ -365,7 +366,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
 
 //Block on a task and get the result synchronously//
                         val result = Tasks.await<Int>(sendMessageTask)
-                       sendmessage(message)
+                       sendMessage(message)
 
 
                         //if the Task fails, then…..//
