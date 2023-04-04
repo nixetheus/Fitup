@@ -5,7 +5,9 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.View
+import it.polimi.mobile.design.R
 import it.polimi.mobile.design.helpers.Constant
 import kotlin.math.sqrt
 
@@ -25,11 +27,15 @@ class LineGraphDataView(context: Context, attrs: AttributeSet? = null) : View(co
 
     private fun drawCircle(canvas: Canvas) {
 
+        // Get color
+        val colorOnPrimary = TypedValue()
+        context.theme.resolveAttribute (R.attr.colorOnPrimary, colorOnPrimary, true)
+
         val pointPaint = Paint()
         pointPaint.strokeWidth = dataPointSize.toFloat() / 15
         pointPaint.strokeCap = Paint.Cap.ROUND
 
-        pointPaint.color = Color.WHITE
+        pointPaint.color = colorOnPrimary.data
         pointPaint.style = Paint.Style.STROKE
         canvas.drawCircle((dataPointSize / 2f), (dataPointSize / 2f),
             pointPaint.strokeWidth * sqrt(2f), pointPaint)

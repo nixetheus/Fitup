@@ -26,6 +26,7 @@
     <color name="clean_sky_1">#450FC0</color>
     <color name="clean_sky_2">#050933</color>
     <color name="pine_1">#3EC480</color>
+    <color name="teal">#00D8B5</color>
 
     <color name="gold">#D4AF37</color>
     <color name="silver">#89898B</color>
@@ -34,4 +35,8 @@
     <color name="good_gray">#0F0F19</color>
     <color name="good_gray_light">#F22B2B42</color>
     <color name="good_gray_transparent">#CF1A1A23</color>
+
+    <color name="good_white">#FBFBED</color>
+    <color name="good_white_light">#ECECDD</color>
+    <color name="good_white_transparent">#CFFBFBED</color>
 </resources>

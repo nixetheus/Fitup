@@ -82,7 +82,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/lato"
                                 android:textAlignment="viewEnd"
-                                android:textColor="?colorOnPrimary"
+                                android:textColor="@android:color/white"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
 
@@ -94,7 +94,7 @@
                                 android:text="@string/calories_reps_label"
                                 android:textAlignment="center"
                                 android:textAllCaps="true"
-                                android:textColor="?colorOnPrimary"
+                                android:textColor="@android:color/white"
                                 android:textSize="10sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
@@ -112,7 +112,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/lato"
                                 android:textAlignment="viewEnd"
-                                android:textColor="?colorOnPrimary"
+                                android:textColor="@android:color/white"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
 
@@ -124,7 +124,7 @@
                                 android:text="@string/experience_reps_label"
                                 android:textAlignment="center"
                                 android:textAllCaps="true"
-                                android:textColor="?colorOnPrimary"
+                                android:textColor="@android:color/white"
                                 android:textSize="10sp"
                                 android:textStyle="bold" />
                         </LinearLayout>

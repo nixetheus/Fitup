@@ -1,6 +1,7 @@
 package it.polimi.mobile.design
 
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -102,8 +103,7 @@ class AchievementsActivity : AppCompatActivity() {
                     resources.getColor(R.color.silver, applicationContext.theme))
                 2 -> achievementLayout.medalCard.setCardBackgroundColor(
                     resources.getColor(R.color.bronze, applicationContext.theme))
-                else -> achievementLayout.medalCard.setCardBackgroundColor(
-                    resources.getColor(R.color.black, applicationContext.theme))
+                else -> achievementLayout.medalCard.setCardBackgroundColor(Color.TRANSPARENT)
             }
 
             binding.achievementsLayout.addView(achievementLayout.root)

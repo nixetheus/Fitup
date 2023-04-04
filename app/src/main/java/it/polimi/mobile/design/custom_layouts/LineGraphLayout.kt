@@ -165,9 +165,13 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
 
     private fun drawLines(canvas: Canvas) {
 
+        // Get color
+        val colorOnPrimary = TypedValue()
+        context.theme.resolveAttribute (R.attr.colorOnPrimary, colorOnPrimary, true)
+
         val linesPaint = Paint()
         linesPaint.strokeWidth = 7.5f
-        linesPaint.color = Color.WHITE
+        linesPaint.color = colorOnPrimary.data
         linesPaint.style = Paint.Style.STROKE
         linesPaint.strokeCap = Paint.Cap.ROUND
 
@@ -254,10 +258,14 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
 
     private fun drawMinMaxMid(canvas: Canvas) {
 
+        // Get color
+        val colorOnPrimary = TypedValue()
+        context.theme.resolveAttribute (R.attr.colorOnPrimary, colorOnPrimary, true)
+
         val graphPaint = Paint()
         graphPaint.strokeWidth = 5f
         graphPaint.style = Paint.Style.FILL
-        graphPaint.color = Color.argb(0.5f, 1f, 1f, 1f)
+        graphPaint.color = colorOnPrimary.data
         graphPaint.pathEffect = DashPathEffect(floatArrayOf(10f, 20f), 0f)
 
         val pointZero = dataPoints.elementAt(0)

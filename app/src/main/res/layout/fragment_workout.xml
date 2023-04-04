@@ -54,7 +54,7 @@
                     android:paddingStart="15dp"
                     android:paddingEnd="15dp"
                     android:textAlignment="center"
-                    android:textColor="?colorOnPrimary"
+                    android:textColor="@android:color/white"
                     android:textSize="25sp"
                     android:textStyle="bold" />
 
@@ -78,7 +78,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/lato"
                             android:textAlignment="center"
-                            android:textColor="?colorOnPrimary"
+                            android:textColor="@android:color/white"
                             android:textSize="20sp"
                             android:textStyle="bold" />
 
@@ -89,7 +89,7 @@
                             android:fontFamily="@font/lato"
                             android:textAlignment="center"
                             android:textAllCaps="true"
-                            android:textColor="?colorOnPrimary"
+                            android:textColor="@android:color/white"
                             android:textSize="12sp"
                             android:textStyle="bold" />
                     </LinearLayout>
@@ -107,7 +107,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/lato"
                             android:textAlignment="center"
-                            android:textColor="?colorOnPrimary"
+                            android:textColor="@android:color/white"
                             android:textSize="20sp"
                             android:textStyle="bold" />
 
@@ -118,7 +118,7 @@
                             android:fontFamily="@font/lato"
                             android:textAlignment="center"
                             android:textAllCaps="true"
-                            android:textColor="?colorOnPrimary"
+                            android:textColor="@android:color/white"
                             android:textSize="12sp"
                             android:textStyle="bold" />
                     </LinearLayout>
@@ -136,7 +136,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/lato"
                             android:textAlignment="center"
-                            android:textColor="?colorOnPrimary"
+                            android:textColor="@android:color/white"
                             android:textSize="20sp"
                             android:textStyle="bold" />
 
@@ -147,7 +147,7 @@
                             android:fontFamily="@font/lato"
                             android:textAlignment="center"
                             android:textAllCaps="true"
-                            android:textColor="?colorOnPrimary"
+                            android:textColor="@android:color/white"
                             android:textSize="12sp"
                             android:textStyle="bold" />
                     </LinearLayout>

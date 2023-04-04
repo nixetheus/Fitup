@@ -446,7 +446,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/lato_bold"
                         android:text="@string/missing"
-                        android:textColor="?colorOnSecondary"
+                        android:textColor="?colorOnPrimary"
                         android:textSize="20sp" />
 
                     <TextView
@@ -456,7 +456,7 @@
                         android:fontFamily="@font/lato_bold"
                         android:text="@string/sets_label"
                         android:textAllCaps="true"
-                        android:textColor="?colorOnSecondary"
+                        android:textColor="?colorOnPrimary"
                         android:textSize="11sp" />
                 </LinearLayout>
 
@@ -474,7 +474,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/lato_bold"
                         android:text="@string/missing"
-                        android:textColor="?colorOnSecondary"
+                        android:textColor="?colorOnPrimary"
                         android:textSize="20sp" />
 
                     <TextView
@@ -484,7 +484,7 @@
                         android:fontFamily="@font/lato_bold"
                         android:text="@string/reps_label"
                         android:textAllCaps="true"
-                        android:textColor="?colorOnSecondary"
+                        android:textColor="?colorOnPrimary"
                         android:textSize="11sp" />
                 </LinearLayout>
 
@@ -502,7 +502,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/lato_bold"
                         android:text="@string/missing"
-                        android:textColor="?colorOnSecondary"
+                        android:textColor="?colorOnPrimary"
                         android:textSize="20sp" />
 
                     <TextView
@@ -512,7 +512,7 @@
                         android:fontFamily="@font/lato_bold"
                         android:text="@string/sets_label"
                         android:textAllCaps="true"
-                        android:textColor="?colorOnSecondary"
+                        android:textColor="?colorOnPrimary"
                         android:textSize="11sp" />
                 </LinearLayout>
 
@@ -530,7 +530,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/lato_bold"
                         android:text="@string/missing"
-                        android:textColor="?colorOnSecondary"
+                        android:textColor="?colorOnPrimary"
                         android:textSize="20sp" />
 
                     <TextView
@@ -540,7 +540,7 @@
                         android:fontFamily="@font/lato_bold"
                         android:text="@string/weight_label"
                         android:textAllCaps="true"
-                        android:textColor="?colorOnSecondary"
+                        android:textColor="?colorOnPrimary"
                         android:textSize="11sp" />
                 </LinearLayout>
             </LinearLayout>
