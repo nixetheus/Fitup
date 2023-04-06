@@ -510,7 +510,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/lato_bold"
-                        android:text="@string/sets_label"
+                        android:text="@string/weight_label"
                         android:textAllCaps="true"
                         android:textColor="?colorOnPrimary"
                         android:textSize="11sp" />
@@ -538,7 +538,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/lato_bold"
-                        android:text="@string/weight_label"
+                        android:text="@string/rest_label"
                         android:textAllCaps="true"
                         android:textColor="?colorOnPrimary"
                         android:textSize="11sp" />

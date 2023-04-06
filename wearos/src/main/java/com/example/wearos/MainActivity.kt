@@ -40,6 +40,7 @@ class MainActivity : Activity() , SensorEventListener {
     private lateinit var chrono: Chronometer
     private var timeWhenStopped by Delegates.notNull<Long>()
     private var talkButton: ImageView? = null
+    private var exercise:String?=null
 
     var receivedMessageNumber = 1
 
@@ -48,6 +49,7 @@ class MainActivity : Activity() , SensorEventListener {
 
 
     private lateinit var binding: ActivityMainBinding
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -76,10 +78,20 @@ class MainActivity : Activity() , SensorEventListener {
 
         //Create an OnClickListener//
         talkButton!!.setOnClickListener {
-            //if (talkButton!!.text=="Start"){
-            SendMessage("/start", "start").start()
+            if (binding.startButton.drawable.constantState==resources.getDrawable(R.drawable.play).constantState) {
+                SendMessage("/start", "start").start()
+                binding.startButton.setImageResource(R.drawable.next)
+                binding.exerciseName.text=exercise
+                startChronometer()
+            }
+            else{
+                SendMessage("/next", "next").start()
+                chrono.stop()
+                timeWhenStopped = chrono.base - SystemClock.elapsedRealtime();
+                binding.startButton.setImageResource(R.drawable.play)
+                binding.exerciseName.text= "next exercise$exercise"
 
-            startChronometer()
+            }
             //talkButton!!.text="next"}
            // if (talkButton!!.text=="next"){
             //    SendMessage("/my_path", "next").start()
@@ -153,23 +165,42 @@ class MainActivity : Activity() , SensorEventListener {
         override fun onReceive(context: Context?, intent: Intent?) {
 
 //Display the following when a new message is received//
-            if (intent?.extras?.get("message")!=null){
+            if (intent?.extras?.get("workout")!=null){
             val onMessageReceived =
-                intent?.extras?.get("message") as String
+                intent?.extras?.get("workout") as String
                 if (onMessageReceived=="exit"){
                     onBackPressed()
                 }
 
                 else {
-                    workoutName?.text = "ready for $onMessageReceived workout?"
+                    workoutName?.text = "workout: $onMessageReceived"
 
 
                     talkButton?.visibility  = View.VISIBLE
                 }}
             if (intent?.extras?.get("exercise")!=null) {
-                val exercise =
+                exercise =
                     intent?.extras?.get("exercise") as String
+                binding.exerciseName.text= "next exercise: $exercise"
+            }
+            if (intent?.extras?.get("start")!=null) {
+
+                startChronometer()
                 binding.exerciseName.text=exercise
+                binding.startButton.setImageResource(R.drawable.next)
+                binding.exerciseName.text= exercise
+            }
+            if (intent?.extras?.get("next")!=null) {
+
+                chrono.stop()
+                timeWhenStopped = chrono.base - SystemClock.elapsedRealtime();
+                binding.startButton.setImageResource(R.drawable.play)
+            }
+            if (intent?.extras?.get("finish")!=null) {
+                chrono.stop()
+                timeWhenStopped = chrono.base - SystemClock.elapsedRealtime();
+                val intent1 = Intent(this@MainActivity, EndWorkoutActivity::class.java)
+                startActivity(intent1)
             }
         }
     }

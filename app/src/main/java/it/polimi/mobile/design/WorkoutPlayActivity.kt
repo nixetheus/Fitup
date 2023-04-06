@@ -77,7 +77,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
         workoutExercise= arrayListOf<WorkoutExercise>()
         timeWhenStopped=0
         chrono= binding.workoutTimeValue
-        chrono.text = "00:00"
+        chrono.text = "00:00:00"
         myHandler = Handler { msg ->
             val stuff = msg.data
             stuff.getString("messageText")?.let { messageText(it) }
@@ -90,9 +90,6 @@ class WorkoutPlayActivity : AppCompatActivity() {
 
         LocalBroadcastManager.getInstance(this).registerReceiver(messageReceiver, messageFilter);
 
-        binding.currentExerciseName.setOnClickListener(){
-
-        }
 
         workout= intent.extras?.get("workout") as Workout
         exp= intent.extras?.get("exp") as Float
@@ -115,6 +112,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
                     }
 
                     binding.workoutLayoutPlay.exercises = workoutExercise
+                NewThread("/exercise", workoutExercise[0].exerciseName.toString()).start()
                 }
 
             override fun onCancelled(error: DatabaseError) {
@@ -122,17 +120,13 @@ class WorkoutPlayActivity : AppCompatActivity() {
             }
 
         })
+
+
+
+
         binding.playPauseButton.setOnClickListener{
 
 
-            playExercise()
-
-        }
-
-        binding.startStopButton.setOnClickListener{
-            //i=0
-            binding.nextExerciseButton.text=""
-            binding.nextExerciseButton.isClickable=false
 
             if (workoutExercise.size!=0) {
                 binding.currentExerciseName.text = workoutExercise[i].exerciseName
@@ -142,7 +136,9 @@ class WorkoutPlayActivity : AppCompatActivity() {
                 }
                 binding.currentExerciseSetsValue.text=workoutExercise[i].sets.toString()
                 binding.startCurrentExerciseLayout.visibility= View.VISIBLE
-                NewThread("/exercise", workoutExercise[i].exerciseName.toString()).start()
+                playExercise()
+                NewThread("/start", "start").start()
+
 
             }
             else {
@@ -168,19 +164,18 @@ class WorkoutPlayActivity : AppCompatActivity() {
     private fun playExercise() {
         startChronometer()
 
-        binding.nextExerciseButton.text="next"
-        binding.beingTimeButton.text=""
-        binding.beingTimeButton.isClickable=false
-        binding.nextExerciseButton.isClickable=true
+
+        binding.playPauseButton.isClickable=false
+        binding.nextButton.isClickable=true
     }
 
     fun nextExercise(exp:Float){
         chrono.stop()
         timeWhenStopped = chrono.base - SystemClock.elapsedRealtime();
-        binding.nextExerciseButton.text=""
-        binding.nextExerciseButton.isClickable=false
-        binding.beingTimeButton.text="begin"
-        binding.beingTimeButton.isClickable=true
+
+        binding.nextButton.isClickable=false
+
+        binding.playPauseButton.isClickable=true
         if(i<workoutExercise.size-1){
             i++
             binding.currentExerciseName.text = workoutExercise[i].exerciseName
@@ -189,13 +184,15 @@ class WorkoutPlayActivity : AppCompatActivity() {
                 it?.let { it1 -> HelperFunctions().secondsToFormatString(it1.toInt()) }
             }
             binding.currentExerciseSetsValue.text=workoutExercise[i].sets.toString()
+            NewThread("/exercise", workoutExercise[i].exerciseName.toString()).start()
+            NewThread("/next", "next").start()
         }
         else {
 
-            binding.startStopButton.text = "FINISH!!"
+            NewThread("/finish", "finish").start()
 
             binding.startCurrentExerciseLayout.visibility = View.GONE
-            binding.startStopButton.setOnClickListener {
+
 
                 val workoutToRemove =
                     db.reference.child("Workout").orderByChild("workoutId").equalTo(workout.workoutId)
@@ -224,7 +221,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
                 intent.putExtra("time", chrono.base)
                 intent.putExtra("number of exercises", i)
                 startActivity(intent)
-            }
+
         }
     }
     fun startSpotify(){
@@ -266,11 +263,11 @@ class WorkoutPlayActivity : AppCompatActivity() {
     }
     override fun onBackPressed() {
         super.onBackPressed()
-        //NewThread("/my_path", "exit").start()
 
         val intent = Intent(this, CentralActivity::class.java)
         startActivity(intent)
         true
+
     }
 
 
@@ -295,13 +292,13 @@ class WorkoutPlayActivity : AppCompatActivity() {
 
     fun messageText(newinfo: String) {
         if (newinfo.compareTo("") != 0) {
-            binding.currentExerciseName
+           /* binding.currentExerciseName
                 .append(
                 """
                 
                 $newinfo
                 """.trimIndent()
-            )
+            )*/
         }
     }
 
@@ -312,23 +309,23 @@ class WorkoutPlayActivity : AppCompatActivity() {
             if (intent?.extras?.get("message") != null) {
 
                 val message = intent?.extras?.get("message") as String
-                if (message == "start") {
-                    startChronometer()
-                    startSpotify()
 
-                } else if (message=="next")
-                {nextExercise(exp)}
-                else
-                    binding.bpmText.text = message + " bpm"
+                binding.bpmText.text = message + " bpm"
             }
             if (intent?.extras?.get("start")!=null){
                 if (workoutExercise.size!=0){
-                    NewThread("/exercise", workoutExercise[i].exerciseName.toString()).start()
-                    startChronometer()
+                    playExercise()
                     startSpotify()
                 }
 
 
+
+            }
+            if (intent?.extras?.get("next")!=null) {
+                if (workoutExercise.size != 0) {
+                    nextExercise(exp)
+                    NewThread("/exercise", workoutExercise[i].exerciseName.toString()).start()
+                }
             }
 
         }
@@ -336,7 +333,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
 
     fun sendWorkoutNameToWearable() {
 
-        workout.name?.let { NewThread("/my_path", it).start() }
+        workout.name?.let { NewThread("/workout", it).start() }
     }
 
     //Use a Bundle to encapsulate our message//
