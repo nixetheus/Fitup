@@ -1,72 +1,188 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.wear.widget.BoxInsetLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/box_inset_layout_padding"
+    android:background="?colorPrimary"
     tools:context=".MainActivity"
     tools:deviceIds="wear">
 
+
+    <TextView
+        android:id="@+id/workoutName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/lato"
+        android:text="Strength Training 1"
+        android:textColor="?colorAccent"
+        android:textSize="9sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+
+        android:id="@+id/exerciseName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato_bold"
+        android:text="Bench Press"
+        android:textColor="?colorOnPrimary"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/workoutName" />
+
+    <Chronometer
+        android:id="@+id/workoutTimeValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:text="00:00:00"
+        android:textAllCaps="true"
+        android:textColor="?colorOnPrimary"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
-
-        android:layout_width="match_parent"
-
-        android:layout_height="match_parent"
-
-        android:gravity="center_horizontal"
-
+        android:id="@+id/timeLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
         android:orientation="vertical"
-
-        app:boxedEdges="all">
-        <TextView
-
-            android:id="@+id/workoutName"
-
-            android:layout_width="wrap_content"
-
-            android:layout_height="wrap_content"
-            android:text="Fitup"/>
-
-        <Button
-
-            android:id="@+id/startButton"
-
-            android:layout_width="wrap_content"
-
-            android:layout_height="wrap_content"
-
-            android:text="Start"
-            android:visibility="gone"/>
+        app:layout_constraintBottom_toTopOf="@+id/bpmLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/exerciseName">
 
         <TextView
-
-            android:id="@+id/exerciseName"
-
+            android:id="@+id/hoursValue"
             android:layout_width="wrap_content"
-
-
-            android:layout_height="wrap_content"/>
-        <Chronometer
-            android:id="@+id/workoutTimeValue"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="-10sp"
             android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:text="00:00:00"
-            android:textAllCaps="true"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:elegantTextHeight="false"
+            android:fallbackLineSpacing="false"
+            android:fontFamily="@font/lato_bold"
+            android:freezesText="false"
+            android:includeFontPadding="true"
+            android:letterSpacing="0.06"
+            android:text="@string/time_placeholder"
+            android:textAlignment="viewStart"
+            android:textColor="?colorOnPrimary"
+            android:textScaleX="1.05"
+            android:textSize="77sp"
+            android:textStyle="bold|italic" />
+
+        <LinearLayout
+            android:id="@+id/bttmTimeLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/minutesValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-10sp"
+                android:fallbackLineSpacing="false"
+                android:fontFamily="@font/lato_bold"
+                android:includeFontPadding="true"
+                android:letterSpacing="0.06"
+                android:paddingStart="20dp"
+                android:paddingEnd="-10sp"
+                android:text="@string/time_placeholder"
+                android:textAlignment="viewEnd"
+                android:textColor="?colorAccent"
+                android:textScaleX="1.05"
+                android:textSize="77sp"
+                android:textStyle="bold|italic" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/secondsValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/lato"
+                    android:gravity="center_vertical"
+                    android:letterSpacing="0.04"
+                    android:text="@string/time_placeholder"
+                    android:textAlignment="center"
+                    android:textColor="?colorAccent"
+                    android:textSize="24sp"
+                    android:textStyle="bold|italic" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/bpmLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
         <TextView
 
-            android:id="@+id/bmp"
-
-            android:layout_width="wrap_content"
-
+            android:id="@+id/bmpValue"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="bpm"/>
+            android:fontFamily="@font/lato"
+            android:text="@string/null_value"
+            android:textAlignment="center"
+            android:textColor="?colorOnPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/bpmLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
+            android:text="@string/bpm"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textColor="?colorOnPrimary"
+            android:textSize="8sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="70sp"
+        android:layout_marginEnd="24dp"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/timeLayout">
+
+        <ImageView
+            android:id="@+id/startButton"
+            android:layout_width="48dp"
+            android:layout_height="48sp"
+            android:contentDescription="@string/hello_world"
+            android:padding="14dp"
+            android:src="@drawable/play" />
 
     </LinearLayout>
 
-</androidx.wear.widget.BoxInsetLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

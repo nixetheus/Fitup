@@ -19,6 +19,7 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.Chronometer
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.wearos.databinding.ActivityMainBinding
@@ -38,7 +39,7 @@ class MainActivity : Activity() , SensorEventListener {
     private var mHeartSensor: Sensor? = null
     private lateinit var chrono: Chronometer
     private var timeWhenStopped by Delegates.notNull<Long>()
-    private var talkButton: Button? = null
+    private var talkButton: ImageView? = null
 
     var receivedMessageNumber = 1
 
@@ -75,14 +76,14 @@ class MainActivity : Activity() , SensorEventListener {
 
         //Create an OnClickListener//
         talkButton!!.setOnClickListener {
-            if (talkButton!!.text=="Start"){
+            //if (talkButton!!.text=="Start"){
             SendMessage("/start", "start").start()
 
             startChronometer()
-            talkButton!!.text="next"}
-            if (talkButton!!.text=="next"){
-                SendMessage("/my_path", "next").start()
-            }
+            //talkButton!!.text="next"}
+           // if (talkButton!!.text=="next"){
+            //    SendMessage("/my_path", "next").start()
+            //}
         }
         val newFilter = IntentFilter(Intent.ACTION_SEND)
 
@@ -100,7 +101,7 @@ class MainActivity : Activity() , SensorEventListener {
     override fun onSensorChanged(event: SensorEvent?) {
         if (event?.values!!.isNotEmpty()) {
             bpm = event.values[0]
-            binding.bmp.text= "" + event.values[0].toInt() + " bpm"
+            binding.bmpValue.text= "" + event.values[0].toInt()
             SendMessage("/my_path", bpm.toString()).start()
             //SendMessage("/ciao", bpm.toString()).start()
 
@@ -117,11 +118,18 @@ class MainActivity : Activity() , SensorEventListener {
                 val h = (time / 3600000).toInt()
                 val m = (time - h * 3600000).toInt() / 60000
                 val s = (time - h * 3600000 - m * 60000).toInt() / 1000
+                val milli = (time - h * 3600000 - m * 60000 - s * 1000).toInt()
                 val t =
                     (if (h < 10) "0$h" else h).toString() + ":" + (if (m < 10) "0$m" else m) + ":" + if (s < 10) "0$s" else s
-                chronometer.text = t
+                chronometer.text = "" // t
+
+                // UI TESTING TODO
+                binding.hoursValue.text =  String.format("%02d", h) + "\u00A0"
+                binding.minutesValue.text = String.format("%02d", m) + "\u00A0"
+                binding.secondsValue.text = String.format("%02d", s) + "\u00A0"
+
             }
-        chrono.base = SystemClock.elapsedRealtime() + timeWhenStopped;
+        chrono.base = SystemClock.elapsedRealtime() + timeWhenStopped
         chrono.start()
 
 
