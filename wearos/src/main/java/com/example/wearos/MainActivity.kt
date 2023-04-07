@@ -17,7 +17,6 @@ import android.util.Log
 
 import android.view.View
 import android.view.WindowManager
-import android.widget.Button
 import android.widget.Chronometer
 import android.widget.ImageView
 import android.widget.TextView
@@ -92,10 +91,7 @@ class MainActivity : Activity() , SensorEventListener {
                 binding.exerciseName.text= "next exercise$exercise"
 
             }
-            //talkButton!!.text="next"}
-           // if (talkButton!!.text=="next"){
-            //    SendMessage("/my_path", "next").start()
-            //}
+
         }
         val newFilter = IntentFilter(Intent.ACTION_SEND)
 
@@ -124,6 +120,7 @@ class MainActivity : Activity() , SensorEventListener {
 
     }
     private fun startChronometer(){
+        chrono.visibility=View.VISIBLE
         chrono.onChronometerTickListener =
             Chronometer.OnChronometerTickListener { chronometer ->
                 val time = SystemClock.elapsedRealtime() - chronometer.base
@@ -164,7 +161,7 @@ class MainActivity : Activity() , SensorEventListener {
         @SuppressLint("SetTextI18n")
         override fun onReceive(context: Context?, intent: Intent?) {
 
-//Display the following when a new message is received//
+
             if (intent?.extras?.get("workout")!=null){
             val onMessageReceived =
                 intent?.extras?.get("workout") as String
@@ -173,7 +170,7 @@ class MainActivity : Activity() , SensorEventListener {
                 }
 
                 else {
-                    workoutName?.text = "workout: $onMessageReceived"
+                    workoutName?.text =onMessageReceived
 
 
                     talkButton?.visibility  = View.VISIBLE
@@ -199,7 +196,14 @@ class MainActivity : Activity() , SensorEventListener {
             if (intent?.extras?.get("finish")!=null) {
                 chrono.stop()
                 timeWhenStopped = chrono.base - SystemClock.elapsedRealtime();
-                val intent1 = Intent(this@MainActivity, EndWorkoutActivity::class.java)
+                val intent1 = Intent(this@MainActivity, MainActivity::class.java)
+                startActivity(intent1)
+            }
+            if (intent?.extras?.get("exit")!=null) {
+                chrono.stop()
+                timeWhenStopped = chrono.base - SystemClock.elapsedRealtime();
+                chrono.text="00:00:00"
+                val intent1 = Intent(this@MainActivity, MainActivity::class.java)
                 startActivity(intent1)
             }
         }

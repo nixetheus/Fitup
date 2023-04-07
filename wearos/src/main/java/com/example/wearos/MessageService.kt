@@ -37,11 +37,11 @@ class MessageService : WearableListenerService() {
                 messageIntent!!.putExtra("finish", next)
                 LocalBroadcastManager.getInstance(this).sendBroadcast(messageIntent!!)
             }
-            "/ready" -> {
-                val next = String(messageEvent.data)
+            "/exit" -> {
+                val exit = String(messageEvent.data)
                 messageIntent=Intent()
                 messageIntent!!.action = Intent.ACTION_SEND
-                messageIntent!!.putExtra("ready", next)
+                messageIntent!!.putExtra("exit", exit)
                 LocalBroadcastManager.getInstance(this).sendBroadcast(messageIntent!!)}
             "/start" -> {
                 val next = String(messageEvent.data)

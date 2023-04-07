@@ -34,6 +34,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
     private val FORMAT = "%02d:%02d"
     private lateinit var binding:ActivityWorkoutPlayBinding
     private lateinit var chrono: Chronometer
+    private lateinit var chronoExercise: Chronometer
     private lateinit var database: DatabaseReference
     private var db = FirebaseDatabase.getInstance()
     private lateinit var workoutExercise: ArrayList<WorkoutExercise>
@@ -61,6 +62,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding=ActivityWorkoutPlayBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        i=0
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -77,6 +79,8 @@ class WorkoutPlayActivity : AppCompatActivity() {
         workoutExercise= arrayListOf<WorkoutExercise>()
         timeWhenStopped=0
         chrono= binding.workoutTimeValue
+        chronoExercise=binding.exerciseCounter
+        chronoExercise.text = "00:00:00"
         chrono.text = "00:00:00"
         myHandler = Handler { msg ->
             val stuff = msg.data
@@ -93,7 +97,8 @@ class WorkoutPlayActivity : AppCompatActivity() {
 
         workout= intent.extras?.get("workout") as Workout
         exp= intent.extras?.get("exp") as Float
-        sendWorkoutNameToWearable()
+
+        binding.expText.text=exp.toString()
         binding.playWorkoutName.text=workout.name
         database=FirebaseDatabase.getInstance().getReference("WorkoutExercise")
         database.addValueEventListener(object : ValueEventListener {
@@ -112,7 +117,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
                     }
 
                     binding.workoutLayoutPlay.exercises = workoutExercise
-                NewThread("/exercise", workoutExercise[0].exerciseName.toString()).start()
+                NewThread("/exercise", workoutExercise[i].exerciseName.toString())
                 }
 
             override fun onCancelled(error: DatabaseError) {
@@ -120,57 +125,69 @@ class WorkoutPlayActivity : AppCompatActivity() {
             }
 
         })
+        sendWorkoutNameToWearable()
+
 
 
 
 
         binding.playPauseButton.setOnClickListener{
 
-
-
-            if (workoutExercise.size!=0) {
-                binding.currentExerciseName.text = workoutExercise[i].exerciseName
-                binding.currentExerciseRepsValue.text=workoutExercise[i].reps.toString()
-                binding.currentExerciseRestValue.text=workoutExercise[i].rest.let {
-                    it?.let { it1 -> HelperFunctions().secondsToFormatString(it1.toInt()) }
-                }
-                binding.currentExerciseSetsValue.text=workoutExercise[i].sets.toString()
-                binding.startCurrentExerciseLayout.visibility= View.VISIBLE
-                playExercise()
-                NewThread("/start", "start").start()
-
-
-            }
-            else {
-                Toast.makeText(
-                    this,
-                    "This workout is empty, please add exercises to continue your training",
-                    Toast.LENGTH_SHORT
-                ).show()
-                chrono.stop()
-                binding.startStopButton.text = "FINISH!!"
-                binding.startStopButton.setOnClickListener {
-                    val intent = Intent(this, CentralActivity::class.java)
-                    startActivity(intent)
-                }
-            }
+            playExercise()
         }
         binding.nextButton.setOnClickListener{
             nextExercise(exp)
 
         }
+        binding.wearOsButton.setOnClickListener{
+
+
+
+        }
     }
 
     private fun playExercise() {
-        startChronometer()
+
+        if (workoutExercise.size!=0) {
+            binding.currentExerciseName.text = workoutExercise[i].exerciseName
+            binding.currentExerciseRepsValue.text=workoutExercise[i].reps.toString()
+            binding.currentExerciseRestValue.text=workoutExercise[i].rest.let {
+                it?.let { it1 -> HelperFunctions().secondsToFormatString(it1.toInt()) }
+            }
+            binding.currentExerciseSetsValue.text=workoutExercise[i].sets.toString()
+            binding.startCurrentExerciseLayout.visibility= View.VISIBLE
+            startChronometer()
+            startChronometerExercise()
 
 
-        binding.playPauseButton.isClickable=false
-        binding.nextButton.isClickable=true
+            binding.playPauseButton.isClickable=false
+            binding.nextButton.isClickable=true
+
+            NewThread("/start", "start").start()
+
+
+        }
+        else {
+            Toast.makeText(
+                this,
+                "This workout is empty, please add exercises to continue your training",
+                Toast.LENGTH_SHORT
+            ).show()
+            chrono.stop()
+            chronoExercise.stop()
+            chronoExercise.text="00:00:00"
+            binding.startStopButton.text = "FINISH!!"
+            binding.startStopButton.setOnClickListener {
+                val intent = Intent(this, CentralActivity::class.java)
+                startActivity(intent)
+            }
+        }
     }
 
     fun nextExercise(exp:Float){
         chrono.stop()
+        chronoExercise.stop()
+        chronoExercise.text="00:00:00"
         timeWhenStopped = chrono.base - SystemClock.elapsedRealtime();
 
         binding.nextButton.isClickable=false
@@ -190,6 +207,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
         else {
 
             NewThread("/finish", "finish").start()
+
 
             binding.startCurrentExerciseLayout.visibility = View.GONE
 
@@ -215,12 +233,12 @@ class WorkoutPlayActivity : AppCompatActivity() {
 
                     SpotifyAppRemote.disconnect(it)
                 }
-
                 val intent = Intent(this, WorkoutEndActivity::class.java)
                 intent.putExtra("exp", exp)
                 intent.putExtra("time", chrono.base)
                 intent.putExtra("number of exercises", i)
                 startActivity(intent)
+                i=0
 
         }
     }
@@ -261,14 +279,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
 
 
     }
-    override fun onBackPressed() {
-        super.onBackPressed()
 
-        val intent = Intent(this, CentralActivity::class.java)
-        startActivity(intent)
-        true
-
-    }
 
 
 
@@ -288,6 +299,38 @@ class WorkoutPlayActivity : AppCompatActivity() {
         chrono.start()
 
 
+    }
+    private fun startChronometerExercise(){
+        chronoExercise.onChronometerTickListener =
+            OnChronometerTickListener { chronometer ->
+                val time = SystemClock.elapsedRealtime() - chronometer.base
+                val h = (time / 3600000).toInt()
+                val m = (time - h * 3600000).toInt() / 60000
+                val s = (time - h * 3600000 - m * 60000).toInt() / 1000
+                val t =
+                    (if (h < 10) "0$h" else h).toString() + ":" + (if (m < 10) "0$m" else m) + ":" + if (s < 10) "0$s" else s
+                chronometer.text = t
+            }
+        chronoExercise.base = SystemClock.elapsedRealtime()
+        chronoExercise.start()
+
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+        NewThread("/exit", "exit").start()
+    }
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val intent = Intent(this, CentralActivity::class.java)
+        startActivity(intent)
+        NewThread("/exit", "exit").start()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        NewThread("/exit", "exit").start()
     }
 
     fun messageText(newinfo: String) {

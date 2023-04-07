@@ -160,7 +160,7 @@ class CentralActivity : AppCompatActivity() {
         val workoutsLayout = FragmentWorkoutRecentBinding.inflate(layoutInflater)
 
         workoutsLayout.workoutDisplayName.text = workout.name!!.replaceFirstChar { it.uppercaseChar() }
-        exp = 0f
+        var exp = 0f
         var kcalTot = 0F
         for(workoutExercise in workoutExerciseList.filter { we -> we.workoutId == workout.workoutId }) {
             for (exercise in exerciseArrayList.filter { ex -> ex.eid == workoutExercise.exerciseId})
@@ -200,7 +200,7 @@ class CentralActivity : AppCompatActivity() {
         val workoutsLayout = FragmentWorkoutBinding.inflate(layoutInflater)
 
         workoutsLayout.workoutDisplayName.text = workout.name!!.replaceFirstChar { it.uppercaseChar() }
-        exp = 0f
+        var exp=0F
         var kcalTot = 0F
         for(workoutExercise in workoutExerciseList.filter { we -> we.workoutId == workout.workoutId }) {
             for (exercise in exerciseArrayList.filter { ex -> ex.eid == workoutExercise.exerciseId})

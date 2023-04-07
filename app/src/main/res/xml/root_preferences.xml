@@ -10,11 +10,11 @@
             app:useSimpleSummaryProvider="true" />
         <EditTextPreference
             android:defaultValue="Default value"
-            android:key="edit_text_preference_1"
+            android:key="logout"
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:title="@string/logout" />
-
+onPause
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/app_header">
