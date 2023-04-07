@@ -53,9 +53,11 @@
 
     <LinearLayout
         android:id="@+id/timeLayout"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="4dp"
+        android:layout_marginEnd="32dp"
         android:layout_marginBottom="4dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/bpmLayout"
@@ -65,10 +67,10 @@
 
         <TextView
             android:id="@+id/hoursValue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
-            android:layout_weight="1"
+            android:layout_weight="0.6"
             android:autoSizeMaxTextSize="100sp"
             android:autoSizeMinTextSize="20sp"
             android:autoSizeTextType="uniform"
@@ -82,22 +84,22 @@
             android:textAlignment="viewStart"
             android:textColor="?colorOnPrimary"
             android:textScaleX="1.05"
-            android:textSize="77sp"
             android:textStyle="bold|italic" />
 
         <LinearLayout
             android:id="@+id/bttmTimeLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.4"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/minutesValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_marginStart="-35dp"
                 android:layout_marginTop="-10sp"
+                android:layout_weight="1"
                 android:autoSizeMaxTextSize="200sp"
                 android:autoSizeMinTextSize="50sp"
                 android:autoSizeTextType="uniform"
@@ -110,31 +112,24 @@
                 android:textAlignment="viewEnd"
                 android:textColor="?colorAccent"
                 android:textScaleX="1.05"
-                android:textSize="100sp"
                 android:textStyle="bold|italic" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/secondsValue"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_weight="3"
+                android:autoSizeMaxTextSize="25sp"
+                android:autoSizeMinTextSize="15sp"
+                android:autoSizeTextType="uniform"
+                android:fontFamily="@font/lato"
+                android:gravity="center_vertical"
+                android:letterSpacing="0.04"
+                android:text="@string/time_placeholder"
+                android:textAlignment="center"
+                android:textColor="?colorAccent"
+                android:textStyle="bold|italic" />
 
-                <TextView
-                    android:id="@+id/secondsValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:autoSizeMaxTextSize="45sp"
-                    android:autoSizeMinTextSize="15sp"
-                    android:autoSizeTextType="none"
-                    android:fontFamily="@font/lato"
-                    android:gravity="center_vertical"
-                    android:letterSpacing="0.04"
-                    android:text="@string/time_placeholder"
-                    android:textAlignment="center"
-                    android:textColor="?colorAccent"
-                    android:textSize="24sp"
-                    android:textStyle="bold|italic" />
-
-            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
@@ -187,7 +182,7 @@
             android:layout_width="48dp"
             android:layout_height="48sp"
             android:contentDescription="@string/hello_world"
-            android:padding="14dp"
+            android:padding="16dp"
             android:src="@drawable/play" />
 
     </LinearLayout>
