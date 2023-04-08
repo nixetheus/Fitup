@@ -139,7 +139,7 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
         val accentColor = TypedValue()
         context.theme.resolveAttribute (androidx.appcompat.R.attr.colorAccent, accentColor, true)
 
-        val cardDim = 110
+        val cardDim = 150
         val card = CardView(context)
         card.radius = cardDim.toPx().toFloat() * 2
         card.setCardBackgroundColor(accentColor.data)
@@ -155,7 +155,7 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
         card.addView(valueTextView)
 
         val bubbleParams = LayoutParams(cardDim, cardDim)
-        bubbleParams.leftMargin = x
+        bubbleParams.leftMargin = x - cardDim / 4
         bubbleParams.topMargin = y - cardDim
         addView(card, bubbleParams)
 

@@ -39,7 +39,7 @@
                     android:fontFamily="@font/lato_bold"
                     android:text="@string/list_exercises_title"
                     android:textColor="?colorOnPrimary"
-                    android:textSize="30sp" />
+                    android:textSize="26sp" />
 
                 <ImageView
                     android:id="@+id/homeButton"
@@ -298,7 +298,7 @@
                 android:stateListAnimator="@null"
                 android:text="@string/add_confirm"
                 android:textColor="?colorOnPrimary"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
                 app:cornerRadius="10dp"
                 tools:ignore="SpeakableTextPresentCheck" />

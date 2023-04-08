@@ -64,23 +64,11 @@ class WorkoutPlayActivity : AppCompatActivity() {
         setContentView(binding.root)
         i=0
 
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.decorView.windowInsetsController!!.hide(WindowInsets.Type.navigationBars())
-        }
-        window.decorView.apply {
-            // Hide both the navigation bar and the status bar.
-            // SYSTEM_UI_FLAG_FULLSCREEN is only available on Android 4.1 and higher, but as
-            // a general rule, you should design your app to hide the status bar whenever you
-            // hide the navigation bar.
-            systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN
-        }
-
         workoutExercise= arrayListOf<WorkoutExercise>()
         timeWhenStopped=0
         chrono= binding.workoutTimeValue
         chronoExercise=binding.exerciseCounter
-        chronoExercise.text = "00:00:00"
+        chronoExercise.text = "00:00"
         chrono.text = "00:00:00"
         myHandler = Handler { msg ->
             val stuff = msg.data
@@ -175,7 +163,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
             ).show()
             chrono.stop()
             chronoExercise.stop()
-            chronoExercise.text="00:00:00"
+            chronoExercise.text="00:00"
             binding.startStopButton.text = "FINISH!!"
             binding.startStopButton.setOnClickListener {
                 val intent = Intent(this, CentralActivity::class.java)
@@ -187,7 +175,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
     fun nextExercise(exp:Float){
         chrono.stop()
         chronoExercise.stop()
-        chronoExercise.text="00:00:00"
+        chronoExercise.text="00:00"
         timeWhenStopped = chrono.base - SystemClock.elapsedRealtime();
 
         binding.nextButton.isClickable=false
@@ -308,7 +296,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
                 val m = (time - h * 3600000).toInt() / 60000
                 val s = (time - h * 3600000 - m * 60000).toInt() / 1000
                 val t =
-                    (if (h < 10) "0$h" else h).toString() + ":" + (if (m < 10) "0$m" else m) + ":" + if (s < 10) "0$s" else s
+                    (if (m < 10) "0$m" else m.toString()) + ":" + if (s < 10) "0$s" else s
                 chronometer.text = t
             }
         chronoExercise.base = SystemClock.elapsedRealtime()

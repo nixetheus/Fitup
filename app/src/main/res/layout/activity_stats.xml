@@ -10,10 +10,9 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingStart="10dp"
         android:paddingTop="30dp"
-        android:paddingEnd="10dp"
         android:paddingBottom="30dp"
+        android:scrollbarSize="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -44,7 +43,7 @@
                     android:text="@string/missing"
                     android:textAlignment="viewStart"
                     android:textColor="?colorOnPrimary"
-                    android:textSize="30sp"
+                    android:textSize="26sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -400,7 +399,7 @@
                     android:text="@string/add_data_title"
                     android:textAllCaps="false"
                     android:textColor="?colorOnPrimary"
-                    android:textSize="22sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <ImageView
@@ -503,7 +502,7 @@
                 android:stateListAnimator="@null"
                 android:text="@string/add_confirm"
                 android:textColor="?colorOnPrimary"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
                 app:cornerRadius="10dp"
                 tools:ignore="SpeakableTextPresentCheck" />

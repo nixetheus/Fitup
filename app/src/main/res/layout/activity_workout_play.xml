@@ -16,7 +16,7 @@
         android:text="@string/courage_text"
         android:textAlignment="center"
         android:textColor="?colorOnPrimary"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,8 +26,7 @@
         android:id="@+id/playWorkoutScrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginBottom="25dp"
+        android:layout_marginBottom="32dp"
         android:contentDescription="@string/null_value"
         android:scrollbarSize="0dp"
         app:layout_constraintBottom_toTopOf="@+id/currentExerciseOverlay"
@@ -136,7 +135,7 @@
         android:layout_height="wrap_content"
         android:baselineAligned="false"
         android:orientation="horizontal"
-        android:paddingTop="55dp"
+        android:paddingTop="35dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -165,8 +164,11 @@
 
             <Chronometer
                 android:id="@+id/workoutTimeValue"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:autoSizeMaxTextSize="75sp"
+                android:autoSizeMinTextSize="60sp"
+                android:autoSizeTextType="uniform"
                 android:fontFamily="@font/roboto"
                 android:gravity="center_vertical"
                 android:letterSpacing="0.015"
@@ -174,7 +176,7 @@
                 android:textAlignment="center"
                 android:textAllCaps="true"
                 android:textColor="?colorOnPrimary"
-                android:textSize="70sp"
+                android:textSize="60sp"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -274,6 +276,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/null_value"
+                    android:padding="2.5dp"
                     app:srcCompat="@drawable/spotify_icon_rgb" />
             </androidx.cardview.widget.CardView>
 
@@ -374,7 +377,7 @@
         android:id="@+id/currentExerciseOverlay"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         app:cardBackgroundColor="@android:color/transparent"
         app:cardCornerRadius="0dp"
         app:cardElevation="0dp"
@@ -406,12 +409,12 @@
                     android:text="@string/null_value"
                     android:textAlignment="center"
                     android:textColor="?colorOnPrimary"
-                    android:textSize="27sp"
+                    android:textSize="25sp"
                     android:textStyle="bold" />
 
                 <Chronometer
                     android:id="@+id/exerciseCounter"
-                    android:layout_width="281dp"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:fontFamily="@font/lato"
@@ -447,7 +450,7 @@
                         android:fontFamily="@font/lato_bold"
                         android:text="@string/missing"
                         android:textColor="?colorOnPrimary"
-                        android:textSize="20sp" />
+                        android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/currentExerciseSetsLabel"
@@ -475,7 +478,7 @@
                         android:fontFamily="@font/lato_bold"
                         android:text="@string/missing"
                         android:textColor="?colorOnPrimary"
-                        android:textSize="20sp" />
+                        android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/currentExerciseRepsLabel"
@@ -503,7 +506,7 @@
                         android:fontFamily="@font/lato_bold"
                         android:text="@string/missing"
                         android:textColor="?colorOnPrimary"
-                        android:textSize="20sp" />
+                        android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/currentExerciseWeightLabel"
@@ -531,7 +534,7 @@
                         android:fontFamily="@font/lato_bold"
                         android:text="@string/missing"
                         android:textColor="?colorOnPrimary"
-                        android:textSize="20sp" />
+                        android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/currentExerciseRestLabel"
@@ -587,7 +590,7 @@
         android:baselineAligned="false"
         android:orientation="horizontal"
         android:paddingTop="20dp"
-        android:paddingBottom="40dp"
+        android:paddingBottom="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
