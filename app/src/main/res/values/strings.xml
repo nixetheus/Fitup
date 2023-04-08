@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">FitUp</string>
-    <string name="webclient_id">925709693638-nm3agj53a3frj6invj8ob7tu63ot5f7r.apps.googleusercontent.com</string>
-    <string name="none">none</string>
+    <string name="webclient_id" translatable="false">925709693638-nm3agj53a3frj6invj8ob7tu63ot5f7r.apps.googleusercontent.com</string>
+    <string name="none" translatable="false">none</string>
     <string name="back_btn">Back</string>
     <string name="next_btn">Next</string>
-    <string name="null_value">--</string>
+    <string name="null_value" translatable="false">--</string>
     <string-array name="sex">
         <item>Male</item>
         <item>Female</item>
@@ -17,30 +17,30 @@
         <item>Chest</item>
     </string-array>
 
-    <string name="facebook_app_id">3465451120365237</string>
-    <string name="fb_login_protocol_scheme">fb1234</string>
-    <string name="facebook_client_token">3693b90df68dbe71408081b07cb74f44</string>
+    <string name="facebook_app_id" translatable="false">3465451120365237</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb1234</string>
+    <string name="facebook_client_token" translatable="false">3693b90df68dbe71408081b07cb74f44</string>
 
 
     <!-- LOGIN -->
     <string name="welcome_title">Welcome</string>
     <string name="welcome_sub">Your fitness journey\n starts here</string>
-    <string name="welcome_image">Welcome Image</string>
+    <string name="welcome_image" translatable="false">Welcome Image</string>
     <string name="pass_forgot">Forgot your password?</string>
     <string name="google_login_btn">Sign In With Google</string>
     <string name="facebook_login_btn">Continue With Facebook</string>
-    <string name="login_btn">Login</string>
+    <string name="login_btn" translatable="false">Login</string>
     <string name="signup_btn">Sign Up</string>
-    <string name="login_btn_back">Or Login</string>
+    <string name="login_btn_back" translatable="false">Or Login</string>
     <string name="signup_btn_back">Or Sign Up</string>
     <string name="data_please">Please insert your data for a better in-app experience</string>
 
     <!-- FIELDS -->
-    <string name="email">Email</string>
-    <string name="password">Password</string>
+    <string name="email" translatable="false">Email</string>
+    <string name="password" translatable="false">Password</string>
     <string name="repeat_password">Repeat Password</string>
     <string name="weight">Weight</string>
-    <string name="username">Username</string>
+    <string name="username" translatable="false">Username</string>
     <string name="age">Age</string>
     <string name="sex">Sex</string>
 
@@ -49,9 +49,9 @@
     <string name="recent_workouts">Recent Workouts</string>
     <string name="welcome_workouts">Chosen For You</string>
     <string name="popular_workouts">Most Popular</string>
-    <string name="level_label">Lvl</string>
-    <string name="strongest_stat_label">Ace Stat</string>
-    <string name="bpm_stat_label">Avg. Bpm</string>
+    <string name="level_label" translatable="false">Lvl</string>
+    <string name="strongest_stat_label" translatable="false">Ace Stat</string>
+    <string name="bpm_stat_label" translatable="false">Avg. Bpm</string>
     <string name="stats_link">Stats</string>
     <string name="workouts_link">Workouts</string>
     <string name="exercises_link">Exercises</string>
@@ -60,7 +60,7 @@
 
     <string name="search_workouts">Search Workouts</string>
     <string name="search_exercises">Search Exercises</string>
-    <string name="list_workouts_title">Workouts</string>
+    <string name="list_workouts_title" translatable="false">Workouts</string>
     <string name="list_exercises_title">Exercises</string>
     <string name="add_workout_title">Create Workout</string>
     <string name="add_exercise_title">Create Exercise</string>
@@ -69,30 +69,30 @@
     <string name="exercise_type_hint">Type</string>
     <string name="add_confirm">Add</string>
     <string name="workout_list_exercises_title">Exercises</string>
-    <string name="exp_exercises_label">Exp</string>
-    <string name="experience_reps_label">Exp/Rep</string>
-    <string name="calories_reps_label">Kcal/Rep</string>
+    <string name="exp_exercises_label" translatable="false">Exp</string>
+    <string name="experience_reps_label" translatable="false">Exp/Rep</string>
+    <string name="calories_reps_label" translatable="false">Kcal/Rep</string>
 
     <!-- WORKOUT DETAIL -->
-    <string name="missing">--</string>
-    <string name="number_exercises_label">Exp</string>
-    <string name="calories_data_label">Kcal</string>
-    <string name="bpm_data_label">BPM</string>
+    <string name="missing" translatable="false">--</string>
+    <string name="number_exercises_label" translatable="false">Exp</string>
+    <string name="calories_data_label" translatable="false">Kcal</string>
+    <string name="bpm_data_label" translatable="false">BPM</string>
     <string name="sets_label">Sets</string>
     <string name="reps_label">Reps</string>
     <string name="rest_label">Rest</string>
-    <string name="weight_label">Kg</string>
-    <string name="buffer_label">Buffer</string>
+    <string name="weight_label" translatable="false">Kg</string>
+    <string name="buffer_label" translatable="false">Buffer</string>
     <string name="add_exercises_please">Let\'s start building your workout</string>
     <string name="add_exercises_please_btn">Add to this workout</string>
 
     <!-- SETTINGS -->
     <string name="settings_title">Settings</string>
-    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_settings" translatable="false">SettingsActivity</string>
 
     <!-- Preference Titles -->
     <string name="profile_header">Profile</string>
-    <string name="app_header">General</string>
+    <string name="app_header" translatable="false">General</string>
 
     <!-- Messages Preferences -->
     <string name="change_nick">Change nickname</string>
@@ -112,18 +112,18 @@
     <string name="add_exercise_label">Add Exercise</string>
     <string name="exercise_label">Exercise:</string>
     <string name="type_label">Type</string>
-    <string name="calories_label">Kcal</string>
+    <string name="calories_label" translatable="false">Kcal</string>
 
     <!-- PLAY -->
     <string name="start_button">Start</string>
-    <string name="stop_button">Stop</string>
-    <string name="missing_time">00:00:00</string>
-    <string name="exp_label">Exp:</string>
+    <string name="stop_button" translatable="false">Stop</string>
+    <string name="missing_time" translatable="false">00:00:00</string>
+    <string name="exp_label" translatable="false">Exp:</string>
     <string name="next_up_label">Next Up:</string>
     <string name="current_exercise_label">Current Exercise</string>
     <string name="begin_exercise_button">Begin</string>
     <string name="next_up_button">Next</string>
-    <string name="spotify_button_label">Spotify</string>
+    <string name="spotify_button_label" translatable="false">Spotify</string>
     <string name="wearos_button_label">Sync</string>
     <string name="courage_text">Defeat The Monster</string>
 
@@ -136,12 +136,12 @@
 
     <!-- STATS -->
     <string name="latest_label">Latest</string>
-    <string name="diff_label">+/-</string>
+    <string name="diff_label" translatable="false">+/-</string>
     <string name="new_value">Value</string>
     <string name="orm">One Rep Max</string>
     <string name="body_comp">Body Composition</string>
     <string name="add_data_title">Add Data</string>
-    <string name="add_data_value_label">--</string>
+    <string name="add_data_value_label" translatable="false">--</string>
     <string name="add_data_date_label">Date</string>
     <string name="add_data_please">Let\'s start tracking</string>
     <string name="add_data_please_btn">Add to this graph</string>
@@ -149,10 +149,10 @@
     <!-- RESET -->
     <string name="reset_label">Reset Your Password</string>
     <string name="confirm_label">Confirm Email</string>
-    <string name="reset_btn">Reset</string>
+    <string name="reset_btn" translatable="false">Reset</string>
 
     <!-- ACHIEVEMENTS DETAIL -->
-    <string name="achievements_title">Achievements</string>
+    <string name="achievements_title" translatable="false">Achievements</string>
     <string name="completed_label">Completed</string>
 
 </resources>
