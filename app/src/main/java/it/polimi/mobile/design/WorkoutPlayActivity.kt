@@ -242,6 +242,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
                 intent.putExtra("exp", exp)
                 intent.putExtra("time", chrono.base)
                 intent.putExtra("number of exercises", i)
+            workoutExercise.clear()
                 startActivity(intent)
                 i=0
 
@@ -424,7 +425,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
                     try {
 
 //Block on a task and get the result synchronously//
-                        val result = Tasks.await<Int>(sendMessageTask)
+                       // val result = Tasks.await<Int>(sendMessageTask)
                         Log.d(TAG, "Data item set: $path")
 
 
@@ -438,6 +439,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
                         //TO DO: Handle the exception//
                     }
                 }
+                Log.d(TAG, "nodes: ${nodes.size}")
             } catch (exception: ExecutionException) {
 
                 //TO DO: Handle the exception//
@@ -447,5 +449,6 @@ class WorkoutPlayActivity : AppCompatActivity() {
             }
         }
     }
+
 }
 

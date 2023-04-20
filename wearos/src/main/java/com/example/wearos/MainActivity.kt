@@ -113,7 +113,7 @@ class MainActivity : Activity() , SensorEventListener {
 
             if (intent?.extras?.get("workout") != null) {
                 workout= intent?.extras?.get("workout") as String
-
+                finish()
                 intent1.putExtra("workout", workout)
                 startActivity(intent1)
 
@@ -176,6 +176,7 @@ class MainActivity : Activity() , SensorEventListener {
 //TO DO//
                     }
                 }
+
             } catch (exception: ExecutionException) {
 
 //TO DO//

@@ -49,17 +49,7 @@ class WorkoutPlayActivity : AppCompatActivity(), SensorEventListener{
         setContentView(binding.root)
 
 
-        val newFilter = IntentFilter(Intent.ACTION_SEND)
-        val messageReceiver = Receiver()
-        LocalBroadcastManager.getInstance(this@WorkoutPlayActivity)
-            .registerReceiver(messageReceiver, newFilter)
-        this@WorkoutPlayActivity.sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager?;
-        mHeartSensor = sensorManager?.getDefaultSensor(Sensor.TYPE_HEART_RATE)
-        sensorManager?.registerListener(
-            this,
-            mHeartSensor,
-            SensorManager.SENSOR_DELAY_FASTEST)
-        SendMessage("/requestExercise", "r").start()
+
 
 
         Log.d("Play Workout", " onCreate play workout wearos"+ Thread.currentThread().id)
@@ -105,6 +95,9 @@ class WorkoutPlayActivity : AppCompatActivity(), SensorEventListener{
             }
 
         }
+        bpmThread().start()
+        ListenerThread().start()
+        SendMessage("/requestExercise", "r").start()
 
 
 
@@ -210,10 +203,10 @@ class WorkoutPlayActivity : AppCompatActivity(), SensorEventListener{
             if (intent?.extras?.get("finish")!=null) {
                 chrono.stop()
                 timeWhenStopped = chrono.base - SystemClock.elapsedRealtime();
-
+                finish()
                 val intent1 = Intent(this@WorkoutPlayActivity, MainActivity::class.java)
                 startActivity(intent1)
-                finish()
+
 
             }
             if (intent?.extras?.get("exit")!=null) {
@@ -277,12 +270,15 @@ class WorkoutPlayActivity : AppCompatActivity(), SensorEventListener{
                 val messageReceiver = Receiver()
                 LocalBroadcastManager.getInstance(this@WorkoutPlayActivity)
                     .registerReceiver(messageReceiver, newFilter);
+
             }
             catch (exception: ExecutionException) {
 
 //TO DO//
             }
+
         }
+
     }
 
 
@@ -326,20 +322,9 @@ class WorkoutPlayActivity : AppCompatActivity(), SensorEventListener{
             }
         }
     }
-    /*public override fun onResume() {
-        super.onResume()
-        Wearable.getDataClient(this).addListener(this)
-    }
-    override fun onPause() {
-        super.onPause()
-        Wearable.getDataClient(this).removeListener(this)
-    }
 
 
 
-    override fun onDataChanged(p0: DataEventBuffer) {
-        TODO("Not yet implemented")
-    }*/
 
 
 
