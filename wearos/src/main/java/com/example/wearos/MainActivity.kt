@@ -28,9 +28,7 @@ import com.google.android.gms.wearable.*
 import java.util.concurrent.ExecutionException
 import kotlin.properties.Delegates
 
-
 class MainActivity : Activity() , SensorEventListener {
-
 
     private var exerciseName: TextView? = null
     private var workoutName: TextView?= null
@@ -40,11 +38,11 @@ class MainActivity : Activity() , SensorEventListener {
     private var timeWhenStopped by Delegates.notNull<Long>()
     private var talkButton: ImageView? = null
     private var exercise:String?=null
-
+    private var workout:String?=null
     var receivedMessageNumber = 1
-
     var sentMessageNumber = 1
     var bpm: Float = 0.0f
+
 
 
     private lateinit var binding: ActivityMainBinding
@@ -55,11 +53,7 @@ class MainActivity : Activity() , SensorEventListener {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        talkButton=binding.startButton
-        workoutName=binding.workoutName
-        exerciseName=binding.exerciseName
-        timeWhenStopped=0
-        chrono=binding.workoutTimeValue
+
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
 
@@ -75,28 +69,7 @@ class MainActivity : Activity() , SensorEventListener {
 
 
 
-        //Create an OnClickListener//
-        talkButton!!.setOnClickListener {
-            if (binding.startButton.drawable.constantState==resources.getDrawable(R.drawable.play).constantState) {
-                SendMessage("/start", "start").start()
-                binding.startButton.setImageResource(R.drawable.next)
-                binding.exerciseName.text=exercise
-                startChronometer()
-            }
-            else{
-                SendMessage("/next", "next").start()
-                chrono.stop()
-                timeWhenStopped = chrono.base - SystemClock.elapsedRealtime();
-                binding.startButton.setImageResource(R.drawable.play)
-                binding.exerciseName.text= "next exercise$exercise"
-
-            }
-
-        }
-        val newFilter = IntentFilter(Intent.ACTION_SEND)
-
-        val messageReceiver = Receiver()
-        LocalBroadcastManager.getInstance(this).registerReceiver(messageReceiver, newFilter);
+        ListenerThread().start()
 
 
 
@@ -111,7 +84,6 @@ class MainActivity : Activity() , SensorEventListener {
             bpm = event.values[0]
             binding.bmpValue.text= "" + event.values[0].toInt()
             SendMessage("/my_path", bpm.toString()).start()
-            //SendMessage("/ciao", bpm.toString()).start()
 
 
         }
@@ -119,30 +91,7 @@ class MainActivity : Activity() , SensorEventListener {
 
 
     }
-    private fun startChronometer(){
-        chrono.visibility=View.VISIBLE
-        chrono.onChronometerTickListener =
-            Chronometer.OnChronometerTickListener { chronometer ->
-                val time = SystemClock.elapsedRealtime() - chronometer.base
-                val h = (time / 3600000).toInt()
-                val m = (time - h * 3600000).toInt() / 60000
-                val s = (time - h * 3600000 - m * 60000).toInt() / 1000
-                val milli = (time - h * 3600000 - m * 60000 - s * 1000).toInt()
-                val t =
-                    (if (h < 10) "0$h" else h).toString() + ":" + (if (m < 10) "0$m" else m) + ":" + if (s < 10) "0$s" else s
-                chronometer.text = "" // t
 
-                // UI TESTING TODO
-                binding.hoursValue.text =  String.format("%02d", h) + "\u00A0"
-                binding.minutesValue.text = String.format("%02d", m) + "\u00A0"
-                binding.secondsValue.text = String.format("%02d", s) + "\u00A0"
-
-            }
-        chrono.base = SystemClock.elapsedRealtime() + timeWhenStopped
-        chrono.start()
-
-
-    }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
         Log.d(TAG, "onAccuracyChanged - accuracy: $accuracy");
@@ -160,51 +109,33 @@ class MainActivity : Activity() , SensorEventListener {
     inner class Receiver : BroadcastReceiver() {
         @SuppressLint("SetTextI18n")
         override fun onReceive(context: Context?, intent: Intent?) {
+            val intent1 = Intent(this@MainActivity, WorkoutPlayActivity::class.java)
 
+            if (intent?.extras?.get("workout") != null) {
+                workout= intent?.extras?.get("workout") as String
 
-            if (intent?.extras?.get("workout")!=null){
-            val onMessageReceived =
-                intent?.extras?.get("workout") as String
-                if (onMessageReceived=="exit"){
-                    onBackPressed()
-                }
-
-                else {
-                    workoutName?.text =onMessageReceived
-
-
-                    talkButton?.visibility  = View.VISIBLE
-                }}
-            if (intent?.extras?.get("exercise")!=null) {
-                exercise =
-                    intent?.extras?.get("exercise") as String
-                binding.exerciseName.text= "next exercise: $exercise"
-            }
-            if (intent?.extras?.get("start")!=null) {
-
-                startChronometer()
-                binding.exerciseName.text=exercise
-                binding.startButton.setImageResource(R.drawable.next)
-                binding.exerciseName.text= exercise
-            }
-            if (intent?.extras?.get("next")!=null) {
-
-                chrono.stop()
-                timeWhenStopped = chrono.base - SystemClock.elapsedRealtime();
-                binding.startButton.setImageResource(R.drawable.play)
-            }
-            if (intent?.extras?.get("finish")!=null) {
-                chrono.stop()
-                timeWhenStopped = chrono.base - SystemClock.elapsedRealtime();
-                val intent1 = Intent(this@MainActivity, MainActivity::class.java)
+                intent1.putExtra("workout", workout)
                 startActivity(intent1)
+
+
             }
-            if (intent?.extras?.get("exit")!=null) {
-                chrono.stop()
-                timeWhenStopped = chrono.base - SystemClock.elapsedRealtime();
-                chrono.text="00:00:00"
-                val intent1 = Intent(this@MainActivity, MainActivity::class.java)
-                startActivity(intent1)
+
+
+        }
+    }
+    inner class ListenerThread() : Thread(){
+        override fun run() {
+            try {
+
+
+                val newFilter = IntentFilter(Intent.ACTION_SEND)
+                val messageReceiver = Receiver()
+                LocalBroadcastManager.getInstance(this@MainActivity)
+                    .registerReceiver(messageReceiver, newFilter);
+            }
+            catch (exception: ExecutionException) {
+
+//TO DO//
             }
         }
     }
@@ -233,6 +164,7 @@ class MainActivity : Activity() , SensorEventListener {
                         .sendMessage(node.id, path, message.toByteArray())
                     try {
                         val result = Tasks.await<Int>(sendMessageTask)
+
 
 
 //Handle the errors//

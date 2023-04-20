@@ -136,7 +136,7 @@ class SignInActivity : AppCompatActivity() {
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
-                    Toast.makeText(baseContext, "Authentication failed.",
+                    Toast.makeText(this, "Authentication failed.",
                         Toast.LENGTH_SHORT).show()
                     updateUI(null)
                 }
@@ -161,6 +161,8 @@ class SignInActivity : AppCompatActivity() {
                 }
             }
         }
+        else {val intent = Intent(this, SignInActivity::class.java)
+            startActivity(intent)}
     }
 
     private fun createRequest() {

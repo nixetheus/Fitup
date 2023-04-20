@@ -10,12 +10,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.*
 import it.polimi.mobile.design.databinding.ActivityCentralBinding
 import it.polimi.mobile.design.databinding.SettingsActivityBinding
+import it.polimi.mobile.design.entities.Workout
 import java.util.*
 
 
 class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
 
     private lateinit var binding: SettingsActivityBinding
+    private lateinit var username: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -23,6 +25,7 @@ class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPrefere
 
         binding = SettingsActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
+       // username= intent.extras?.get("username") as String
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
@@ -44,6 +47,7 @@ class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPrefere
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey)
             val logout: EditTextPreference? = findPreference("logout")
+            val nickname: EditTextPreference? = findPreference("nickname")
             if (logout != null) {
                 logout.setOnPreferenceClickListener {
                     val intent = Intent(this.context, LogoutPopUp::class.java)

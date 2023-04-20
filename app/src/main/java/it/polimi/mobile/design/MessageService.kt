@@ -34,6 +34,15 @@ class MessageService : WearableListenerService() {
                 messageIntent!!.action = Intent.ACTION_SEND
                 messageIntent!!.putExtra("start", start)
                 LocalBroadcastManager.getInstance(this).sendBroadcast(messageIntent!!)
+
+            }
+            "/requestExercise" -> {
+                val request = String(messageEvent.data)
+                messageIntent=Intent()
+                messageIntent!!.action = Intent.ACTION_SEND
+                messageIntent!!.putExtra("request", request)
+                LocalBroadcastManager.getInstance(this).sendBroadcast(messageIntent!!)
+
             }
             "/next" -> {
                 val next = String(messageEvent.data)

@@ -100,6 +100,15 @@ class CentralActivity : AppCompatActivity() {
 
         binding.userImage.setOnClickListener{
             val intent = Intent(this, SettingsActivity::class.java)
+            val usersSchema = databaseInstance.getReference("Users")
+            firebaseAuth.uid?.let { userId ->
+                usersSchema.child(userId).get().addOnSuccessListener { userSnapshot ->
+                    val user = databaseHelperInstance!!.getUserFromSnapshot(userSnapshot)
+                    if (user != null) {
+                        intent.putExtra("username", user.username)
+                    }
+                }
+            }
             startActivity(intent)
         }
 

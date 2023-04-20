@@ -5,7 +5,7 @@
     <PreferenceCategory app:title="@string/profile_header">
 
         <EditTextPreference
-            app:key="signature"
+            app:key="nickname"
             app:title="@string/change_nick"
             app:useSimpleSummaryProvider="true" />
         <EditTextPreference
