@@ -63,6 +63,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
         i=0
 
         workoutExercise= arrayListOf<WorkoutExercise>()
+        workoutExercise.clear()
         timeWhenStopped=0
         chrono= binding.workoutTimeValue
         chronoExercise=binding.exerciseCounter
@@ -230,6 +231,19 @@ class WorkoutPlayActivity : AppCompatActivity() {
                         Log.e(ContentValues.TAG, "onCancelled", databaseError.toException())
                     }
                 })
+            val userExp=db.reference.child("Users").orderByChild("uid").equalTo(firebaseAuth.uid)
+                userExp.addListenerForSingleValueEvent(object: ValueEventListener{
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        for (userSnapshot in dataSnapshot.children) {
+                            userSnapshot.ref.child("exp").setValue(ServerValue.increment(exp.toDouble()))
+                        }
+                    }
+
+                    override fun onCancelled(databaseError: DatabaseError) {
+                        Log.e(ContentValues.TAG, "onCancelled", databaseError.toException())
+                    }
+
+                })
 
 
                 mSpotifyAppRemote?.playerApi?.pause()
@@ -244,6 +258,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
                 intent.putExtra("number of exercises", i)
             workoutExercise.clear()
                 startActivity(intent)
+            finish()
                 i=0
 
         }
@@ -425,7 +440,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
                     try {
 
 //Block on a task and get the result synchronously//
-                       // val result = Tasks.await<Int>(sendMessageTask)
+                       val result = Tasks.await<Int>(sendMessageTask)
                         Log.d(TAG, "Data item set: $path")
 
 

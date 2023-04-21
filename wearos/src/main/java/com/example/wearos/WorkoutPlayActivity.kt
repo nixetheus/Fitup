@@ -3,6 +3,7 @@ package com.example.wearos
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.*
+import android.content.ContentValues.TAG
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -40,6 +41,7 @@ class WorkoutPlayActivity : AppCompatActivity(), SensorEventListener{
     var receivedMessageNumber = 1
     var sentMessageNumber = 1
     var bpm: Float = 0.0f
+    var i=0
     protected var myHandler: Handler? = null
     private lateinit var binding: ActivityWorkoutPlayBinding
     @SuppressLint("SetTextI18n")
@@ -77,7 +79,10 @@ class WorkoutPlayActivity : AppCompatActivity(), SensorEventListener{
         //Create an OnClickListener//
         talkButton!!.setOnClickListener {
             if (binding.startButton.drawable.constantState==resources.getDrawable(R.drawable.play).constantState) {
-                startChronometer()
+
+                if(i==0){
+                    i++
+                    startChronometer()}
 
                 SendMessage("/start", "start").start()
 
@@ -306,6 +311,7 @@ class WorkoutPlayActivity : AppCompatActivity(), SensorEventListener{
 
 //Handle the errors//
                     } catch (exception: ExecutionException) {
+                        Log.e(TAG, "Exception thrown");
 
 //TO DO//
                     } catch (exception: InterruptedException) {

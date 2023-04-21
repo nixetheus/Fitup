@@ -60,7 +60,7 @@ class CentralActivity : AppCompatActivity() {
 
     private fun workoutsCallback() {
         val workoutsSchema = databaseInstance.getReference("Workout")
-        workoutsSchema.orderByChild("ranking").limitToFirst(5).addValueEventListener(object : ValueEventListener {
+        workoutsSchema.orderByChild("ranking").limitToFirst(6).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 showWorkouts(
                     databaseHelperInstance!!.getWorkoutsFromSnapshot(snapshot))
