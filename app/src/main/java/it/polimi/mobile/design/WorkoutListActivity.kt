@@ -14,6 +14,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ServerValue
 import com.google.firebase.database.ValueEventListener
 import it.polimi.mobile.design.databinding.ActivityWorkoutListBinding
 import it.polimi.mobile.design.databinding.FragmentWorkoutListBinding
@@ -23,6 +24,8 @@ import it.polimi.mobile.design.entities.WorkoutExercise
 import it.polimi.mobile.design.enum.ExerciseType
 import it.polimi.mobile.design.helpers.DatabaseHelper
 import it.polimi.mobile.design.helpers.HelperFunctions
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class WorkoutListActivity : AppCompatActivity() {
@@ -143,7 +146,8 @@ class WorkoutListActivity : AppCompatActivity() {
 
         val wId = databaseWorkout.push().key!!
         if(name.isNotEmpty()) {
-            val workout = Workout(wId, uid, name, "hip hop", 0, false, MutableList(4){0})
+
+            val workout = Workout(wId, uid, name, "hip hop", 0, null, MutableList(4){0})
             databaseWorkout.child(name).setValue(workout).addOnSuccessListener {
                 Toast.makeText(this, "Successfully saved!!", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, WorkoutListActivity::class.java)

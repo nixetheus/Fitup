@@ -27,7 +27,10 @@ import it.polimi.mobile.design.entities.Workout
 import it.polimi.mobile.design.entities.WorkoutExercise
 import it.polimi.mobile.design.helpers.DatabaseHelper
 import it.polimi.mobile.design.helpers.HelperFunctions
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.concurrent.ExecutionException
+import kotlin.collections.ArrayList
 import kotlin.properties.Delegates
 
 
@@ -224,6 +227,8 @@ class WorkoutPlayActivity : AppCompatActivity() {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         for (workoutSnapshot in dataSnapshot.children) {
                             workoutSnapshot.ref.child("ranking").setValue(ServerValue.increment(-1))
+
+                            workoutSnapshot.ref.child("timestamp").setValue(ServerValue.TIMESTAMP)
                         }
                     }
 
@@ -381,6 +386,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
                     if(i==0)
                         startChronometer()
                     playExercise()
+                    startExerciseAnimation()
                     Log.d("Play Workout", "Exercise"+i+"of"+workoutExercise.size+":"+workoutExercise[i].exerciseName)
 
                 }
@@ -405,6 +411,9 @@ class WorkoutPlayActivity : AppCompatActivity() {
             }
 
         }
+    }
+    fun startExerciseAnimation(){
+        TODO()
     }
 
     fun sendWorkoutNameToWearable() {

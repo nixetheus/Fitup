@@ -48,6 +48,11 @@ class EditWorkoutActivity : AppCompatActivity() {
         setupExercisesUI()
 
         binding.confirmAddWorkoutBtn.setOnClickListener{onAddNewExercise()}
+        binding.homeButton.setOnClickListener{
+            val intent = Intent(this, CentralActivity::class.java)
+            startActivity(intent)
+
+        }
 
         workoutExerciseDatabase.addValueEventListener(object :ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {

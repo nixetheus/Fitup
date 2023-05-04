@@ -11,4 +11,5 @@ data class User(
     val exp: Float? = null,
     val workoutsCounters: Map<String, Int>? = mapOf(),
     val exercisesCounters: Map<String, Int>? = mapOf()
+
 )

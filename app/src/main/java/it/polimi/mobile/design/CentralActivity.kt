@@ -3,30 +3,24 @@ package it.polimi.mobile.design
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.res.TypedArray
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import android.util.TypedValue
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import it.polimi.mobile.design.databinding.ActivityCentralBinding
 import it.polimi.mobile.design.databinding.FragmentFilterBinding
 import it.polimi.mobile.design.databinding.FragmentWorkoutBinding
 import it.polimi.mobile.design.databinding.FragmentWorkoutRecentBinding
 import it.polimi.mobile.design.entities.Exercise
-import it.polimi.mobile.design.entities.User
 import it.polimi.mobile.design.entities.Workout
 import it.polimi.mobile.design.entities.WorkoutExercise
 import it.polimi.mobile.design.enum.ExerciseType
 import it.polimi.mobile.design.helpers.DatabaseHelper
 import it.polimi.mobile.design.helpers.HelperFunctions
-import kotlin.properties.Delegates
+
 
 
 class CentralActivity : AppCompatActivity() {
@@ -59,8 +53,19 @@ class CentralActivity : AppCompatActivity() {
     }
 
     private fun workoutsCallback() {
-        val workoutsSchema = databaseInstance.getReference("Workout")
-        workoutsSchema.orderByChild("ranking").limitToFirst(6).addValueEventListener(object : ValueEventListener {
+        val workoutsSchema = databaseInstance.getReference("Workout")//.orderByChild(firebaseAuth.uid.toString())
+        workoutsSchema.orderByChild("timestamp").limitToLast(2).addValueEventListener(object : ValueEventListener {
+            @SuppressLint("SuspiciousIndentation")
+            override fun onDataChange(snapshot: DataSnapshot) {
+                binding.workoutsLayoutRecent.removeAllViews()
+                for (workout in databaseHelperInstance!!.getWorkoutsFromSnapshot(snapshot))
+                showRecentWorkout(workout)
+            }
+            override fun onCancelled(error: DatabaseError) {
+                Log.w("Firebase", "Couldn't retrieve data...")
+            }
+        })
+        workoutsSchema.orderByChild("ranking").limitToFirst(5).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 showWorkouts(
                     databaseHelperInstance!!.getWorkoutsFromSnapshot(snapshot))
@@ -156,9 +161,9 @@ class CentralActivity : AppCompatActivity() {
 
     private fun showWorkouts(workouts: List<Workout>) {
         binding.workoutsLayout.removeAllViews()
-        binding.workoutsLayoutRecent.removeAllViews()
+        //binding.workoutsLayoutRecent.removeAllViews()
         for (workout in workouts) {
-            showRecentWorkout(workout)
+            //showRecentWorkout(workout)
             showChosenWorkout(workout)
         }
     }
