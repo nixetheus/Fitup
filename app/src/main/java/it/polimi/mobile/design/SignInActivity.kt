@@ -27,8 +27,8 @@ import it.polimi.mobile.design.databinding.ActivitySignInBinding
 
 class SignInActivity : AppCompatActivity() {
 
-    private var auth =  FirebaseAuth.getInstance()
-    private lateinit var database: DatabaseReference
+    var auth =  FirebaseAuth.getInstance()
+    lateinit var database: DatabaseReference
     private lateinit var binding: ActivitySignInBinding
     private lateinit var buttonFacebookLogin: LoginButton
     private lateinit var mGoogleSignInClient: GoogleSignInClient
@@ -64,36 +64,9 @@ class SignInActivity : AppCompatActivity() {
         }
 
         binding.emailLoginButton.setOnClickListener {
-
             val pass = binding.Pass.text.toString()
             val email = binding.EmailField.text.toString()
-
-            if (email.isNotEmpty() && pass.isNotEmpty()) {
-
-                auth.signInWithEmailAndPassword(email, pass).addOnCompleteListener {
-
-                    if (it.isSuccessful) {
-                        val uid = auth.uid.toString()
-                        database = FirebaseDatabase.getInstance().getReference("Users")
-                        database.child(uid).get().addOnSuccessListener {
-                            if (it.exists())
-                            {
-                                val intent = Intent(this, CentralActivity::class.java)
-                                startActivity(intent)
-                            }
-                            else{
-                                val intent = Intent(this, HomeActivity::class.java)
-                                startActivity(intent)
-                            }
-                        }
-                    } else {
-                        Toast.makeText(this, "Incorrect email or password", Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-            } else {
-                Toast.makeText(this, "Please, fill all fields", Toast.LENGTH_SHORT).show()
-            }
+            logIn(pass, email)
         }
 
         binding.facebookLogin.
@@ -113,6 +86,37 @@ class SignInActivity : AppCompatActivity() {
             }
         })
     }
+    private fun logIn(pass: String, email: String)
+    {
+
+
+    if (email.isNotEmpty() && pass.isNotEmpty()) {
+
+        auth.signInWithEmailAndPassword(email, pass).addOnCompleteListener {
+
+            if (it.isSuccessful) {
+                val uid = auth.uid.toString()
+                database = FirebaseDatabase.getInstance().getReference("Users")
+                database.child(uid).get().addOnSuccessListener {
+
+                    if (it.exists())
+                    {
+                        val intent = Intent(this, CentralActivity::class.java)
+                        startActivity(intent)
+                    }
+                    else{
+                        val intent = Intent(this, HomeActivity::class.java)
+                        startActivity(intent)
+                    }
+                }
+            } else {
+                Toast.makeText(this, "Incorrect email or password", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+    } else {
+        Toast.makeText(this, "Please, fill all fields", Toast.LENGTH_SHORT).show()
+    }}
 
     public override fun onStart() {
         super.onStart()
@@ -202,7 +206,7 @@ class SignInActivity : AppCompatActivity() {
         }
     }
 
-    private fun firebaseAuthWithGoogle(account: GoogleSignInAccount) {
+    fun firebaseAuthWithGoogle(account: GoogleSignInAccount) {
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
 
         auth.signInWithCredential(credential)
@@ -227,5 +231,9 @@ class SignInActivity : AppCompatActivity() {
                     Toast.makeText(this@SignInActivity, "Login Failed: ", Toast.LENGTH_SHORT).show()
                 }
             }
+    }
+    interface LogInListener {
+        fun logInSuccess(email: String?, password: String?)
+        fun logInFailure(exception: Exception?, email: String?, password: String?)
     }
 }
