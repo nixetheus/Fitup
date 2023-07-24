@@ -4,6 +4,8 @@ import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
+import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.facebook.AccessToken
@@ -49,6 +51,16 @@ class SignInActivity : AppCompatActivity() {
         buttonFacebookLogin.setPermissions("email", "public_profile")
         createRequest()
 
+        binding.Pass.setOnEditorActionListener { _, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE || event?.action == KeyEvent.ACTION_DOWN) {
+                // The action you want to perform when the "Enter" key is pressed
+                // For example, you can call a function here.
+                binding.emailLoginButton.performClick();
+                return@setOnEditorActionListener true
+            }
+            return@setOnEditorActionListener false
+        }
+
         binding.signupLogin.setOnClickListener {
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
@@ -57,6 +69,7 @@ class SignInActivity : AppCompatActivity() {
         binding.buttonGoogle2.setOnClickListener {
             googleSignIn()
         }
+
         binding.forgetPass.setOnClickListener{
             val intent = Intent(this, ResetPasswordActivity::class.java)
             startActivity(intent)

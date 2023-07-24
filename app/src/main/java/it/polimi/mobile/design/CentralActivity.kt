@@ -129,7 +129,8 @@ class CentralActivity : AppCompatActivity() {
         for (typeFilter in ExerciseType.values()) {
 
             val filterLayout = FragmentFilterBinding.inflate(layoutInflater)
-            filterLayout.filterDisplayName.text = typeFilter.name.lowercase().replaceFirstChar { it.uppercaseChar() }
+            filterLayout.filterDisplayName.text = typeFilter.name.replace("_", " ").lowercase().split(' ')
+                .joinToString(" ") { it.replaceFirstChar(Char::uppercaseChar) }
             binding.filtersLayout.addView(filterLayout.root)
 
 
