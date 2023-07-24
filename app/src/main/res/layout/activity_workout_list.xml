@@ -80,6 +80,7 @@
                     android:layout_height="35dp"
                     android:contentDescription="@string/none"
                     android:cropToPadding="false"
+                    android:foreground="?attr/selectableItemBackground"
                     app:srcCompat="@drawable/ic_baseline_add_48" />
 
             </LinearLayout>

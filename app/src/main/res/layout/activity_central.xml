@@ -272,6 +272,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:foreground="?attr/selectableItemBackground"
                 app:cardBackgroundColor="@android:color/transparent"
                 app:cardElevation="0dp"
                 app:cardMaxElevation="0dp">
@@ -314,6 +315,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:foreground="?attr/selectableItemBackground"
                 app:cardBackgroundColor="@android:color/transparent"
                 app:cardElevation="0dp"
                 app:cardMaxElevation="0dp">
@@ -355,6 +357,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:foreground="?attr/selectableItemBackground"
                 app:cardBackgroundColor="@android:color/transparent"
                 app:cardElevation="0dp"
                 app:cardMaxElevation="0dp">

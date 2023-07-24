@@ -20,6 +20,7 @@
             android:id="@+id/workoutCard"
             android:layout_width="275dp"
             android:layout_height="180dp"
+            android:foreground="?attr/selectableItemBackground"
             android:hapticFeedbackEnabled="true"
             app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="5dp"

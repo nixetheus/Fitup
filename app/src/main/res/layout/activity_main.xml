@@ -73,6 +73,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="?colorAccent"
             android:fontFamily="@font/lato"
+            android:foreground="?attr/selectableItemBackground"
             android:insetTop="0dp"
             android:insetBottom="0dp"
             android:minHeight="53dp"
