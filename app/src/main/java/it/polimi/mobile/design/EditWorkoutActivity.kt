@@ -24,6 +24,7 @@ import it.polimi.mobile.design.helpers.HelperFunctions
 class EditWorkoutActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEditWorkoutBinding
+    private var usersDatabase = FirebaseDatabase.getInstance().getReference("Users")
     private var exerciseDatabase = FirebaseDatabase.getInstance().getReference("Exercise")
     private var workoutExerciseDatabase = FirebaseDatabase.getInstance().getReference("WorkoutExercise")
     private val databaseHelperInstance = DatabaseHelper().getInstance()
@@ -75,6 +76,12 @@ class EditWorkoutActivity : AppCompatActivity() {
     private fun setupWorkoutUI() {
 
         binding.workoutName.text = workout.name!!.replaceFirstChar { it.uppercaseChar() }
+
+        workout.userId?.let { w ->
+            usersDatabase.child(w).get().addOnSuccessListener {
+                binding.workoutCreator.text = DatabaseHelper().getUserFromSnapshot(it)!!.username
+            }
+        }
 
         // Add workout animation
         binding.openAddExerciseLayout.setOnClickListener {

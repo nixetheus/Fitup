@@ -31,8 +31,12 @@ class LineGraphDataView(context: Context, attrs: AttributeSet? = null) : View(co
         val colorOnPrimary = TypedValue()
         context.theme.resolveAttribute (R.attr.colorOnPrimary, colorOnPrimary, true)
 
+        // Get color
+        val accentColor = TypedValue()
+        context.theme.resolveAttribute (androidx.appcompat.R.attr.colorAccent, accentColor, true)
+
         val pointPaint = Paint()
-        pointPaint.strokeWidth = dataPointSize.toFloat() / 15
+        pointPaint.strokeWidth = dataPointSize.toFloat() / 12.5f
         pointPaint.strokeCap = Paint.Cap.ROUND
 
         pointPaint.color = colorOnPrimary.data
@@ -40,7 +44,7 @@ class LineGraphDataView(context: Context, attrs: AttributeSet? = null) : View(co
         canvas.drawCircle((dataPointSize / 2f), (dataPointSize / 2f),
             pointPaint.strokeWidth * sqrt(2f), pointPaint)
 
-        pointPaint.color = Color.WHITE
+        pointPaint.color = accentColor.data
         pointPaint.style = Paint.Style.FILL
         canvas.drawCircle((dataPointSize / 2f), (dataPointSize / 2f),
             pointPaint.strokeWidth * sqrt(2f), pointPaint)

@@ -1,11 +1,13 @@
 package it.polimi.mobile.design
 
 import android.annotation.SuppressLint
+import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.animation.TranslateAnimation
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DataSnapshot
@@ -16,6 +18,7 @@ import it.polimi.mobile.design.databinding.ActivityExerciseListBinding
 import it.polimi.mobile.design.databinding.FragmentExerciseListBinding
 import it.polimi.mobile.design.databinding.FragmentFilterBinding
 import it.polimi.mobile.design.entities.Exercise
+import it.polimi.mobile.design.entities.Workout
 import it.polimi.mobile.design.enum.ExerciseType
 import it.polimi.mobile.design.helpers.DatabaseHelper
 import it.polimi.mobile.design.helpers.HelperFunctions
@@ -58,8 +61,8 @@ class ExerciseListActivity : AppCompatActivity() {
         for (typeFilter in ExerciseType.values()) {
 
             val filterLayout = FragmentFilterBinding.inflate(layoutInflater)
-            filterLayout.filterDisplayName.text = typeFilter.name.lowercase().replaceFirstChar { it.uppercaseChar() }
-            binding.filtersLayout.addView(filterLayout.root)
+            filterLayout.filterDisplayName.text = typeFilter.name.replace("_", " ").lowercase().split(' ')
+                .joinToString(" ") { it.replaceFirstChar(Char::uppercaseChar) }
 
 
             val attrs = intArrayOf(R.attr.colorSecondary)
@@ -112,6 +115,14 @@ class ExerciseListActivity : AppCompatActivity() {
                 return false
             }
         })
+
+        // Close workout menu
+        binding.closeExerciseMenu.setOnClickListener{
+            val animate = TranslateAnimation(0F, 0F, 0F, binding.exerciseMenuCard.height.toFloat())
+            animate.duration = 500
+            animate.fillAfter = true
+            binding.exerciseMenuCard.startAnimation(animate)
+        }
     }
 
     private fun createExercise(){
@@ -154,10 +165,61 @@ class ExerciseListActivity : AppCompatActivity() {
             exerciseLayout.caloriesRepsValue.text = exercise.caloriesPerRep!!.toString()
             exerciseLayout.experienceValue.text = exercise.experiencePerReps!!.toString()
 
-            /*exerciseLayout.exercisesLayout.setBackgroundColor(
-                HelperFunctions().getExerciseBackground(exercise.type!!, resources, applicationContext))
-             */
+            exerciseLayout.exerciseCard.setOnLongClickListener {
+
+                //binding.exerciseMenuCard.visibility = View.VISIBLE
+                binding.exerciseMenuName.text = exercise.name.replaceFirstChar { it.uppercaseChar() }
+                val animate = TranslateAnimation(0F, 0F, binding.addExerciseCard.height.toFloat(), 0F)
+                animate.duration = 500
+                animate.fillAfter = true
+                binding.deleteExerciseLayout.startAnimation(animate)
+
+                binding.deleteExerciseButton.setOnClickListener{
+                    onDeleteExercise(exercise)
+                }
+                false
+            }
+
             binding.exercisesListLayout.addView(exerciseLayout.root)
         }
+    }
+
+    private fun onDeleteExercise(exercise: Exercise) {
+
+        /*binding.exerciseMenuCard.visibility = View.GONE
+
+        val exercise = database.reference.child("WorkoutExercise").orderByChild("workoutId")
+            .equalTo(exercise.eid)
+
+        exercise.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (exerciseSnap in dataSnapshot.children) {
+                    exerciseSnap.ref.removeValue()
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e(ContentValues.TAG, "onCancelled", databaseError.toException())
+            }
+        })
+
+
+        val workoutToRemove =
+            database.reference.child("Workout").orderByChild("workoutId").equalTo(workout.workoutId)
+
+        workoutToRemove.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (workoutSnapshot in dataSnapshot.children) {
+                    workoutSnapshot.ref.removeValue()
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e(ContentValues.TAG, "onCancelled", databaseError.toException())
+            }
+        })
+
+        val intent = Intent(this, WorkoutListActivity::class.java)
+        startActivity(intent)*/
     }
 }

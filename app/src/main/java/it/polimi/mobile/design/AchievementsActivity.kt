@@ -103,7 +103,6 @@ class AchievementsActivity : AppCompatActivity() {
                     resources.getColor(R.color.silver, applicationContext.theme))
                 2 -> achievementLayout.medalCard.setCardBackgroundColor(
                     resources.getColor(R.color.bronze, applicationContext.theme))
-                else -> achievementLayout.medalCard.setCardBackgroundColor(Color.TRANSPARENT)
             }
 
             binding.achievementsLayout.addView(achievementLayout.root)

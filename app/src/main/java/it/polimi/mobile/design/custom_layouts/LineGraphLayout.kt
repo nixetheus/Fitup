@@ -27,6 +27,8 @@ import java.time.ZoneOffset
 import java.time.temporal.ChronoUnit
 import android.content.res.TypedArray
 import android.util.TypedValue
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.alpha
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
@@ -139,10 +141,10 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
         val accentColor = TypedValue()
         context.theme.resolveAttribute (androidx.appcompat.R.attr.colorAccent, accentColor, true)
 
-        val cardDim = 150
+        val cardDim = 125
         val card = CardView(context)
         card.radius = cardDim.toPx().toFloat() * 2
-        card.setCardBackgroundColor(accentColor.data)
+        card.background = getDrawable(context, R.drawable.stats_data_card_background)
         card.foregroundGravity = CENTER_VERTICAL
 
         val valueTextView = TextView(context)
@@ -155,7 +157,7 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
         card.addView(valueTextView)
 
         val bubbleParams = LayoutParams(cardDim, cardDim)
-        bubbleParams.leftMargin = x - cardDim / 4
+        bubbleParams.leftMargin = x - cardDim / 6
         bubbleParams.topMargin = y - cardDim
         addView(card, bubbleParams)
 
@@ -170,10 +172,11 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
         context.theme.resolveAttribute (R.attr.colorOnPrimary, colorOnPrimary, true)
 
         val linesPaint = Paint()
-        linesPaint.strokeWidth = 7.5f
+        linesPaint.strokeWidth = 15f
         linesPaint.color = colorOnPrimary.data
         linesPaint.style = Paint.Style.STROKE
         linesPaint.strokeCap = Paint.Cap.ROUND
+        linesPaint.setARGB(200, linesPaint.color.red, linesPaint.color.green, linesPaint.color.blue)
 
         for (pointIndex in 0 until dataPoints.size - 1) {
 

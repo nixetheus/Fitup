@@ -78,35 +78,6 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
-                android:id="@+id/userInfoLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginBottom="15dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingStart="40dp"
-                android:paddingEnd="40dp">
-
-                <ImageView
-                    android:id="@+id/userImageWorkout"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_marginEnd="10dp"
-                    app:srcCompat="@drawable/user_icon_96" />
-
-                <TextView
-                    android:id="@+id/workoutCreator"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/lato"
-                    android:text="@string/null_value"
-                    android:textColor="?colorOnSecondary"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <LinearLayout
                 android:id="@+id/graphDataLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -289,7 +260,7 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/graphCard"
                 android:layout_width="match_parent"
-                android:layout_height="350dp"
+                android:layout_height="375dp"
                 android:layout_marginBottom="35dp"
                 app:cardBackgroundColor="@android:color/transparent"
                 app:cardCornerRadius="0dp"
@@ -332,12 +303,13 @@
                     android:layout_height="42dp"
                     android:layout_gravity="start"
                     android:layout_marginStart="10dp"
+                    android:background="?colorPrimary"
                     android:clipToPadding="false"
                     android:foreground="?attr/selectableItemBackground"
                     android:hapticFeedbackEnabled="true"
                     android:popupBackground="@drawable/spinner_drawable"
                     android:popupElevation="0dp"
-                    android:spinnerMode="dialog"
+                    android:spinnerMode="dropdown"
                     android:textAlignment="viewStart"
                     tools:ignore="SpeakableTextPresentCheck" />
 
@@ -347,12 +319,13 @@
                     android:layout_height="42dp"
                     android:layout_gravity="start"
                     android:layout_marginStart="10dp"
+                    android:background="?colorPrimary"
                     android:clipToPadding="false"
                     android:foreground="?attr/selectableItemBackground"
                     android:hapticFeedbackEnabled="true"
-                    android:popupBackground="@drawable/spinner_drawable"
+                    android:popupBackground="@android:color/transparent"
                     android:popupElevation="0dp"
-                    android:spinnerMode="dialog"
+                    android:spinnerMode="dropdown"
                     android:textAlignment="viewStart"
                     tools:ignore="RtlCompat,SpeakableTextPresentCheck" />
             </LinearLayout>

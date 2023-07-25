@@ -136,7 +136,6 @@ class WorkoutListActivity : AppCompatActivity() {
             animate.duration = 500
             animate.fillAfter = true
             binding.editWorkoutLayout.startAnimation(animate)
-            //workoutsLayout.workoutCard.isLongClickable = true
         }
     }
 
