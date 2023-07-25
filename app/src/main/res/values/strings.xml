@@ -98,6 +98,11 @@
     <string name="change_nick">Change nickname</string>
     <string name="logout">Logout</string>
 
+    <!-- Logout Pop Up -->
+    <string name="confirm_logout">Are you sure you want to logout?</string>
+    <string name="confirm_logout_yes">Yes</string>
+    <string name="confirm_logout_no">No</string>
+
     <!-- Sync Preferences -->
     <string name="language">Choose your language</string>
 

@@ -72,4 +72,5 @@
     <string name="reset_label">Reimposta Password</string>
     <string name="confirm_label">Conferma Email</string>
     <string name="completed_label">Completato</string>
+    <string name="confirm_logout">Sei sicuro di volerti disconnettere?</string>
 </resources>

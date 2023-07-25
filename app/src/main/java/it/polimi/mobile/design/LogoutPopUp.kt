@@ -21,15 +21,7 @@ class LogoutPopUp : Activity() {
         binding = ActivityLogoutPopUpBinding.inflate(layoutInflater)
         overridePendingTransition(0, 0)
         setContentView(binding.root)
-        firebaseAuth = FirebaseAuth.getInstance()
-        val uid = firebaseAuth.uid.toString()
-        database = FirebaseDatabase.getInstance().getReference("Users")
-        database.child(uid).get().addOnSuccessListener {
-            if (it.exists()) {
-                val username = it.child("username").value
-                binding.popupWindowTitle.text = username.toString()
-            }
-        }
+
         binding.yesBtn.setOnClickListener{
             val options = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken("925709693638-nm3agj53a3frj6invj8ob7tu63ot5f7r.apps.googleusercontent.com")
