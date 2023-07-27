@@ -6,19 +6,17 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
-import it.polimi.mobile.design.entities.User
-import it.polimi.mobile.design.enum.Gender
-import org.junit.After
-import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.junit.MockitoJUnitRunner
+import org.junit.Assert.assertTrue
+import it.polimi.mobile.design.entities.User
+import it.polimi.mobile.design.enum.Gender
+import org.junit.After
 import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
-@Config(sdk = [29])
+@Config(sdk = [29], manifest = Config.NONE)
 class SignUpActivityTest{
 
     private lateinit var context: Context
@@ -38,12 +36,12 @@ class SignUpActivityTest{
         // and configure the Firebase instances accordingly.
     }
 
-    /*@After
+    @After
     fun tearDown() {
         // Clean up Firebase resources
-        firebaseDatabase.reference.child("Users").child(getCurrentUserId()).removeValue()
-        firebaseAuth.signOut()
-    }*/
+        //firebaseDatabase.reference.child("Users").child(getCurrentUserId()).removeValue()
+        //firebaseAuth.signOut()
+    }
 
     @Test
     fun testCreateUserAndVerifyPresence() {
