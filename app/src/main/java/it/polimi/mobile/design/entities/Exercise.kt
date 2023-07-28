@@ -4,8 +4,8 @@ import it.polimi.mobile.design.enum.ExerciseType
 
 
 data class Exercise(
-    val eid: String? = null,
-    val name: String? = null,
+    var eid: String? = null,
+    var name: String? = null,
     val caloriesPerRep: Float? = null,
     val type: ExerciseType? = null,
     val experiencePerReps: Float? = null

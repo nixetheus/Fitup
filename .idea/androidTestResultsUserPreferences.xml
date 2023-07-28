@@ -9,6 +9,7 @@
               <option name="preferredColumnWidths">
                 <map>
                   <entry key="Duration" value="90" />
+                  <entry key="Pixel_3_API_30" value="120" />
                   <entry key="Pixel_4_API_31" value="120" />
                   <entry key="Tests" value="360" />
                 </map>
@@ -22,6 +23,7 @@
               <option name="preferredColumnWidths">
                 <map>
                   <entry key="Duration" value="90" />
+                  <entry key="Pixel_3_API_30" value="120" />
                   <entry key="Pixel_4_API_31" value="120" />
                   <entry key="Tests" value="360" />
                 </map>
@@ -143,6 +145,19 @@
                   <entry key="Pixel_4_API_31" value="120" />
                   <entry key="Tests" value="360" />
                   <entry key="samsung&#10; SM-G965F" value="120" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
+        <entry key="1586804326">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="Pixel_3_API_30" value="120" />
+                  <entry key="Tests" value="360" />
                 </map>
               </option>
             </AndroidTestResultsTableState>

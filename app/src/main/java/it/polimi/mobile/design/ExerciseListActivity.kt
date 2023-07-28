@@ -168,7 +168,8 @@ class ExerciseListActivity : AppCompatActivity() {
             exerciseLayout.exerciseCard.setOnLongClickListener {
 
                 //binding.exerciseMenuCard.visibility = View.VISIBLE
-                binding.exerciseMenuName.text = exercise.name.replaceFirstChar { it.uppercaseChar() }
+                binding.exerciseMenuName.text = exercise.name
+                   // .replaceFirstChar { it.uppercaseChar() }
                 val animate = TranslateAnimation(0F, 0F, binding.addExerciseCard.height.toFloat(), 0F)
                 animate.duration = 500
                 animate.fillAfter = true

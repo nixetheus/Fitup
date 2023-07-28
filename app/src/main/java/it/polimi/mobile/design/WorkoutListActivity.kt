@@ -158,7 +158,7 @@ class WorkoutListActivity : AppCompatActivity() {
 
     }
 
-    private fun showWorkouts(workouts: List<Workout>) {
+    fun showWorkouts(workouts: List<Workout>) {
 
 
         binding.workoutsListLayout.removeAllViews()

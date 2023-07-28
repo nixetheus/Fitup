@@ -23,7 +23,7 @@ import it.polimi.mobile.design.helpers.HelperFunctions
 
 class EditWorkoutActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityEditWorkoutBinding
+    lateinit var binding: ActivityEditWorkoutBinding
     private var usersDatabase = FirebaseDatabase.getInstance().getReference("Users")
     private var exerciseDatabase = FirebaseDatabase.getInstance().getReference("Exercise")
     private var workoutExerciseDatabase = FirebaseDatabase.getInstance().getReference("WorkoutExercise")
@@ -31,7 +31,7 @@ class EditWorkoutActivity : AppCompatActivity() {
 
     private var exerciseArrayList = ArrayList<Exercise>()
     private var exerciseInWorkout = ArrayList<Exercise>()
-    private var workoutExerciseList = ArrayList<WorkoutExercise>()
+    var workoutExerciseList = ArrayList<WorkoutExercise>()
 
     private lateinit var adapter: ArrayAdapter<Exercise>
 
@@ -125,7 +125,7 @@ class EditWorkoutActivity : AppCompatActivity() {
         })
     }
 
-    private fun onAddNewExercise() {
+    fun onAddNewExercise() {
 
         workoutExerciseDatabase= FirebaseDatabase.getInstance().getReference("WorkoutExercise")
 
