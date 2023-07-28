@@ -8,19 +8,20 @@ import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.After
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class AchievementsActivityTest {
+class ComeBackPopupTest {
 
-    private lateinit var activityScenario: ActivityScenario<AchievementsActivity>
+    private lateinit var activityScenario: ActivityScenario<ComeBackPopUp>
 
     @Before
     fun setup() {
         Intents.init()
-        activityScenario = ActivityScenario.launch(AchievementsActivity::class.java)
+        activityScenario = ActivityScenario.launch(ComeBackPopUp::class.java)
     }
 
     @After
@@ -30,10 +31,18 @@ class AchievementsActivityTest {
     }
 
     @Test
-    fun testClickOnHomeButtonShouldStartCentralActivity() {
-        // Perform click on the home button
-        onView(withId(R.id.homeButton)).perform(click())
-        // Verify that CentralActivity is started
+    fun testClickOnNoButton() {
+        // Perform click on no button
+        onView(withId(R.id.noBtn)).perform(click())
+        activityScenario.onActivity { activity ->
+            assertTrue(activity.isFinishing)
+        }
+    }
+
+    @Test
+    fun testClickOnYesButton() {
+        // Perform click on yes button
+        onView(withId(R.id.yesBtn)).perform(click())
         Intents.intended(hasComponent(CentralActivity::class.java.name))
     }
 }

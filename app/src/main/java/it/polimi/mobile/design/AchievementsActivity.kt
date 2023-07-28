@@ -20,15 +20,16 @@ import java.lang.Integer.min
 
 class AchievementsActivity : AppCompatActivity() {
 
-    private var firebaseAuth = FirebaseAuth.getInstance()
+    // Attributes
     private lateinit var binding: ActivityAchievementsBinding
-    private val databaseInstance = FirebaseDatabase.getInstance()
 
+    // DB
     private val databaseHelperInstance = DatabaseHelper().getInstance()
     private var achievements = FirebaseDatabase.getInstance().getReference("Achievements")
     private var userAchievements = FirebaseDatabase.getInstance().getReference("UserAchievements")
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
 
         binding = ActivityAchievementsBinding.inflate(layoutInflater)
@@ -47,8 +48,10 @@ class AchievementsActivity : AppCompatActivity() {
 
     private fun retrieveUserAchievements() {
         achievements.get().addOnSuccessListener { achievementsSnap ->
+
             val achievements = databaseHelperInstance!!.getAchievementsFromSnapshot(achievementsSnap)
             userAchievements.get().addOnSuccessListener { userAchievementsSnap ->
+
                 val userAchievements = databaseHelperInstance.getUserAchievementsFromSnapshot(userAchievementsSnap)
                 val bestUserAchievements =
                     userAchievements.sortedByDescending { it.tierId }.distinctBy { it.achievementId }
@@ -61,6 +64,7 @@ class AchievementsActivity : AppCompatActivity() {
 
                 binding.achievementsNumberValue.text = tracker
                 displayAchievements(bestUserAchievements, achievements)
+
             }
         }
     }
@@ -69,8 +73,8 @@ class AchievementsActivity : AppCompatActivity() {
                                     achievements: List<Achievement>) {
         for (achievement in achievements) {
 
-            var tierName = ""
-            var tierObjective = 0
+            var tierName: String
+            var tierObjective: Int
             val desc = achievement.description
 
             var userTier = 0
