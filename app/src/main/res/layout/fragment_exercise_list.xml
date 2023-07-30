@@ -32,6 +32,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:background="?colorAccent"
+                android:foreground="?attr/selectableItemBackground"
                 android:orientation="vertical">
 
                 <LinearLayout
