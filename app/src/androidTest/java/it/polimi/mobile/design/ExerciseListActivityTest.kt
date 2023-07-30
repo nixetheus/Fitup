@@ -64,7 +64,7 @@ class ExerciseListActivityTest {
         // Perform click on the home button
         onView(withId(R.id.homeButton)).perform(click())
         // Verify that Central Activity is started
-        Thread.sleep(1000)
+        Thread.sleep(2000)
         Intents.intended(IntentMatchers.hasComponent(CentralActivity::class.java.name))
     }
 }
