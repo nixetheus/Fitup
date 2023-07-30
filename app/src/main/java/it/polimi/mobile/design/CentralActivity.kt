@@ -22,22 +22,20 @@ import it.polimi.mobile.design.helpers.DatabaseHelper
 import it.polimi.mobile.design.helpers.HelperFunctions
 
 
-
 class CentralActivity : AppCompatActivity() {
 
+    // Attributes
     private lateinit var binding: ActivityCentralBinding
-    private var firebaseAuth = FirebaseAuth.getInstance()
-    private val databaseInstance = FirebaseDatabase.getInstance()
-    private var exp:Float = 0.0f
-
-    private var exerciseDatabase = FirebaseDatabase.getInstance().getReference("Exercise")
-    private var workoutExerciseDatabase = FirebaseDatabase.getInstance().getReference("WorkoutExercise")
-    private val databaseHelperInstance = DatabaseHelper().getInstance()
-
+    private var filters = arrayListOf<Int>()
     private var exerciseArrayList = ArrayList<Exercise>()
     private var workoutExerciseList = ArrayList<WorkoutExercise>()
 
-    private var filters = arrayListOf<Int>()
+    // DBs
+    private var firebaseAuth = FirebaseAuth.getInstance()
+    private val databaseHelperInstance = DatabaseHelper().getInstance()
+    private val databaseInstance = FirebaseDatabase.getInstance()
+    private var exerciseDatabase = FirebaseDatabase.getInstance().getReference("Exercise")
+    private var workoutExerciseDatabase = FirebaseDatabase.getInstance().getReference("WorkoutExercise")
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -45,11 +43,72 @@ class CentralActivity : AppCompatActivity() {
 
         binding = ActivityCentralBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         configDatabases()
-        showUser()
         createBindings()
-        workoutsCallback()
+        showUser()
         showFilters()
+        workoutsCallback()
+    }
+
+    private fun configDatabases() {
+
+        exerciseDatabase.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                exerciseArrayList = DatabaseHelper().getExercisesFromSnapshot(snapshot)
+            }
+            override fun onCancelled(error: DatabaseError) {
+                Log.w("Firebase", "Couldn't retrieve data...")
+            }
+        })
+
+        workoutExerciseDatabase.addValueEventListener(object :ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                workoutExerciseList = DatabaseHelper().getAllWorkoutsExercisesFromSnapshot(snapshot)
+            }
+            override fun onCancelled(error: DatabaseError) {
+                Log.w("Firebase", "Couldn't retrieve data...")
+            }
+        })
+    }
+
+    private fun createBindings() {
+
+        binding.userImage.setOnClickListener{
+            val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.trophyLink.setOnClickListener{
+            val intent = Intent(this, AchievementsActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.exercisesLink.setOnClickListener{
+            val intent = Intent(this, ExerciseListActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.statsLink.setOnClickListener{
+            val intent = Intent(this, StatsActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.workoutsLink.setOnClickListener{
+            val intent = Intent(this, WorkoutListActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
+    private fun showUser(){
+        val usersSchema = databaseInstance.getReference("Users")
+        firebaseAuth.uid?.let { userId ->
+            usersSchema.child(userId).get().addOnSuccessListener { userSnapshot ->
+                val user = databaseHelperInstance!!.getUserFromSnapshot(userSnapshot)
+                binding.usernameText.text = user!!.username
+                binding.userLevelValue.text = (user.exp!! / 10).toInt().toString()
+            }
+        }
     }
 
     private fun workoutsCallback() {
@@ -76,53 +135,6 @@ class CentralActivity : AppCompatActivity() {
         })
     }
 
-    private fun showUser(){
-        val usersSchema = databaseInstance.getReference("Users")
-        firebaseAuth.uid?.let { userId ->
-            usersSchema.child(userId).get().addOnSuccessListener { userSnapshot ->
-                val user = databaseHelperInstance!!.getUserFromSnapshot(userSnapshot)
-                binding.usernameText.text = user!!.username
-                binding.userLevelValue.text = (user.exp!! / 10).toInt().toString()
-            }
-        }
-    }
-
-    private fun createBindings() {
-        binding.exercisesLink.setOnClickListener{
-            val intent = Intent(this, ExerciseListActivity::class.java)
-            startActivity(intent)
-        }
-
-        binding.statsLink.setOnClickListener{
-            val intent = Intent(this, StatsActivity::class.java)
-            startActivity(intent)
-        }
-
-        binding.workoutsLink.setOnClickListener{
-            val intent = Intent(this, WorkoutListActivity::class.java)
-            startActivity(intent)
-        }
-
-        binding.userImage.setOnClickListener{
-            val intent = Intent(this, SettingsActivity::class.java)
-            val usersSchema = databaseInstance.getReference("Users")
-            firebaseAuth.uid?.let { userId ->
-                usersSchema.child(userId).get().addOnSuccessListener { userSnapshot ->
-                    val user = databaseHelperInstance!!.getUserFromSnapshot(userSnapshot)
-                    if (user != null) {
-                        intent.putExtra("username", user.username)
-                    }
-                }
-            }
-            startActivity(intent)
-        }
-
-        binding.trophyLink.setOnClickListener{
-            val intent = Intent(this, AchievementsActivity::class.java)
-            startActivity(intent)
-        }
-    }
-
     @SuppressLint("Recycle")
     private fun showFilters() {
 
@@ -132,7 +144,6 @@ class CentralActivity : AppCompatActivity() {
             filterLayout.filterDisplayName.text = typeFilter.name.replace("_", " ").lowercase().split(' ')
                 .joinToString(" ") { it.replaceFirstChar(Char::uppercaseChar) }
             binding.filtersLayout.addView(filterLayout.root)
-
 
             val attrs = intArrayOf(R.attr.colorSecondary)
             val ta = obtainStyledAttributes(R.style.Theme_MobileProject, attrs)
@@ -152,8 +163,8 @@ class CentralActivity : AppCompatActivity() {
 
     private fun applyFilter() {
         val workoutsSchema = databaseInstance.getReference("Workout")
-        workoutsSchema.orderByChild("ranking").limitToFirst(5).get().addOnSuccessListener { graphsSnapshot ->
-            val workouts = DatabaseHelper().getWorkoutsFromSnapshot(graphsSnapshot)
+        workoutsSchema.orderByChild("ranking").limitToFirst(10).get().addOnSuccessListener { workoutsSnapshot ->
+            val workouts = DatabaseHelper().getWorkoutsFromSnapshot(workoutsSnapshot)
             if (filters.isEmpty()) showWorkouts(workouts)
             else showWorkouts(workouts.filter {
                     filters.contains(HelperFunctions().getWorkoutType(it.exercisesType!!))})
@@ -255,26 +266,6 @@ class CentralActivity : AppCompatActivity() {
             intent.putExtra("exp", exp)
             startActivity(intent)
         }
-    }
-    private fun configDatabases() {
-
-        exerciseDatabase.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                exerciseArrayList = DatabaseHelper().getExercisesFromSnapshot(snapshot)
-            }
-            override fun onCancelled(error: DatabaseError) {
-                Log.w("Firebase", "Couldn't retrieve data...")
-            }
-        })
-
-        workoutExerciseDatabase.addValueEventListener(object :ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                workoutExerciseList = DatabaseHelper().getAllWorkoutsExercisesFromSnapshot(snapshot)
-            }
-            override fun onCancelled(error: DatabaseError) {
-                Log.w("Firebase", "Couldn't retrieve data...")
-            }
-        })
     }
 
     fun getFiltersSize() : Int {

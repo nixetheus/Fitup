@@ -25,20 +25,13 @@ class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPrefere
 
         binding = SettingsActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
-       // username= intent.extras?.get("username") as String
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.settings, SettingsFragment()).commit()
         }
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-
-
         setupLanguages()
-
-
-
     }
 
 

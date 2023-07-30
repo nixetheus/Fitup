@@ -12,40 +12,21 @@ import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import it.polimi.mobile.design.entities.Workout
-import kotlinx.coroutines.delay
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class EditWorkoutActivityTest {
+class ExerciseListActivityTest {
 
-    private lateinit var activityScenario: ActivityScenario<EditWorkoutActivity>
+    private lateinit var activityScenario: ActivityScenario<ExerciseListActivity>
 
     @Before
     fun setup() {
-
         Intents.init()
-
-        val intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, EditWorkoutActivity::class.java)
-        intent.putExtra("workout", createFakeWorkout())
-        intent.putExtra("exp", 0)
-
+        val intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, ExerciseListActivity::class.java)
         activityScenario = ActivityScenario.launch(intent)
-    }
-
-    private fun createFakeWorkout() : Workout {
-        return Workout(
-            "-Na7Mh7plP_oDVrlVw-c",
-            "Mw19C5PhigZGoG1OtwpTt8BF1op1",
-            "Strength - Total Body 1",
-            "hip hop",
-            -4,
-            1690447497966,
-            mutableListOf(1, 1, 0, 0)
-        )
     }
 
     @After
@@ -57,27 +38,25 @@ class EditWorkoutActivityTest {
     @Test
     fun testOpenAddExerciseLayout() {
         // Perform click on the plus exercise button
-        onView(withId(R.id.openAddExerciseLayout)).perform(click())
+        onView(withId(R.id.addExerciseButton)).perform(click())
         // Verify that add exercise layout is visible
         Thread.sleep(1000)
-        onView(withId(R.id.addExerciseToWorkoutCard)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+        onView(withId(R.id.addExerciseCard)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
     }
 
     @Test
     fun testCloseAddExerciseLayout() {
         // Perform click on the plus exercise button
-        onView(withId(R.id.openAddExerciseLayout)).perform(click())
+        onView(withId(R.id.addExerciseButton)).perform(click())
         // Verify that add exercise layout is visible
-        Thread.sleep(500)
-        onView(withId(R.id.addExerciseToWorkoutCard)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
-        // Perform click on close button
-        onView(withId(R.id.addExerciseWorkoutClose)).perform(click())
-        // Verify that add exercise layout is gone
-        Thread.sleep(500)
-        onView(withId(R.id.addExerciseToWorkoutCard)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+        Thread.sleep(1000)
+        onView(withId(R.id.addExerciseCard)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+        // Perform click on the close button
+        onView(withId(R.id.addExerciseClose)).perform(click())
+        Thread.sleep(1000)
+        // Verify that add exercise layout is visible
+        onView(withId(R.id.addExerciseCard)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
     }
-
-    // TODO? Add Exercise Test?
 
     // Navigation Tests
     @Test
@@ -85,6 +64,7 @@ class EditWorkoutActivityTest {
         // Perform click on the home button
         onView(withId(R.id.homeButton)).perform(click())
         // Verify that Central Activity is started
+        Thread.sleep(1000)
         Intents.intended(IntentMatchers.hasComponent(CentralActivity::class.java.name))
     }
 }

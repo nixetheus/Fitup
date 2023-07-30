@@ -131,6 +131,7 @@
     <string name="spotify_button_label" translatable="false">Spotify</string>
     <string name="wearos_button_label">Sync</string>
     <string name="courage_text">Defeat The Monster</string>
+    <string name="popup">Are you sure you want to end the workout?</string>
 
     <!-- FINISH -->
     <string name="congrats_main">You\'ve Done It!</string>

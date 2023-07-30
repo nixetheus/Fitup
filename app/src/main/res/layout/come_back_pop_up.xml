@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/popup_window_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_centerVertical="false"
+    android:background="?colorPrimary"
+    android:gravity="center_vertical"
     tools:context=".LogoutPopUp">
 
 
@@ -15,8 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        app:cardBackgroundColor="#FFFFFF"
-        app:cardCornerRadius="3dp"
+        app:cardBackgroundColor="@android:color/transparent"
         app:cardElevation="0dp"
         app:cardMaxElevation="0dp"
         app:cardPreventCornerOverlap="false"
@@ -30,93 +30,81 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_margin="2dp"
-            app:cardBackgroundColor="@android:color/white"
-            app:cardCornerRadius="3dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            app:cardBackgroundColor="@android:color/transparent"
+            app:cardCornerRadius="10dp"
             app:cardElevation="0dp"
             app:cardMaxElevation="0dp"
             app:cardPreventCornerOverlap="false">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/popup_window_background_container"
-                android:layout_width="250dp"
-                android:minHeight="170dp"
-                android:background="#bc214b"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true">
+                android:layout_centerInParent="true"
+                android:background="?colorPrimary"
+                android:paddingBottom="8dp">
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/popup_window_text"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:text="Are you sure to come out? in this way you will lose all the progress of the current workout"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginBottom="24dp"
+                    android:background="@android:color/transparent"
                     android:gravity="center"
+                    android:text="@string/popup"
                     android:textAlignment="center"
+                    android:textColor="?colorOnPrimary"
+                    android:textSize="24sp"
                     android:textStyle="bold"
-                    android:textColor="#FFFFFF"
-                    android:textSize="12sp"
-                    app:layout_constraintBottom_toTopOf="@+id/yesBtn"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/popup_window_title" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/popup_window_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    app:autoSizeTextType="uniform"
-                    app:autoSizeMaxTextSize="24dp"
-                    android:background="#9E1C40"
-                    android:text=""
-                    android:gravity="center"
-                    android:textAlignment="center"
-                    android:textColor="#FFFFFF"
-                    android:textSize="20sp"
+                    app:fontFamily="@font/lato_bold"
+                    app:layout_constraintBottom_toTopOf="@id/yesBtn"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
 
-                <Button
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/yesBtn"
-                    style="?android:attr/borderlessButtonStyle"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="48dp"
-                    android:background="#851635"
-                    android:text="yes"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="?colorPrimary"
+                    android:fontFamily="@font/lato_bold"
+                    android:text="@string/confirm_logout_yes"
                     android:textAllCaps="false"
-                    android:textColor="#FFFFFF"
+                    android:textColor="?colorOnPrimary"
                     android:textSize="20sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@id/noBtn"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/noBtn" />
-
-                <Button
-                    android:id="@+id/noBtn"
-                    style="?android:attr/borderlessButtonStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginBottom="16dp"
-                    android:background="#851635"
-                    android:text="no"
-                    android:textAllCaps="false"
-                    android:textColor="#FFFFFF"
-                    android:textSize="20sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/yesBtn"
-                    app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/popup_window_text" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/noBtn"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="?colorAccent"
+                    android:backgroundTintMode="add"
+                    android:fontFamily="@font/lato_bold"
+                    android:text="@string/confirm_logout_no"
+                    android:textAllCaps="false"
+                    android:textColor="?colorOnPrimary"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/yesBtn" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.cardview.widget.CardView>
     </androidx.cardview.widget.CardView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
