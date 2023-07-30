@@ -33,8 +33,8 @@
     <color name="bronze">#B08D57</color>
 
     <color name="good_gray">#0F0F19</color>
-    <color name="good_gray_light">#F22B2B42</color>
-    <color name="good_gray_transparent">#CF1A1A23</color>
+    <color name="good_gray_light">#2B2B42</color>
+    <color name="good_gray_transparent">#800F1923</color>
 
     <color name="good_white">#FBFBED</color>
     <color name="good_white_light">#ECECDD</color>

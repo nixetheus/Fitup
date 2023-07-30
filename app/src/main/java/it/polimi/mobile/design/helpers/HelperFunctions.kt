@@ -1,14 +1,18 @@
 package it.polimi.mobile.design.helpers
 
 import android.content.Context
+import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.text.format.DateUtils
 import android.util.Log
 import androidx.core.content.res.ResourcesCompat
 import it.polimi.mobile.design.R
+import it.polimi.mobile.design.entities.Workout
 import it.polimi.mobile.design.enum.ExerciseType
+import java.io.Serializable
 
 class HelperFunctions {
 
@@ -34,6 +38,16 @@ class HelperFunctions {
             orderedIndices[0]
         else ExerciseType.FULL_BODY.ordinal
     }
+
+    inline fun <reified T : Serializable> getSerializableExtra(intent: Intent, extraName: String): T? {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getSerializableExtra(extraName, T::class.java)!!
+        } else {
+            @Suppress("DEPRECATION")
+            intent.getSerializableExtra(extraName) as? T
+        }
+    }
+
 
     fun getExerciseBackground(exerciseType: ExerciseType, resources: Resources, context: Context) : Int {
         return when(exerciseType.ordinal) {

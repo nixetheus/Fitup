@@ -234,7 +234,7 @@ class WorkoutListActivity : AppCompatActivity() {
 
     private fun onModifyWorkout(workout: Workout, workoutsLayout: FragmentWorkoutListBinding) {
         val intent = Intent(this, EditWorkoutActivity::class.java)
-        intent.putExtra("workout", workout)
+        intent.putExtra("Workout", workout)
         startActivity(intent)
         workoutsLayout.workoutCardList.isLongClickable = true
         binding.editWorkoutLayout.visibility = View.GONE
