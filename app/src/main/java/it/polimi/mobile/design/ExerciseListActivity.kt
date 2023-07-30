@@ -43,7 +43,7 @@ class ExerciseListActivity : AppCompatActivity() {
 
         exerciseDatabase.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                exerciseArrayList = databaseHelperInstance!!.getExercisesFromSnapshot(snapshot)
+                exerciseArrayList = databaseHelperInstance.getExercisesFromSnapshot(snapshot)
                 showExercises(exerciseArrayList)
             }
             override fun onCancelled(error: DatabaseError) {

@@ -2,15 +2,25 @@ package it.polimi.mobile.design.helpers
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.FirebaseDatabase
 import it.polimi.mobile.design.entities.*
 
 
 class DatabaseHelper() {
 
+    // Database Schemas Instances
     private var firebaseAuth = FirebaseAuth.getInstance()
+    val achievementsSchema      = FirebaseDatabase.getInstance().getReference("Achievements")
+    val exercisesSchema         = FirebaseDatabase.getInstance().getReference("Exercise")
+    val graphsSchema            = FirebaseDatabase.getInstance().getReference("Graphs")
+    val pointsSchema            = FirebaseDatabase.getInstance().getReference("Points")
+    val userAchievementsSchema  = FirebaseDatabase.getInstance().getReference("UserAchievements")
+    val usersSchema             = FirebaseDatabase.getInstance().getReference("Users")
+    val workoutsExercisesSchema = FirebaseDatabase.getInstance().getReference("WorkoutExercise")
+    val workoutsSchema          = FirebaseDatabase.getInstance().getReference("Workout")
 
     private var instance: DatabaseHelper? = null
-    fun getInstance(): DatabaseHelper? {
+    fun getInstance(): DatabaseHelper {
         if (instance == null) {
             synchronized(DatabaseHelper::class.java) {
                 if (instance == null) {
@@ -18,7 +28,7 @@ class DatabaseHelper() {
                 }
             }
         }
-        return instance
+        return instance!!
     }
 
     fun getWorkoutsFromSnapshot(snapshot: DataSnapshot) : ArrayList<Workout> {

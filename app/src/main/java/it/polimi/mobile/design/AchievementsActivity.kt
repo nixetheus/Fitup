@@ -1,32 +1,18 @@
 package it.polimi.mobile.design
 
 import android.content.Intent
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import androidx.core.content.res.ResourcesCompat
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
 import it.polimi.mobile.design.databinding.ActivityAchievementsBinding
-import it.polimi.mobile.design.databinding.ActivityCentralBinding
 import it.polimi.mobile.design.databinding.FragmentAchievementBinding
-import it.polimi.mobile.design.databinding.FragmentWorkoutRecentBinding
 import it.polimi.mobile.design.entities.Achievement
 import it.polimi.mobile.design.entities.UserAchievements
 import it.polimi.mobile.design.helpers.DatabaseHelper
-import it.polimi.mobile.design.helpers.HelperFunctions
-import java.lang.Integer.min
 
 class AchievementsActivity : AppCompatActivity() {
 
-    // Attributes
     private lateinit var binding: ActivityAchievementsBinding
-
-    // DB
-    private val databaseHelperInstance = DatabaseHelper().getInstance()
-    private var achievements = FirebaseDatabase.getInstance().getReference("Achievements")
-    private var userAchievements = FirebaseDatabase.getInstance().getReference("UserAchievements")
+    private val helperDB = DatabaseHelper().getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -47,69 +33,54 @@ class AchievementsActivity : AppCompatActivity() {
     }
 
     private fun retrieveUserAchievements() {
-        achievements.get().addOnSuccessListener { achievementsSnap ->
+        helperDB.achievementsSchema.get().addOnSuccessListener { achievementsSnap ->
+            helperDB.userAchievementsSchema.get().addOnSuccessListener { userAchievementsSnap ->
 
-            val achievements = databaseHelperInstance!!.getAchievementsFromSnapshot(achievementsSnap)
-            userAchievements.get().addOnSuccessListener { userAchievementsSnap ->
+                val achievements = helperDB.getAchievementsFromSnapshot(achievementsSnap)
+                val userAchievements = helperDB.getUserAchievementsFromSnapshot(userAchievementsSnap)
+                val bestUserAchievements = userAchievements.sortedByDescending { it.tierId }.distinctBy { it.achievementId }
 
-                val userAchievements = databaseHelperInstance.getUserAchievementsFromSnapshot(userAchievementsSnap)
-                val bestUserAchievements =
-                    userAchievements.sortedByDescending { it.tierId }.distinctBy { it.achievementId }
-
-                val tracker =
-                    (bestUserAchievements.filter{
-                        it.tierId == achievements.filter {
-                                achievement -> achievement.achievementId == it.achievementId }[0].numberOfTiers}.size).toString() +
-                            "/" + (achievements.size).toString()
-
-                binding.achievementsNumberValue.text = tracker
-                displayAchievements(bestUserAchievements, achievements)
-
+                displayCompletedText(achievements, bestUserAchievements)
+                displayAchievements(achievements, bestUserAchievements)
             }
         }
     }
 
-    private fun displayAchievements(bestUserAchievements: List<UserAchievements>,
-                                    achievements: List<Achievement>) {
+    private fun displayCompletedText(achievements: List<Achievement>,
+                                     bestUserAchievements: List<UserAchievements>) {
+        val completed = bestUserAchievements.filter{ it.tierId == achievements.find { achievement ->
+            achievement.achievementId == it.achievementId }!!.numberOfTiers}
+        val tracker = "${completed.size}/${achievements.size}"
+        binding.achievementsNumberValue.text = tracker
+    }
+
+    private fun displayAchievements(achievements: List<Achievement>,
+                                    bestUserAchievements: List<UserAchievements>) {
+
         for (achievement in achievements) {
 
-            var tierName: String
-            var tierObjective: Int
-            val desc = achievement.description
-
-            var userTier = 0
-
-            if (!bestUserAchievements.map { it.achievementId }.contains(achievement.achievementId)) {
-                tierName = achievement.tiers[0].name!!
-                tierObjective = achievement.tiers[0].objective!!
-            }
-            else {
-                userTier = bestUserAchievements.filter { it.achievementId == achievement.achievementId }[0].tierId!!
-                tierName = achievement.tiers[userTier - 1].name!!
-                tierObjective = achievement.tiers[userTier - 1].objective!!
-            }
-
-            // TODO: get user number
-
-            // View
-            val objPerc = "0/$tierObjective"
+            val userTier = bestUserAchievements.find { it.achievementId == achievement.achievementId }?.tierId ?: 0
+            val tier = achievement.tiers.getOrElse(userTier - 1) { achievement.tiers.first() }
+            val objPerc = "0/${tier.objective}"
             val achievementLayout = FragmentAchievementBinding.inflate(layoutInflater)
 
-            achievementLayout.achievementTierName.text = tierName
-            achievementLayout.achievementDescription.text = desc!!.replace("%", tierObjective.toString())
-            achievementLayout.objectivePercValue.text = objPerc
-
-            // Badge color
-            when(achievement.numberOfTiers!! - userTier) {
-                0 -> achievementLayout.medalCard.setCardBackgroundColor(
-                    resources.getColor(R.color.gold, applicationContext.theme))
-                1 -> achievementLayout.medalCard.setCardBackgroundColor(
-                    resources.getColor(R.color.silver, applicationContext.theme))
-                2 -> achievementLayout.medalCard.setCardBackgroundColor(
-                    resources.getColor(R.color.bronze, applicationContext.theme))
+            with(achievementLayout) {
+                objectivePercValue.text = objPerc
+                achievementTierName.text = tier.name!!
+                achievementDescription.text =
+                    achievement.description!!.replace("%", tier.objective.toString())
+                medalCard.setCardBackgroundColor(getAchievementColor(achievement.numberOfTiers!!, userTier))
             }
-
             binding.achievementsLayout.addView(achievementLayout.root)
+        }
+    }
+
+    private fun getAchievementColor(tiers: Int, userTier: Int) : Int {
+        return when (tiers - userTier) {
+            0 -> resources.getColor(R.color.gold, applicationContext.theme)
+            1 -> resources.getColor(R.color.silver, applicationContext.theme)
+            2 -> resources.getColor(R.color.bronze, applicationContext.theme)
+            else -> {resources.getColor(android.R.color.transparent, applicationContext.theme)}
         }
     }
 }

@@ -130,7 +130,7 @@ class StatsActivity : AppCompatActivity() {
 
         // Display Data Points
         pointsDatabase.get().addOnSuccessListener { pointsSnapshot ->
-            var points = databaseHelperInstance!!.getPointsFromSnapshot(pointsSnapshot)
+            var points = databaseHelperInstance.getPointsFromSnapshot(pointsSnapshot)
             points = points.filter { it.graphId == currentGraph.graphId}.sortedBy { it.xcoordinate } // TODO: userId too
             Log.w("Data:", points.toString())
             binding.graphVisualizer.dataPoints = points

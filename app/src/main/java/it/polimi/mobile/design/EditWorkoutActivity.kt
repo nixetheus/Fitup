@@ -116,7 +116,7 @@ class EditWorkoutActivity : AppCompatActivity() {
     private fun setupExercisesUI() {
         exerciseDatabase.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                exerciseArrayList = databaseHelperInstance!!.getExercisesFromSnapshot(snapshot)
+                exerciseArrayList = databaseHelperInstance.getExercisesFromSnapshot(snapshot)
                 showExerciseSpinner()
             }
             override fun onCancelled(error: DatabaseError) {

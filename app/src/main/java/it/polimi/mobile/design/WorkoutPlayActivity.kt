@@ -96,7 +96,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
                         if (workData != null) {
                             if (workData.workoutId == workout.workoutId) {
 
-                                    workoutExercise.add(workData!!)
+                                    workoutExercise.add(workData)
                                 }
                             }
                         }

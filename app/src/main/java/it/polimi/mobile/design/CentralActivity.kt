@@ -104,7 +104,7 @@ class CentralActivity : AppCompatActivity() {
         val usersSchema = databaseInstance.getReference("Users")
         firebaseAuth.uid?.let { userId ->
             usersSchema.child(userId).get().addOnSuccessListener { userSnapshot ->
-                val user = databaseHelperInstance!!.getUserFromSnapshot(userSnapshot)
+                val user = databaseHelperInstance.getUserFromSnapshot(userSnapshot)
                 binding.usernameText.text = user!!.username
                 binding.userLevelValue.text = (user.exp!! / 10).toInt().toString()
             }
@@ -117,7 +117,7 @@ class CentralActivity : AppCompatActivity() {
             @SuppressLint("SuspiciousIndentation")
             override fun onDataChange(snapshot: DataSnapshot) {
                 binding.workoutsLayoutRecent.removeAllViews()
-                for (workout in databaseHelperInstance!!.getWorkoutsFromSnapshot(snapshot))
+                for (workout in databaseHelperInstance.getWorkoutsFromSnapshot(snapshot))
                 showRecentWorkout(workout)
             }
             override fun onCancelled(error: DatabaseError) {
@@ -127,7 +127,7 @@ class CentralActivity : AppCompatActivity() {
         workoutsSchema.orderByChild("ranking").limitToFirst(5).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 showWorkouts(
-                    databaseHelperInstance!!.getWorkoutsFromSnapshot(snapshot))
+                    databaseHelperInstance.getWorkoutsFromSnapshot(snapshot))
             }
             override fun onCancelled(error: DatabaseError) {
                 Log.w("Firebase", "Couldn't retrieve data...")
