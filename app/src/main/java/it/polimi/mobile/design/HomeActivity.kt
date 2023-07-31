@@ -24,19 +24,17 @@ class HomeActivity : AppCompatActivity() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.nextBtn.setOnClickListener { createUser() }
+        binding.nextBtn.setOnClickListener {
+            createUser()
+        }
     }
 
-    private fun createUser(){
+    private fun createUser() {
 
         val uid = firebaseAuth.uid.toString()
-        val username = binding.username.editText?.text.toString()
-        val age = HelperFunctions().parseIntInput(binding.age.editText?.text.toString())
-        val weight = HelperFunctions().parseFloatInput(binding.weight.editText?.text.toString())
-        val gender = if (binding.gender.selectedItem == "Male") Gender.MALE else Gender.FEMALE
+        val newUser = createUser(uid)
 
-        if (username.isNotEmpty()) {
-            val newUser = User(uid, username, weight, age ,gender, 0F)
+        if (newUser != null) {
             userDatabase.child(uid).setValue(newUser).addOnSuccessListener {
                 val intent = Intent(this, CentralActivity::class.java)
                 startActivity(intent)
@@ -44,5 +42,17 @@ class HomeActivity : AppCompatActivity() {
         }
         else Toast.makeText(this, "Username is not valid", Toast.LENGTH_SHORT).show()
 
+    }
+
+    private fun createUser(uid: String) : User? {
+        val username = binding.username.editText?.text.toString()
+        return if (username.isNotEmpty()) {
+            val age = HelperFunctions().parseIntInput(binding.age.editText?.text.toString())
+            val weight = HelperFunctions().parseFloatInput(binding.weight.editText?.text.toString())
+            val gender = if (binding.gender.selectedItem == "Male") Gender.MALE else Gender.FEMALE
+            User(uid, username, weight, age, gender, 0F)
+        } else {
+            null
+        }
     }
 }
