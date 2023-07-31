@@ -3,20 +3,14 @@ package it.polimi.mobile.design.custom_layouts
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.DashPathEffect
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.LinearLayout
-import android.widget.RelativeLayout
-import android.widget.TextView
 import it.polimi.mobile.design.R
-import it.polimi.mobile.design.custom_views.MinimizedExerciseView
 import it.polimi.mobile.design.databinding.FragmentExerciseInPlayBinding
-import it.polimi.mobile.design.entities.Exercise
 import it.polimi.mobile.design.entities.WorkoutExercise
 import it.polimi.mobile.design.helpers.Constant
 

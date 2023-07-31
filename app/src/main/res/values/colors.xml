@@ -14,11 +14,11 @@
     <color name="dark_night">#141847</color>
     <color name="deep_ocean"> #FF01020E</color>
 
-    <color name="red_arms">#970000</color>
-    <color name="yellow_core">#D8A600</color>
-    <color name="blue_legs">#0050D6</color>
-    <color name="green_spirit">#DC00CC92</color>
-    <color name="exercise_default">#C900FF</color>
+    <color name="red_arms">#DB1F48</color>
+    <color name="yellow_core">#F3B61F</color>
+    <color name="blue_legs">#095AAC</color>
+    <color name="green_spirit">#3BCEAC</color>
+    <color name="exercise_default">#A799B7</color>
 
     <color name="lime_1">#BBDF59</color>
     <color name="petroleum_1">#027C83</color>

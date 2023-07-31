@@ -2,7 +2,6 @@ package it.polimi.mobile.design.custom_views
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.util.TypedValue
@@ -15,10 +14,6 @@ class LineGraphDataView(context: Context, attrs: AttributeSet? = null) : View(co
 
     var dataValue = 0f
     private val dataPointSize = Constant.DATA_BUTTON_SIZE
-
-    init {
-
-    }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)

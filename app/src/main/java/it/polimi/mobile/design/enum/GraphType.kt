@@ -1,8 +1,5 @@
 package it.polimi.mobile.design.enum
 
-import android.content.res.Resources
-import it.polimi.mobile.design.R
-
 enum class GraphType {
 
     BODY_COMP,

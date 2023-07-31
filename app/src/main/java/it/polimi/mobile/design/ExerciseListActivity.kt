@@ -19,6 +19,7 @@ import it.polimi.mobile.design.databinding.ActivityExerciseListBinding
 import it.polimi.mobile.design.databinding.FragmentExerciseListBinding
 import it.polimi.mobile.design.databinding.FragmentFilterBinding
 import it.polimi.mobile.design.entities.Exercise
+import it.polimi.mobile.design.entities.WorkoutExercise
 import it.polimi.mobile.design.enum.ExerciseType
 import it.polimi.mobile.design.helpers.DatabaseHelper
 import it.polimi.mobile.design.helpers.HelperFunctions
@@ -159,21 +160,24 @@ class ExerciseListActivity : AppCompatActivity() {
                 experienceValue.text   = exercise.experiencePerReps!!.toString()
 
                 exerciseCard.setCardBackgroundColor(HelperFunctions().getExerciseBackground(exercise.type!!, resources, applicationContext))
-
-                exerciseCard.setOnLongClickListener {
-                    binding.exerciseMenuCard.visibility = View.VISIBLE
-                    binding.exerciseMenuName.text = exercise.name!!.uppercase()
-                    val animate = TranslateAnimation(0F, 0F, binding.addExerciseCard.height.toFloat(), 0F)
-                    animate.duration = 500
-                    animate.fillAfter = true
-                    binding.deleteExerciseLayout.startAnimation(animate)
-                    binding.deleteExerciseButton.setOnClickListener {
-                        onDeleteExercise(exercise)
-                    }
-                    false
-                }
+                setDeleteMenuAnimation(exerciseCard, exercise)
             }
             binding.exercisesListLayout.addView(exerciseLayout.root)
+        }
+    }
+
+    private fun setDeleteMenuAnimation(exerciseCard: View, exercise: Exercise) {
+        exerciseCard.setOnLongClickListener {
+            binding.exerciseMenuCard.visibility = View.VISIBLE
+            binding.exerciseMenuName.text = exercise.name!!.uppercase()
+            val animate = TranslateAnimation(0F, 0F, binding.addExerciseCard.height.toFloat(), 0F)
+            animate.duration = 500
+            animate.fillAfter = true
+            binding.deleteExerciseLayout.startAnimation(animate)
+            binding.deleteExerciseButton.setOnClickListener {
+                onDeleteExercise(exercise)
+            }
+            false
         }
     }
 

@@ -388,7 +388,7 @@
                 android:id="@+id/dataLayout1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="10dp"
+                android:layout_marginTop="20dp"
                 android:baselineAligned="false"
                 android:orientation="horizontal">
 
@@ -400,26 +400,27 @@
                     android:paddingStart="20dp"
                     android:paddingEnd="20dp">
 
-                    <EditText
-                        android:id="@+id/setsInputValue"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
-                        android:ems="10"
-                        android:importantForAutofill="no"
-                        android:inputType="number"
-                        android:textAlignment="center"
-                        tools:ignore="LabelFor,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-
                     <TextView
                         android:id="@+id/setsInputLabel"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
                         android:fontFamily="@font/lato_bold"
                         android:text="@string/sets_label"
                         android:textAlignment="center"
                         android:textAllCaps="true"
                         android:textColor="?colorOnPrimary" />
+
+                    <EditText
+                        android:id="@+id/setsInputValue"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:importantForAutofill="no"
+                        android:inputType="number"
+                        android:textAlignment="center"
+                        tools:ignore="LabelFor,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -429,27 +430,28 @@
                     android:orientation="vertical"
                     android:paddingStart="20dp"
                     android:paddingEnd="20dp">
-
-                    <EditText
-                        android:id="@+id/repsInputValue"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
-                        android:ems="10"
-                        android:importantForAutofill="no"
-                        android:inputType="number"
-                        android:textAlignment="center"
-                        tools:ignore="LabelFor,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
                     <TextView
                         android:id="@+id/repsInputLabel"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
                         android:fontFamily="@font/lato_bold"
                         android:text="@string/reps_label"
                         android:textAlignment="center"
                         android:textAllCaps="true"
                         android:textColor="?colorOnPrimary" />
+
+                    <EditText
+                        android:id="@+id/repsInputValue"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:importantForAutofill="no"
+                        android:inputType="number"
+                        android:textAlignment="center"
+                        tools:ignore="LabelFor,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -460,26 +462,27 @@
                     android:paddingStart="20dp"
                     android:paddingEnd="20dp">
 
+                    <TextView
+                        android:id="@+id/restInputLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:fontFamily="@font/lato_bold"
+                        android:text="@string/rest_label"
+                        android:textAlignment="center"
+                        android:textAllCaps="true"
+                        android:textColor="?colorOnPrimary" />
+
                     <EditText
                         android:id="@+id/restInputValue"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
                         android:ems="10"
                         android:importantForAutofill="no"
                         android:inputType="number"
                         android:textAlignment="center"
                         tools:ignore="LabelFor,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
-                    <TextView
-                        android:id="@+id/restInputLabel"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/lato_bold"
-                        android:text="@string/rest_label"
-                        android:textAlignment="center"
-                        android:textAllCaps="true"
-                        android:textColor="?colorOnPrimary" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -487,7 +490,7 @@
                 android:id="@+id/dataLayout2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="10dp"
+                android:layout_marginTop="20dp"
                 android:baselineAligned="false"
                 android:orientation="horizontal"
                 android:paddingBottom="20dp">
@@ -500,26 +503,27 @@
                     android:paddingStart="20dp"
                     android:paddingEnd="20dp">
 
+                    <TextView
+                        android:id="@+id/weightInputLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:fontFamily="@font/lato_bold"
+                        android:text="@string/weight"
+                        android:textAlignment="center"
+                        android:textAllCaps="true"
+                        android:textColor="?colorOnPrimary" />
+
                     <EditText
                         android:id="@+id/weightInputValue"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
                         android:ems="10"
                         android:importantForAutofill="no"
                         android:inputType="number"
                         android:textAlignment="center"
                         tools:ignore="LabelFor,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
-                    <TextView
-                        android:id="@+id/weightInputLabel"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/lato_bold"
-                        android:text="@string/weight"
-                        android:textAlignment="center"
-                        android:textAllCaps="true"
-                        android:textColor="?colorOnPrimary" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -530,26 +534,27 @@
                     android:paddingStart="20dp"
                     android:paddingEnd="20dp">
 
+                    <TextView
+                        android:id="@+id/bufferInputLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:fontFamily="@font/lato_bold"
+                        android:text="@string/buffer_label"
+                        android:textAlignment="center"
+                        android:textAllCaps="true"
+                        android:textColor="?colorOnPrimary" />
+
                     <EditText
                         android:id="@+id/bufferInputValue"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
                         android:ems="10"
                         android:importantForAutofill="no"
                         android:inputType="number"
                         android:textAlignment="center"
                         tools:ignore="LabelFor,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
-                    <TextView
-                        android:id="@+id/bufferInputLabel"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/lato_bold"
-                        android:text="@string/buffer_label"
-                        android:textAlignment="center"
-                        android:textAllCaps="true"
-                        android:textColor="?colorOnPrimary" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -580,10 +585,12 @@
         android:id="@+id/execiseChangeMenuCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/popup_gradient"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="5dp"
         android:visibility="invisible"
         app:cardBackgroundColor="@android:color/transparent"
-        app:cardCornerRadius="0dp"
+        app:cardCornerRadius="25dp"
         app:cardElevation="0dp"
         app:cardMaxElevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -592,70 +599,85 @@
         tools:visibility="invisible">
 
         <LinearLayout
+            android:id="@+id/deleteExerciseL"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/popup_gradient"
+            android:background="@drawable/gradient_popup"
             android:orientation="vertical"
-            android:paddingStart="40dp"
-            android:paddingTop="150dp"
-            android:paddingEnd="40dp"
+            android:paddingStart="25dp"
+            android:paddingTop="30dp"
+            android:paddingEnd="25dp"
             android:paddingBottom="40dp">
 
-            <ImageView
-                android:id="@+id/closeModifyExercise"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_gravity="end"
-                android:layout_marginBottom="50dp"
-                android:contentDescription="@string/none"
-                android:layoutDirection="ltr"
-                app:srcCompat="@drawable/ic_baseline_close_48" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="30dp"
+                android:orientation="horizontal"
+                android:paddingTop="10dp"
+                tools:ignore="UseCompoundDrawables">
 
-            <TextView
-                android:id="@+id/exerciseName"
+                <ImageView
+                    android:id="@+id/closeModifyExercise2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:layout_weight="0.25"
+                    android:contentDescription="@string/none"
+                    android:foregroundGravity="center_vertical"
+                    android:layoutDirection="ltr"
+                    android:visibility="invisible"
+                    app:srcCompat="@drawable/ic_baseline_close_48"
+                    tools:visibility="invisible" />
+
+                <TextView
+                    android:id="@+id/exerciseName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/lato"
+                    android:letterSpacing="0.05"
+                    android:paddingStart="30dp"
+                    android:paddingEnd="30dp"
+                    android:text="@string/missing"
+                    android:textAlignment="center"
+                    android:textColor="?colorOnPrimary"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/closeModifyExercise"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:layout_weight="0.25"
+                    android:clickable="true"
+                    android:contentDescription="@string/none"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:foregroundGravity="center_vertical"
+                    android:layoutDirection="ltr"
+                    app:srcCompat="@drawable/ic_baseline_close_48" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/deleteExerciseWorkoutButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
-                android:fontFamily="@font/lato"
-                android:text="@string/missing"
+                android:backgroundTint="@android:color/transparent"
+                android:fontFamily="@font/lato_bold"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minHeight="35dp"
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp"
+                android:stateListAnimator="@null"
+                android:text="@string/delete_workout"
                 android:textAlignment="center"
                 android:textColor="?colorOnPrimary"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <Button
-                android:id="@+id/modifyExerciseButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:backgroundTint="@android:color/transparent"
-                android:fontFamily="@font/lato_bold"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
-                android:stateListAnimator="@null"
-                android:text="@string/modify_exercise"
-                android:textAlignment="viewStart"
-                android:textAllCaps="false"
-                android:textColor="?colorOnPrimary"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
-                tools:ignore="DuplicateSpeakableTextCheck" />
-
-            <Button
-                android:id="@+id/deleteExerciseButon"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@android:color/transparent"
-                android:fontFamily="@font/lato_bold"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
-                android:stateListAnimator="@null"
-                android:text="@string/delete_exercise"
-                android:textAlignment="viewStart"
-                android:textAllCaps="false"
-                android:textColor="?colorOnPrimary"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                app:iconPadding="0dp"
+                tools:ignore="TouchTargetSizeCheck" />
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

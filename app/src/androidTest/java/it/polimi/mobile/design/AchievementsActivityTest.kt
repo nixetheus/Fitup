@@ -39,6 +39,8 @@ class AchievementsActivityTest {
     @Test
     fun testDisplayCompletedText() {
 
+        Thread.sleep(1500)
+
         val method: Method =
             AchievementsActivity::class.java.getDeclaredMethod("displayCompletedText", List::class.java, List::class.java)
         method.isAccessible = true

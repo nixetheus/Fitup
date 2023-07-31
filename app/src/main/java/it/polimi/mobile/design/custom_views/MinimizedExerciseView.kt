@@ -9,7 +9,6 @@ import android.graphics.drawable.ColorDrawable
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
-import android.widget.Toast
 import it.polimi.mobile.design.R
 import it.polimi.mobile.design.helpers.Constant
 

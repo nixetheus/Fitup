@@ -1,13 +1,11 @@
 package it.polimi.mobile.design.custom_layouts
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.*
 import android.util.AttributeSet
-import android.util.DisplayMetrics
-import android.util.Log
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
@@ -16,23 +14,15 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.cardview.widget.CardView
+import androidx.core.graphics.blue
+import androidx.core.graphics.green
+import androidx.core.graphics.red
 import it.polimi.mobile.design.R
 import it.polimi.mobile.design.custom_views.LineGraphDataView
 import it.polimi.mobile.design.entities.DataPoint
 import it.polimi.mobile.design.helpers.Constant
 import java.lang.Integer.max
 import java.lang.Integer.min
-import java.time.LocalDateTime
-import java.time.ZoneOffset
-import java.time.temporal.ChronoUnit
-import android.content.res.TypedArray
-import android.util.TypedValue
-import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.alpha
-import androidx.core.graphics.blue
-import androidx.core.graphics.green
-import androidx.core.graphics.red
 
 
 class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(context, attrs) {
@@ -51,14 +41,11 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
 
     set(points) {
         field = points
-
         getEdges()
     }
 
     init {
-
         setWillNotDraw(false)
-        // Draw
         post{drawDataPoints()}
     }
 

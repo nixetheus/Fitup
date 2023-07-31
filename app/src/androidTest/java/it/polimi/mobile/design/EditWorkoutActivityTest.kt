@@ -61,12 +61,13 @@ class EditWorkoutActivityTest {
         // Perform click on the plus exercise button
         onView(withId(R.id.openAddExerciseLayout)).perform(click())
         // Verify that add exercise layout is visible
-        Thread.sleep(1000)
+        Thread.sleep(1500)
         onView(withId(R.id.addExerciseToWorkoutCard)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
     }
 
     @Test
     fun testCloseAddExerciseLayout() {
+        Thread.sleep(1500)
         // Perform click on the plus exercise button
         onView(withId(R.id.openAddExerciseLayout)).perform(click())
         // Verify that add exercise layout is visible

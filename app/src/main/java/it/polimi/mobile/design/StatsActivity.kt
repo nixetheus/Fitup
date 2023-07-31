@@ -3,6 +3,7 @@ package it.polimi.mobile.design
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Intent
+import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -70,7 +71,7 @@ class StatsActivity : AppCompatActivity() {
         }
 
         binding.addDataClose.setOnClickListener{
-            val animate = TranslateAnimation(0F, 0F, 0F, binding.addDataCard.height.toFloat())
+            val animate = TranslateAnimation(0F, 0F, 0F, binding.addDataCard.height.toFloat() + 15.toPx())
             animate.duration = 500
             animate.fillAfter = true
             binding.addDataCard.startAnimation(animate)
@@ -237,4 +238,6 @@ class StatsActivity : AppCompatActivity() {
         val dateFormat = SimpleDateFormat(myFormat, Locale.US)
         binding.dateInputValue.setText(dateFormat.format(myCalendar.time))
     }
+
+    private fun Int.toPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
 }

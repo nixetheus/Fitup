@@ -51,7 +51,10 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="@android:color/transparent"
                 android:foreground="?attr/selectableItemBackground"
-                android:inputType="number" />
+                android:inputType="number|numberDecimal"
+                android:textColor="?colorOnPrimary"
+                android:textColorHighlight="?colorOnPrimary"
+                android:textColorHint="?colorOnPrimary" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -66,7 +69,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@android:color/transparent"
-                android:foreground="?attr/selectableItemBackground" />
+                android:foreground="?attr/selectableItemBackground"
+                android:textColor="?colorOnPrimary"
+                android:textColorHighlight="?colorOnPrimary"
+                android:textColorHint="?colorOnPrimary" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -82,7 +88,10 @@
                 android:layout_height="match_parent"
                 android:backgroundTint="@android:color/transparent"
                 android:foreground="?attr/selectableItemBackground"
-                android:inputType="number" />
+                android:inputType="number"
+                android:textColor="?colorOnPrimary"
+                android:textColorHighlight="?colorOnPrimary"
+                android:textColorHint="?colorOnPrimary" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout

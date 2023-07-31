@@ -2,10 +2,13 @@ package it.polimi.mobile.design
 
 import android.content.Intent
 import android.content.res.Resources
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
 import android.view.View
 import android.view.animation.TranslateAnimation
+import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -72,6 +75,18 @@ class EditWorkoutActivity : AppCompatActivity() {
         binding.addExerciseWorkoutClose.setOnClickListener {
             hideAddExercise()
         }
+
+        binding.closeModifyExercise.setOnClickListener {
+            binding.execiseChangeMenuCard.visibility = View.GONE
+        }
+
+        binding.bufferInputValue.setOnEditorActionListener { _, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE || event?.action == KeyEvent.ACTION_DOWN) {
+                binding.confirmAddWorkoutBtn.performClick()
+                return@setOnEditorActionListener true
+            }
+            return@setOnEditorActionListener false
+        }
     }
 
     private fun setupWorkoutUI() {
@@ -97,7 +112,7 @@ class EditWorkoutActivity : AppCompatActivity() {
     private fun hideAddExercise() {
         binding.addExerciseToWorkoutCard.visibility = View.GONE
         val closeAddExerciseMenuAnimation = TranslateAnimation(
-            0F, 0F, 0F, binding.addExerciseToWorkoutCard.height.toFloat())
+            0F, 0F, 0F, binding.addExerciseToWorkoutCard.height.toFloat() + 15.toPx())
         closeAddExerciseMenuAnimation.duration = 500
         closeAddExerciseMenuAnimation.fillAfter = true
         binding.addExerciseToWorkoutCard.startAnimation(closeAddExerciseMenuAnimation)
@@ -189,22 +204,55 @@ class EditWorkoutActivity : AppCompatActivity() {
     private fun showExerciseCards(workoutExercises: List<WorkoutExercise>) {
 
         binding.workoutExercisesList.removeAllViews()
-        if (workoutExercises.isNotEmpty()) binding.noExercisesLayout.visibility = View.GONE
+        binding.noExercisesLayout.visibility = if (workoutExercises.isNotEmpty()) View.GONE else View.VISIBLE
         for (exercise in workoutExercises) {
 
             val exerciseFragment = FragmentExerciseInWorkoutBinding.inflate(layoutInflater)
 
-            exerciseFragment.exerciseNameWorkout.text = exercise.exerciseName.toString()
-            exerciseFragment.repsValue.text = exercise.reps.toString()
-            exerciseFragment.setsValue.text = exercise.sets.toString()
-            exerciseFragment.restValue.text = exercise.rest?.let {
-                HelperFunctions().secondsToFormatString(it)
+            helperDB.exercisesSchema.child(exercise.exerciseId!!).get().addOnSuccessListener { dataSnapshot ->
+                if (dataSnapshot.exists()) {
+                    exerciseFragment.workoutExercisesList.background = ColorDrawable(HelperFunctions()
+                        .getExerciseBackground(dataSnapshot.getValue(Exercise::class.java)!!.type!!, resources, applicationContext))
+                }
             }
-            exerciseFragment.weightValue.text = exercise.weight.toString()
-            exerciseFragment.bufferValue.text = exercise.buffer.toString()
+
+            with(exerciseFragment) {
+                exerciseNameWorkout.text = exercise.exerciseName.toString()
+                repsValue.text = exercise.reps.toString()
+                setsValue.text = exercise.sets.toString()
+                restValue.text = exercise.rest?.let {
+                    HelperFunctions().secondsToFormatString(it)
+                }
+                weightValue.text = exercise.weight.toString()
+                bufferValue.text = exercise.buffer.toString()
+
+                setDeleteMenuAnimation(workoutExercisesList, exercise)
+            }
 
             binding.workoutExercisesList.addView(exerciseFragment.root)
         }
     }
 
+    private fun setDeleteMenuAnimation(exerciseCard: View, exercise: WorkoutExercise) {
+        exerciseCard.setOnLongClickListener {
+            binding.execiseChangeMenuCard.visibility = View.VISIBLE
+            binding.exerciseName.text = exercise.exerciseName!!.uppercase()
+            val animate = TranslateAnimation(0F, 0F, binding.execiseChangeMenuCard.height.toFloat(), 0F)
+            animate.duration = 500
+            animate.fillAfter = true
+            binding.deleteExerciseL.startAnimation(animate)
+            binding.deleteExerciseWorkoutButton.setOnClickListener {
+                onDeleteExerciseFromWorkout(exercise)
+            }
+            false
+        }
+    }
+
+    private fun onDeleteExerciseFromWorkout(exercise: WorkoutExercise) {
+        binding.execiseChangeMenuCard.visibility = View.GONE
+        helperDB.workoutsExercisesSchema.child(exercise.id!!).removeValue()
+        Toast.makeText(this, "Exercise Eliminated", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun Int.toPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
 }
