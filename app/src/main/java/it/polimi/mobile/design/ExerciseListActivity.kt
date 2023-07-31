@@ -6,8 +6,10 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
 import android.view.View
 import android.view.animation.TranslateAnimation
+import android.view.inputmethod.EditorInfo
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DataSnapshot
@@ -145,11 +147,13 @@ class ExerciseListActivity : AppCompatActivity() {
 
     private fun showExercises(exercises: List<Exercise>) {
 
+        var index = 0
         binding.exercisesListLayout.removeAllViews()
         for (exercise in exercises.sortedWith(compareBy({ it.type }, { it.name!!.length }))) {
 
             val exerciseLayout = FragmentExerciseListBinding.inflate(layoutInflater)
             with(exerciseLayout) {
+                exerciseCard.tag = index++
                 exerciseNameList.text  = exercise.name!!.replaceFirstChar { it.uppercaseChar() }
                 caloriesRepsValue.text = exercise.caloriesPerRep!!.toString()
                 experienceValue.text   = exercise.experiencePerReps!!.toString()
@@ -196,10 +200,10 @@ class ExerciseListActivity : AppCompatActivity() {
 
     private fun exerciseTypeFromString(typeString : String) : ExerciseType {
         return when(typeString) {
-            "ARMS" -> ExerciseType.ARMS
-            "LEGS" -> ExerciseType.LEGS
+            "ARMS"  -> ExerciseType.ARMS
+            "LEGS"  -> ExerciseType.LEGS
             "CHEST" -> ExerciseType.CHEST
-            else -> ExerciseType.ABDOMEN
+            else    -> ExerciseType.ABDOMEN
         }
     }
 
