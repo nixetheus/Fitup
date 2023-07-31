@@ -21,54 +21,26 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        createBindings()
         checkUserSignIn()
+    }
 
+    private fun createBindings() {
         binding.SignInBtn.setOnClickListener {
             val intent = Intent(this, SignInActivity::class.java)
             startActivity(intent)
         }
-
-        binding.SignUpbtn.setOnClickListener {
-            val intent = Intent(this, SignUpActivity::class.java)
-            startActivity(intent)
-        }
-
     }
 
     private fun checkUserSignIn() {
-
-        // Check if user is signed in (non-null) and update UI accordingly.
-        if (mAuth.currentUser != null) {
-
+        mAuth.currentUser?.let {
             val uid = mAuth.uid.toString()
             userDatabase.child(uid).get().addOnSuccessListener {
-                if (it.exists()) {
-                    val intent = Intent(this, CentralActivity::class.java)
-                    startActivity(intent)
-                } else {
-                    val intent = Intent(this, HomeActivity::class.java)
-                    startActivity(intent)
-                }
+                val intent = Intent(this, if (it.exists()) CentralActivity::class.java else HomeActivity::class.java)
+                startActivity(intent)
             }
         }
     }
 }
-
-/*private fun printHashKey(pContext: Context) {
-try {
-val info: PackageInfo = pContext.packageManager
-.getPackageInfo(pContext.packageName, PackageManager.GET_SIGNATURES)
-for (signature in info.signatures) {
-val md: MessageDigest = MessageDigest.getInstance("SHA")
-md.update(signature.toByteArray())
-val hashKey: String = String(Base64.encode(md.digest(), 0))
-Log.i(TAG, "printHashKey() Hash Key: $hashKey")
-}
-} catch (e: NoSuchAlgorithmException) {
-Log.e(TAG, "printHashKey()", e)
-} catch (e: Exception) {
-Log.e(TAG, "printHashKey()", e)
-}
-}*/
 
 
