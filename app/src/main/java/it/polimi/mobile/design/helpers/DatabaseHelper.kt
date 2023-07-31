@@ -6,10 +6,10 @@ import com.google.firebase.database.FirebaseDatabase
 import it.polimi.mobile.design.entities.*
 
 
-class DatabaseHelper() {
+class DatabaseHelper {
 
     // Database Schemas Instances
-    private var firebaseAuth = FirebaseAuth.getInstance()
+    private var firebaseAuth    = FirebaseAuth.getInstance()
     val achievementsSchema      = FirebaseDatabase.getInstance().getReference("Achievements")
     val exercisesSchema         = FirebaseDatabase.getInstance().getReference("Exercise")
     val graphsSchema            = FirebaseDatabase.getInstance().getReference("Graphs")
@@ -135,6 +135,10 @@ class DatabaseHelper() {
             }
         }
         return userAchievements
+    }
+
+    fun getFirebaseAuth() : FirebaseAuth {
+        return firebaseAuth
     }
 
 }

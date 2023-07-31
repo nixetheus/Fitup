@@ -36,6 +36,10 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 }
 
 dependencies {
@@ -92,7 +96,8 @@ dependencies {
 
     // Mockito
     testImplementation 'org.mockito:mockito-core:3.12.4'
-    testImplementation 'org.mockito:mockito-inline:2.13.0'
+    testImplementation 'org.mockito:mockito-inline:3.12.4'
+    androidTestImplementation 'org.mockito:mockito-android:3.12.4'
 
     // Google Truth
     testImplementation "com.google.truth:truth:1.0.1"

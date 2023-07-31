@@ -14,10 +14,10 @@
     <color name="dark_night">#141847</color>
     <color name="deep_ocean"> #FF01020E</color>
 
-    <color name="red_arms">#F50057</color>
-    <color name="yellow_core">#FFC400</color>
-    <color name="blue_legs">#2979FF</color>
-    <color name="green_spirit">#DC1DE9AF</color>
+    <color name="red_arms">#970000</color>
+    <color name="yellow_core">#D8A600</color>
+    <color name="blue_legs">#0050D6</color>
+    <color name="green_spirit">#DC00CC92</color>
     <color name="exercise_default">#C900FF</color>
 
     <color name="lime_1">#BBDF59</color>

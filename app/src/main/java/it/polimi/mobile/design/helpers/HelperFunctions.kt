@@ -3,14 +3,11 @@ package it.polimi.mobile.design.helpers
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
-import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.os.Build
 import android.text.format.DateUtils
-import android.util.Log
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.text.isDigitsOnly
 import it.polimi.mobile.design.R
-import it.polimi.mobile.design.entities.Workout
 import it.polimi.mobile.design.enum.ExerciseType
 import java.io.Serializable
 
@@ -20,24 +17,28 @@ class HelperFunctions {
         return DateUtils.formatElapsedTime(seconds.toLong())
     }
     fun parseIntInput(text: String) : Int {
-        if (text.isNotEmpty())
+        if (text.isNotEmpty() && text.isDigitsOnly())
             return Integer.parseInt(text)
         return 0
     }
 
     fun parseFloatInput(text: String) : Float {
-        if (text.isNotEmpty())
+        if (text.isNotEmpty() && text.replace(".", "").isDigitsOnly())
             return text.toFloat()
         return 0f
     }
 
-    fun getWorkoutType(exercisesTypes: MutableList<Int>) : Int {
-        val orderedIndices =
-            exercisesTypes.indices.sortedBy { type -> exercisesTypes[type] }.reversed()
-        return if (exercisesTypes[orderedIndices[0]] > exercisesTypes[orderedIndices[1]])
-            orderedIndices[0]
-        else ExerciseType.FULL_BODY.ordinal
+    fun getWorkoutType(exercisesTypes: MutableList<Int>): Int {
+        val orderedIndices = exercisesTypes.indices.sortedBy { type -> exercisesTypes[type] }.reversed()
+        val highestIndex = if (orderedIndices.isNotEmpty()) orderedIndices[0] else null
+        return if (highestIndex != null && exercisesTypes.count { it == exercisesTypes[highestIndex] } == 1) {
+            highestIndex
+        } else {
+            ExerciseType.FULL_BODY.ordinal
+        }
     }
+
+
 
     inline fun <reified T : Serializable> getSerializableExtra(intent: Intent, extraName: String): T? {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -58,7 +59,5 @@ class HelperFunctions {
             else -> ResourcesCompat.getColor(resources, R.color.exercise_default, context.theme)
         }
     }
-
-    fun Double.format(digits: Int) = "%.${digits}f".format(this)
 
 }

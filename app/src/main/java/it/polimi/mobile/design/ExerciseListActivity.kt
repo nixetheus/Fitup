@@ -158,6 +158,8 @@ class ExerciseListActivity : AppCompatActivity() {
                 caloriesRepsValue.text = exercise.caloriesPerRep!!.toString()
                 experienceValue.text   = exercise.experiencePerReps!!.toString()
 
+                exerciseCard.setCardBackgroundColor(HelperFunctions().getExerciseBackground(exercise.type!!, resources, applicationContext))
+
                 exerciseCard.setOnLongClickListener {
                     binding.exerciseMenuCard.visibility = View.VISIBLE
                     binding.exerciseMenuName.text = exercise.name!!.uppercase()
