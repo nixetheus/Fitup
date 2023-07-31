@@ -13,16 +13,21 @@ import com.google.firebase.database.FirebaseDatabase
 import it.polimi.mobile.design.databinding.ActivityLogoutPopUpBinding
 
 class LogoutPopUp : Activity() {
+
     private lateinit var binding: ActivityLogoutPopUpBinding
-    private lateinit var database : DatabaseReference
-    private lateinit var firebaseAuth: FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         binding = ActivityLogoutPopUpBinding.inflate(layoutInflater)
         overridePendingTransition(0, 0)
         setContentView(binding.root)
+        createBindings()
+    }
 
-        binding.yesBtn.setOnClickListener{
+    private fun createBindings() {
+        binding.yesBtn.setOnClickListener {
+
             val options = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken("925709693638-nm3agj53a3frj6invj8ob7tu63ot5f7r.apps.googleusercontent.com")
                 .requestEmail()
@@ -36,7 +41,8 @@ class LogoutPopUp : Activity() {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
-        binding.noBtn.setOnClickListener{
+
+        binding.noBtn.setOnClickListener {
             val intent = Intent(this, CentralActivity::class.java)
             startActivity(intent)
         }
