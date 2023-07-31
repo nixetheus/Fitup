@@ -4,6 +4,7 @@ package it.polimi.mobile.design
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -14,9 +15,7 @@ import it.polimi.mobile.design.databinding.ActivityCentralBinding
 import it.polimi.mobile.design.databinding.FragmentFilterBinding
 import it.polimi.mobile.design.databinding.FragmentWorkoutBinding
 import it.polimi.mobile.design.databinding.FragmentWorkoutRecentBinding
-import it.polimi.mobile.design.entities.Exercise
 import it.polimi.mobile.design.entities.Workout
-import it.polimi.mobile.design.entities.WorkoutExercise
 import it.polimi.mobile.design.enum.ExerciseType
 import it.polimi.mobile.design.helpers.DatabaseHelper
 import it.polimi.mobile.design.helpers.HelperFunctions
@@ -24,18 +23,10 @@ import it.polimi.mobile.design.helpers.HelperFunctions
 
 class CentralActivity : AppCompatActivity() {
 
-    // Attributes
-    private lateinit var binding: ActivityCentralBinding
     private var filters = arrayListOf<Int>()
-    private var exerciseArrayList = ArrayList<Exercise>()
-    private var workoutExerciseList = ArrayList<WorkoutExercise>()
-
-    // DBs
+    private lateinit var binding: ActivityCentralBinding
+    private val helperDB = DatabaseHelper().getInstance()
     private var firebaseAuth = FirebaseAuth.getInstance()
-    private val databaseHelperInstance = DatabaseHelper().getInstance()
-    private val databaseInstance = FirebaseDatabase.getInstance()
-    private var exerciseDatabase = FirebaseDatabase.getInstance().getReference("Exercise")
-    private var workoutExerciseDatabase = FirebaseDatabase.getInstance().getReference("WorkoutExercise")
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -44,32 +35,10 @@ class CentralActivity : AppCompatActivity() {
         binding = ActivityCentralBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        configDatabases()
         createBindings()
         showUser()
         showFilters()
         workoutsCallback()
-    }
-
-    private fun configDatabases() {
-
-        exerciseDatabase.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                exerciseArrayList = DatabaseHelper().getExercisesFromSnapshot(snapshot)
-            }
-            override fun onCancelled(error: DatabaseError) {
-                Log.w("Firebase", "Couldn't retrieve data...")
-            }
-        })
-
-        workoutExerciseDatabase.addValueEventListener(object :ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                workoutExerciseList = DatabaseHelper().getAllWorkoutsExercisesFromSnapshot(snapshot)
-            }
-            override fun onCancelled(error: DatabaseError) {
-                Log.w("Firebase", "Couldn't retrieve data...")
-            }
-        })
     }
 
     private fun createBindings() {
@@ -101,38 +70,13 @@ class CentralActivity : AppCompatActivity() {
     }
 
     private fun showUser(){
-        val usersSchema = databaseInstance.getReference("Users")
         firebaseAuth.uid?.let { userId ->
-            usersSchema.child(userId).get().addOnSuccessListener { userSnapshot ->
-                val user = databaseHelperInstance.getUserFromSnapshot(userSnapshot)
+            helperDB.usersSchema.child(userId).get().addOnSuccessListener { userSnapshot ->
+                val user = helperDB.getUserFromSnapshot(userSnapshot)
                 binding.usernameText.text = user!!.username
                 binding.userLevelValue.text = (user.exp!! / 10).toInt().toString()
             }
         }
-    }
-
-    private fun workoutsCallback() {
-        val workoutsSchema = databaseInstance.getReference("Workout")//.orderByChild(firebaseAuth.uid.toString())
-        workoutsSchema.orderByChild("timestamp").limitToLast(2).addValueEventListener(object : ValueEventListener {
-            @SuppressLint("SuspiciousIndentation")
-            override fun onDataChange(snapshot: DataSnapshot) {
-                binding.workoutsLayoutRecent.removeAllViews()
-                for (workout in databaseHelperInstance.getWorkoutsFromSnapshot(snapshot))
-                showRecentWorkout(workout)
-            }
-            override fun onCancelled(error: DatabaseError) {
-                Log.w("Firebase", "Couldn't retrieve data...")
-            }
-        })
-        workoutsSchema.orderByChild("ranking").limitToFirst(5).addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                showWorkouts(
-                    databaseHelperInstance.getWorkoutsFromSnapshot(snapshot))
-            }
-            override fun onCancelled(error: DatabaseError) {
-                Log.w("Firebase", "Couldn't retrieve data...")
-            }
-        })
     }
 
     @SuppressLint("Recycle")
@@ -156,120 +100,111 @@ class CentralActivity : AppCompatActivity() {
                     filters.remove(typeFilter.ordinal)
                     filterLayout.filterDisplayName.setBackgroundColor(ta.getColor(0, Color.BLACK))
                 }
-                applyFilter()
             }
         }
     }
 
-    private fun applyFilter() {
-        val workoutsSchema = databaseInstance.getReference("Workout")
-        workoutsSchema.orderByChild("ranking").limitToFirst(10).get().addOnSuccessListener { workoutsSnapshot ->
-            val workouts = DatabaseHelper().getWorkoutsFromSnapshot(workoutsSnapshot)
-            if (filters.isEmpty()) showWorkouts(workouts)
-            else showWorkouts(workouts.filter {
-                    filters.contains(HelperFunctions().getWorkoutType(it.exercisesType!!))})
-        }
+    private fun workoutsCallback() {
+        helperDB.workoutsSchema.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                showWorkouts(helperDB.getWorkoutsFromSnapshot(snapshot))
+            }
+            override fun onCancelled(error: DatabaseError) {
+                Log.w("Firebase", "Couldn't retrieve data...")
+            }
+        })
     }
 
     private fun showWorkouts(workouts: List<Workout>) {
+
+        // Eliminate workouts based on filters
+        workouts.filter { filters.contains(HelperFunctions().getWorkoutType(it.exercisesType!!))}
+
+        // Fill recent
+        binding.workoutsLayoutRecent.removeAllViews()
+        filterRecentWorkouts(workouts).map { workout -> showRecentWorkout(workout) }
+
+        // Fill For You
         binding.workoutsLayout.removeAllViews()
-        //binding.workoutsLayoutRecent.removeAllViews()
-        for (workout in workouts) {
-            //showRecentWorkout(workout)
-            showChosenWorkout(workout)
-        }
+        workouts.map { workout -> showChosenWorkout(workout) }
+
+        // Fill most popular
+        binding.workoutsPopularLayout.removeAllViews()
+        filterMostPopularWorkouts(workouts).map { workout -> showMostPopularWorkout(workout) }
     }
 
     private fun showRecentWorkout(workout: Workout) {
 
-
         val workoutsLayout = FragmentWorkoutRecentBinding.inflate(layoutInflater)
-
         workoutsLayout.workoutDisplayName.text = workout.name!!.replaceFirstChar { it.uppercaseChar() }
-        var exp = 0f
-        var kcalTot = 0F
-        for(workoutExercise in workoutExerciseList.filter { we -> we.workoutId == workout.workoutId }) {
-            for (exercise in exerciseArrayList.filter { ex -> ex.eid == workoutExercise.exerciseId})
-            {
-                exp += (workoutExercise.reps!! * workoutExercise.sets!!) * exercise.experiencePerReps!!
-                kcalTot += (workoutExercise.reps * exercise.caloriesPerRep!!) * workoutExercise.sets
-            }
-        }
-
-        when(workout.exercisesType?.let { HelperFunctions().getWorkoutType(it) }) {
-            0 -> workoutsLayout.colorTypeImage.setImageDrawable(
-                ResourcesCompat.getDrawable(resources, R.drawable.gradient_arms, applicationContext.theme))
-            1 -> workoutsLayout.colorTypeImage.setImageDrawable(
-                ResourcesCompat.getDrawable(resources, R.drawable.gradient_legs, applicationContext.theme))
-            2 -> workoutsLayout.colorTypeImage.setImageDrawable(
-                ResourcesCompat.getDrawable(resources, R.drawable.gradient_core, applicationContext.theme))
-            3 -> workoutsLayout.colorTypeImage.setImageDrawable(
-                ResourcesCompat.getDrawable(resources, R.drawable.gradient_yoga, applicationContext.theme))
-            else -> workoutsLayout.colorTypeImage.setImageDrawable(
-                ResourcesCompat.getDrawable(resources, R.drawable.gradient_default, applicationContext.theme))
-        }
-
+        workoutsLayout.colorTypeImage.setImageDrawable(getWorkoutColor(workout.exercisesType?.let { HelperFunctions().getWorkoutType(it) }!!))
         binding.workoutsLayoutRecent.addView(workoutsLayout.root)
 
+        // TODO change intent extras
         workoutsLayout.workoutCard.setOnClickListener {
             val intent = Intent(this, WorkoutPlayActivity::class.java)
             intent.putExtra("workout", workout)
-            intent.putExtra("exp", exp)
-
+            intent.putExtra("exp", 0)
             startActivity(intent)
         }
     }
 
+    private fun filterRecentWorkouts(workouts: List<Workout>) : List<Workout> {
+        // TODO: Logic
+        return workouts
+    }
+
     private fun showChosenWorkout(workout: Workout) {
 
+        val chosenWorkoutLayout = fillWorkoutFragment(workout)
+        binding.workoutsLayout.addView(chosenWorkoutLayout.root)
+    }
 
-        val workoutsLayout = FragmentWorkoutBinding.inflate(layoutInflater)
+    private fun filterMostPopularWorkouts(workouts: List<Workout>) : List<Workout> {
+        // TODO: Logic
+        return workouts
+    }
 
-        workoutsLayout.workoutDisplayName.text = workout.name!!.replaceFirstChar { it.uppercaseChar() }
-        var exp = 0F
-        var kcalTot = 0F
-        for(workoutExercise in workoutExerciseList.filter { we -> we.workoutId == workout.workoutId }) {
-            for (exercise in exerciseArrayList.filter { ex -> ex.eid == workoutExercise.exerciseId})
-            {
-                exp += (workoutExercise.reps!! * workoutExercise.sets!!) * exercise.experiencePerReps!!
-                kcalTot += (workoutExercise.reps * exercise.caloriesPerRep!!) * workoutExercise.sets
-            }
+    private fun showMostPopularWorkout(workout: Workout) {
+        val mostPopularWorkoutLayout = fillWorkoutFragment(workout)
+        binding.workoutsPopularLayout.addView(mostPopularWorkoutLayout.root)
+    }
+
+    private fun fillWorkoutFragment(workout: Workout) : FragmentWorkoutBinding {
+
+        val workoutLayout = FragmentWorkoutBinding.inflate(layoutInflater)
+
+        with(workoutLayout) {
+            workoutDisplayName.text = workout.name!!.replaceFirstChar { it.uppercaseChar() }
+            exercisesValue.text = "TODO"
+            kcalValue.text = "TODO"
+            bpmValue.text = getString(R.string.null_value)
+            workoutColorLayout.background =
+                getWorkoutColor(workout.exercisesType?.let { HelperFunctions().getWorkoutType(it) }!!)
         }
 
-        // TODO: real values
-        workoutsLayout.exercisesValue.text = exp.toString()
-        workoutsLayout.kcalValue.text = kcalTot.toString()
-        workoutsLayout.bpmValue.text = getString(R.string.null_value)
-
-        workoutsLayout.exercisesLabel.text = getString(R.string.number_exercises_label)
-        workoutsLayout.kcalLabel.text = getString(R.string.calories_data_label)
-        workoutsLayout.bpmLabel.text = getString(R.string.bpm_data_label)
-
-        when(workout.exercisesType?.let { HelperFunctions().getWorkoutType(it) }) {
-            0 -> workoutsLayout.workoutColorLayout.background =
-                ResourcesCompat.getDrawable(resources, R.drawable.gradient_arms, applicationContext.theme)
-            1 -> workoutsLayout.workoutColorLayout.background =
-                ResourcesCompat.getDrawable(resources, R.drawable.gradient_legs, applicationContext.theme)
-            2 -> workoutsLayout.workoutColorLayout.background =
-                ResourcesCompat.getDrawable(resources, R.drawable.gradient_core, applicationContext.theme)
-            3 -> workoutsLayout.workoutColorLayout.background =
-                ResourcesCompat.getDrawable(resources, R.drawable.gradient_yoga, applicationContext.theme)
-            else -> workoutsLayout.workoutColorLayout.background =
-                ResourcesCompat.getDrawable(resources, R.drawable.gradient_default, applicationContext.theme)
-        }
-
-        binding.workoutsLayout.addView(workoutsLayout.root)
-
-        workoutsLayout.workoutCard.setOnClickListener {
+        // TODO change intent extras
+        workoutLayout.workoutCard.setOnClickListener {
             val intent = Intent(this, WorkoutPlayActivity::class.java)
             intent.putExtra("workout", workout)
-            intent.putExtra("exp", exp)
+            intent.putExtra("exp", 0)
             startActivity(intent)
+        }
+
+        return workoutLayout
+    }
+
+    private fun getWorkoutColor(workoutType: Int) : Drawable {
+        return when(workoutType) {
+            0    -> ResourcesCompat.getDrawable(resources, R.drawable.gradient_arms, applicationContext.theme)!!
+            1    -> ResourcesCompat.getDrawable(resources, R.drawable.gradient_legs, applicationContext.theme)!!
+            2    -> ResourcesCompat.getDrawable(resources, R.drawable.gradient_core, applicationContext.theme)!!
+            3    -> ResourcesCompat.getDrawable(resources, R.drawable.gradient_yoga, applicationContext.theme)!!
+            else -> ResourcesCompat.getDrawable(resources, R.drawable.gradient_default, applicationContext.theme)!!
         }
     }
 
     fun getFiltersSize() : Int {
         return filters.size
     }
-
 }

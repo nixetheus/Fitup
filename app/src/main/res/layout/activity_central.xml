@@ -229,6 +229,7 @@
             <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="100dp"
                 android:scrollbarSize="0dp"
                 tools:ignore="SpeakableTextPresentCheck">
 
@@ -250,10 +251,10 @@
         android:id="@+id/linksLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
+        android:background="@drawable/gradient_nav"
         android:orientation="vertical"
         android:paddingTop="50dp"
-        android:paddingBottom="24dp"
+        android:paddingBottom="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">

@@ -138,7 +138,7 @@
     <string name="congrats_sub">Now stretch, relax and enjoy the rest of your day</string>
     <string name="recap_exp">Total Exp:</string>
     <string name="recap_time">Final Time:</string>
-    <string name="recap_number_ex">N. Exercises:</string>
+    <string name="recap_number_ex">Exercises</string>
 
     <!-- STATS -->
     <string name="latest_label">Latest</string>
