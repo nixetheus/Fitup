@@ -3,6 +3,7 @@ package it.polimi.mobile.design
 import android.content.Intent
 import android.os.Bundle
 import android.view.KeyEvent
+import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +19,7 @@ class SignUpActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
+
 
         binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)

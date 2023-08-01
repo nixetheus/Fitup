@@ -36,12 +36,12 @@ class SignUpActivityTest{
         // and configure the Firebase instances accordingly.
     }
 
-    @After
+  /*  @After
     fun tearDown() {
         // Clean up Firebase resources
         //firebaseDatabase.reference.child("Users").child(getCurrentUserId()).removeValue()
         //firebaseAuth.signOut()
-    }
+    }*/
 
     @Test
     fun testCreateUserAndVerifyPresence() {
