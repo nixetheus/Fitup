@@ -2,10 +2,12 @@ package it.polimi.mobile.design
 
 import android.content.*
 import android.content.ContentValues.TAG
-import android.os.*
+import android.os.Bundle
+import android.os.Handler
+import android.os.Message
+import android.os.SystemClock
 import android.util.Log
 import android.view.View
-import android.view.WindowInsets
 import android.widget.Chronometer
 import android.widget.Chronometer.OnChronometerTickListener
 import android.widget.Toast
@@ -27,10 +29,7 @@ import it.polimi.mobile.design.entities.Workout
 import it.polimi.mobile.design.entities.WorkoutExercise
 import it.polimi.mobile.design.helpers.DatabaseHelper
 import it.polimi.mobile.design.helpers.HelperFunctions
-import java.text.SimpleDateFormat
-import java.util.*
 import java.util.concurrent.ExecutionException
-import kotlin.collections.ArrayList
 import kotlin.properties.Delegates
 
 

@@ -1,6 +1,5 @@
 package it.polimi.mobile.design
 
-import android.content.ContentValues
 import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
@@ -12,25 +11,16 @@ import android.view.inputmethod.EditorInfo
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.res.ResourcesCompat
 import com.google.android.gms.tasks.Task
-import com.google.android.gms.tasks.Tasks
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ServerValue
 import com.google.firebase.database.ValueEventListener
 import it.polimi.mobile.design.databinding.ActivityWorkoutListBinding
 import it.polimi.mobile.design.databinding.FragmentWorkoutListBinding
-import it.polimi.mobile.design.entities.Exercise
 import it.polimi.mobile.design.entities.Workout
-import it.polimi.mobile.design.entities.WorkoutExercise
 import it.polimi.mobile.design.enum.ExerciseType
 import it.polimi.mobile.design.helpers.DatabaseHelper
 import it.polimi.mobile.design.helpers.HelperFunctions
-import java.text.SimpleDateFormat
-import java.util.*
 
 
 class WorkoutListActivity : AppCompatActivity() {

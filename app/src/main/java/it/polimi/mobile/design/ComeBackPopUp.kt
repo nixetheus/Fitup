@@ -3,7 +3,6 @@ package it.polimi.mobile.design
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import it.polimi.mobile.design.databinding.ActivityAchievementsBinding
 import it.polimi.mobile.design.databinding.ComeBackPopUpBinding
 
 class ComeBackPopUp : AppCompatActivity() {

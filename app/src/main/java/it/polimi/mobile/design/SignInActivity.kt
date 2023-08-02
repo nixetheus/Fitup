@@ -102,11 +102,10 @@ class SignInActivity : AppCompatActivity() {
 
     private fun logIn(pass: String, email: String) {
         if (email.isNotEmpty() && pass.isNotEmpty()) {
-            auth.signInWithEmailAndPassword(email, pass).addOnCompleteListener {
-                if (it.isSuccessful) {
+            auth.signInWithEmailAndPassword(email, pass).addOnCompleteListener { task ->
+                if (task.isSuccessful) {
                     val uid = auth.uid.toString()
                     helperDB.usersSchema.child(uid).get().addOnSuccessListener {
-
                         if (it.exists())
                         {
                             val intent = Intent(this, CentralActivity::class.java)

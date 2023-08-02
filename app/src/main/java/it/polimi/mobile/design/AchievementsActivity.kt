@@ -1,8 +1,8 @@
 package it.polimi.mobile.design
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import it.polimi.mobile.design.databinding.ActivityAchievementsBinding
 import it.polimi.mobile.design.databinding.FragmentAchievementBinding
 import it.polimi.mobile.design.entities.Achievement

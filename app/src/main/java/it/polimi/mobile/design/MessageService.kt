@@ -4,7 +4,6 @@ import android.content.Intent
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.WearableListenerService
-import it.polimi.mobile.design.entities.Workout
 
 
 class MessageService : WearableListenerService() {

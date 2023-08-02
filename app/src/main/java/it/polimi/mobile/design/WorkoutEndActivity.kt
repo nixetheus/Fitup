@@ -1,12 +1,10 @@
 package it.polimi.mobile.design
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
 import androidx.appcompat.app.AppCompatActivity
 import it.polimi.mobile.design.databinding.ActivityWorkoutEndBinding
-import it.polimi.mobile.design.databinding.ActivityWorkoutPlayBinding
 import it.polimi.mobile.design.helpers.HelperFunctions
 
 class WorkoutEndActivity : AppCompatActivity() {

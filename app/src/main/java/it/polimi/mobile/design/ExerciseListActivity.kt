@@ -6,10 +6,8 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import android.view.KeyEvent
 import android.view.View
 import android.view.animation.TranslateAnimation
-import android.view.inputmethod.EditorInfo
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DataSnapshot
@@ -19,7 +17,6 @@ import it.polimi.mobile.design.databinding.ActivityExerciseListBinding
 import it.polimi.mobile.design.databinding.FragmentExerciseListBinding
 import it.polimi.mobile.design.databinding.FragmentFilterBinding
 import it.polimi.mobile.design.entities.Exercise
-import it.polimi.mobile.design.entities.WorkoutExercise
 import it.polimi.mobile.design.enum.ExerciseType
 import it.polimi.mobile.design.helpers.DatabaseHelper
 import it.polimi.mobile.design.helpers.HelperFunctions

@@ -7,14 +7,12 @@ import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.animation.TranslateAnimation
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ScrollView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
 import it.polimi.mobile.design.databinding.ActivityStatsBinding
 import it.polimi.mobile.design.entities.DataPoint
 import it.polimi.mobile.design.entities.Graph
@@ -23,8 +21,6 @@ import it.polimi.mobile.design.helpers.DatabaseHelper
 import it.polimi.mobile.design.helpers.HelperFunctions
 import java.text.SimpleDateFormat
 import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.util.*
