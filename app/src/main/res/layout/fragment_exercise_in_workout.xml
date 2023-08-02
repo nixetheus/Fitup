@@ -50,7 +50,7 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/lato_bold"
                         android:letterSpacing="0.025"
-                        android:paddingStart="20dp"
+                        android:paddingStart="10dp"
                         android:paddingEnd="20dp"
                         android:textAlignment="center"
                         android:textAllCaps="true"

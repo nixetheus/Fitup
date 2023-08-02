@@ -9,9 +9,12 @@ data class Workout(
     val workoutId: String? = null,
     val userId: String? = null,
     val name: String? = null,
-    val spotifyPlaylistLink: String?=null,
-    var ranking: Int? = null,
-    var timestamp: Long? = null,
+    val spotifyPlaylistLink: String? = null,
+    var totalNumberOfTimesPlayed: Int? = 0,
+    var numberOfExercises: Int? = 0,
+    var caloriesBurned: Float? = 0.0f,
+    var gainedExperience: Float? = 0.0f,
+    var averageBpmValue: Int? = 0,
     var exercisesType: MutableList<Int>? = MutableList(ExerciseType.values().size) { 0 }
 ): Serializable {
 

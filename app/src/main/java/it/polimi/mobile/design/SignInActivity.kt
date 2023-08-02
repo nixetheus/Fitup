@@ -22,15 +22,14 @@ import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import it.polimi.mobile.design.databinding.ActivitySignInBinding
+import it.polimi.mobile.design.helpers.DatabaseHelper
 
 
 class SignInActivity : AppCompatActivity() {
 
     var auth =  FirebaseAuth.getInstance()
-    lateinit var database: DatabaseReference
+    private val helperDB = DatabaseHelper().getInstance()
     private lateinit var binding: ActivitySignInBinding
     private lateinit var buttonFacebookLogin: LoginButton
     private lateinit var mGoogleSignInClient: GoogleSignInClient
@@ -46,16 +45,18 @@ class SignInActivity : AppCompatActivity() {
         binding = ActivitySignInBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        createBindings()
 
         buttonFacebookLogin = binding.facebookLogin
         buttonFacebookLogin.setPermissions("email", "public_profile")
         createRequest()
+    }
+
+    private fun createBindings() {
 
         binding.Pass.setOnEditorActionListener { _, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE || event?.action == KeyEvent.ACTION_DOWN) {
-                // The action you want to perform when the "Enter" key is pressed
-                // For example, you can call a function here.
-                binding.emailLoginButton.performClick();
+                binding.emailLoginButton.performClick()
                 return@setOnEditorActionListener true
             }
             return@setOnEditorActionListener false
@@ -73,7 +74,6 @@ class SignInActivity : AppCompatActivity() {
         binding.forgetPass.setOnClickListener{
             val intent = Intent(this, ResetPasswordActivity::class.java)
             startActivity(intent)
-
         }
 
         binding.emailLoginButton.setOnClickListener {
@@ -99,43 +99,38 @@ class SignInActivity : AppCompatActivity() {
             }
         })
     }
-    private fun logIn(pass: String, email: String)
-    {
 
+    private fun logIn(pass: String, email: String) {
+        if (email.isNotEmpty() && pass.isNotEmpty()) {
+            auth.signInWithEmailAndPassword(email, pass).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    val uid = auth.uid.toString()
+                    helperDB.usersSchema.child(uid).get().addOnSuccessListener {
 
-    if (email.isNotEmpty() && pass.isNotEmpty()) {
-
-        auth.signInWithEmailAndPassword(email, pass).addOnCompleteListener {
-
-            if (it.isSuccessful) {
-                val uid = auth.uid.toString()
-                database = FirebaseDatabase.getInstance().getReference("Users")
-                database.child(uid).get().addOnSuccessListener {
-
-                    if (it.exists())
-                    {
-                        val intent = Intent(this, CentralActivity::class.java)
-                        startActivity(intent)
+                        if (it.exists())
+                        {
+                            val intent = Intent(this, CentralActivity::class.java)
+                            startActivity(intent)
+                        }
+                        else{
+                            val intent = Intent(this, HomeActivity::class.java)
+                            startActivity(intent)
+                        }
                     }
-                    else{
-                        val intent = Intent(this, HomeActivity::class.java)
-                        startActivity(intent)
-                    }
+                } else {
+                    Toast.makeText(this, "Incorrect email or password", Toast.LENGTH_SHORT).show()
                 }
-            } else {
-                Toast.makeText(this, "Incorrect email or password", Toast.LENGTH_SHORT).show()
             }
+        } else {
+            Toast.makeText(this, "Please, fill all fields", Toast.LENGTH_SHORT).show()
         }
-
-    } else {
-        Toast.makeText(this, "Please, fill all fields", Toast.LENGTH_SHORT).show()
-    }}
+    }
 
     public override fun onStart() {
         super.onStart()
         // Check if user is signed in (non-null) and update UI accordingly.
         val currentUser = auth.currentUser
-        if (currentUser!=null)
+        if (currentUser != null)
             updateUI(currentUser)
     }
 
@@ -164,9 +159,7 @@ class SignInActivity : AppCompatActivity() {
         if (user != null)
         {
             val uid = auth.uid.toString()
-            database = FirebaseDatabase.getInstance().getReference("Users")
-
-            database.child(uid).get().addOnSuccessListener {
+            helperDB.usersSchema.child(uid).get().addOnSuccessListener {
                 if (it.exists())
                 {
                     val intent = Intent(this, CentralActivity::class.java)
@@ -191,11 +184,11 @@ class SignInActivity : AppCompatActivity() {
         mGoogleSignInClient = com.google.android.gms.auth.api.signin.GoogleSignIn.getClient(this, gso)
     }
 
+    // TODO: modernize
     private fun googleSignIn() {
         val signInIntent = mGoogleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         callbackManager.onActivityResult(requestCode, resultCode, data)
@@ -203,7 +196,7 @@ class SignInActivity : AppCompatActivity() {
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             val task = com.google.android.gms.auth.api.signin.GoogleSignIn.getSignedInAccountFromIntent(data)
-            val exception=task.exception
+            task.exception
 
             try {
                 // Google Sign In was successful, authenticate with Firebase
@@ -219,7 +212,7 @@ class SignInActivity : AppCompatActivity() {
         }
     }
 
-    fun firebaseAuthWithGoogle(account: GoogleSignInAccount) {
+    private fun firebaseAuthWithGoogle(account: GoogleSignInAccount) {
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
 
         auth.signInWithCredential(credential)
@@ -227,8 +220,7 @@ class SignInActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     val uid = auth.uid.toString()
-                    database = FirebaseDatabase.getInstance().getReference("Users")
-                    database.child(uid).get().addOnSuccessListener {
+                    helperDB.usersSchema.child(uid).get().addOnSuccessListener {
                         if (it.exists())
                         {
                             val intent = Intent(this, CentralActivity::class.java)
@@ -244,9 +236,5 @@ class SignInActivity : AppCompatActivity() {
                     Toast.makeText(this@SignInActivity, "Login Failed: ", Toast.LENGTH_SHORT).show()
                 }
             }
-    }
-    interface LogInListener {
-        fun logInSuccess(email: String?, password: String?)
-        fun logInFailure(exception: Exception?, email: String?, password: String?)
     }
 }

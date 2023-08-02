@@ -201,7 +201,7 @@ class ExerciseListActivity : AppCompatActivity() {
         val exType       = exerciseTypeFromString(binding.typeOfEx.selectedItem.toString())
         val exp          = HelperFunctions().parseFloatInput(binding.expInputValue.text.toString())
 
-        return Exercise(exerciseId, exerciseName, kcalPerReps, exType, exp)
+        return Exercise(helperDB.getFirebaseAuth().uid, exerciseId, exerciseName, kcalPerReps, exType, exp)
     }
 
     private fun exerciseTypeFromString(typeString : String) : ExerciseType {

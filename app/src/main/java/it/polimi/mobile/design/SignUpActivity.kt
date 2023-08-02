@@ -17,17 +17,16 @@ class SignUpActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
-
-
         binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        createBindings()
+    }
+
+    private fun createBindings() {
 
         binding.Pass2.setOnEditorActionListener { _, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE || event?.action == KeyEvent.ACTION_DOWN) {
-                // The action you want to perform when the "Enter" key is pressed
-                // For example, you can call a function here.
                 binding.SignUpBtn.performClick();
                 return@setOnEditorActionListener true
             }
@@ -40,29 +39,25 @@ class SignUpActivity : AppCompatActivity() {
         }
 
         binding.SignUpBtn.setOnClickListener {
+            signUp()
+        }
+    }
 
-            val email = binding.EmailField.text.toString()
-            val pass = binding.Pass.text.toString()
-            val confirmPass = binding.Pass2.text.toString()
+    private fun signUp() {
+        val email = binding.EmailField.text.toString()
+        val pass = binding.Pass.text.toString()
+        val confirmPass = binding.Pass2.text.toString()
 
-            if (email.isNotEmpty() && pass.isNotEmpty() && confirmPass.isNotEmpty()) {
-                if (pass == confirmPass) {
-
-                    firebaseAuth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener {
-                        if (it.isSuccessful) {
-                            val intent = Intent(this, HomeActivity::class.java)
-                            startActivity(intent)
-                        } else {
-                            Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
-                        }
-                    }
-
+        if (email.isNotEmpty() && pass.isNotEmpty() && pass == confirmPass) {
+            firebaseAuth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    startActivity(Intent(this, HomeActivity::class.java))
                 } else {
-                    Toast.makeText(this, "Password do not match", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Authentication failed. Please try again.", Toast.LENGTH_SHORT).show()
                 }
-            } else {
-                Toast.makeText(this, "Empty Fields are not allowed", Toast.LENGTH_SHORT).show()
             }
+        } else {
+            Toast.makeText(this, "Please fill in all the fields correctly.", Toast.LENGTH_SHORT).show()
         }
     }
 }

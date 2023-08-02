@@ -4,6 +4,7 @@ import it.polimi.mobile.design.enum.ExerciseType
 
 
 data class Exercise(
+    var uid: String? = null,
     var eid: String? = null,
     var name: String? = null,
     val caloriesPerRep: Float? = null,

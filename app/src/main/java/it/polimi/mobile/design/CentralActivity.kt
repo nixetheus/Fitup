@@ -16,9 +16,12 @@ import it.polimi.mobile.design.databinding.FragmentFilterBinding
 import it.polimi.mobile.design.databinding.FragmentWorkoutBinding
 import it.polimi.mobile.design.databinding.FragmentWorkoutRecentBinding
 import it.polimi.mobile.design.entities.Workout
+import it.polimi.mobile.design.entities.WorkoutUserData
 import it.polimi.mobile.design.enum.ExerciseType
 import it.polimi.mobile.design.helpers.DatabaseHelper
 import it.polimi.mobile.design.helpers.HelperFunctions
+import java.sql.Time
+import java.time.Instant
 
 
 class CentralActivity : AppCompatActivity() {
@@ -27,6 +30,8 @@ class CentralActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCentralBinding
     private val helperDB = DatabaseHelper().getInstance()
     private var firebaseAuth = FirebaseAuth.getInstance()
+    private lateinit var userWorkouts: List<Workout>
+    private lateinit var userWorkoutData: List<WorkoutUserData>
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -35,6 +40,7 @@ class CentralActivity : AppCompatActivity() {
         binding = ActivityCentralBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        getUserWorkoutData()
         createBindings()
         showUser()
         showFilters()
@@ -69,6 +75,17 @@ class CentralActivity : AppCompatActivity() {
         }
     }
 
+    private fun getUserWorkoutData() {
+        helperDB.workoutsSchema.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                userWorkoutData = helperDB.getUserWorkoutDataFromSnapshot(snapshot)
+            }
+            override fun onCancelled(error: DatabaseError) {
+                Log.w("Firebase", "Couldn't retrieve data...")
+            }
+        })
+    }
+
     private fun showUser(){
         firebaseAuth.uid?.let { userId ->
             helperDB.usersSchema.child(userId).get().addOnSuccessListener { userSnapshot ->
@@ -100,6 +117,7 @@ class CentralActivity : AppCompatActivity() {
                     filters.remove(typeFilter.ordinal)
                     filterLayout.filterDisplayName.setBackgroundColor(ta.getColor(0, Color.BLACK))
                 }
+                showWorkouts()
             }
         }
     }
@@ -107,7 +125,8 @@ class CentralActivity : AppCompatActivity() {
     private fun workoutsCallback() {
         helperDB.workoutsSchema.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                showWorkouts(helperDB.getWorkoutsFromSnapshot(snapshot))
+                userWorkouts = helperDB.getWorkoutsFromSnapshot(snapshot)
+                showWorkouts()
             }
             override fun onCancelled(error: DatabaseError) {
                 Log.w("Firebase", "Couldn't retrieve data...")
@@ -115,10 +134,13 @@ class CentralActivity : AppCompatActivity() {
         })
     }
 
-    private fun showWorkouts(workouts: List<Workout>) {
+    private fun showWorkouts() {
 
         // Eliminate workouts based on filters
-        workouts.filter { filters.contains(HelperFunctions().getWorkoutType(it.exercisesType!!))}
+        val workouts =
+            if (filters.isNotEmpty())
+                userWorkouts.filter { filters.contains(HelperFunctions().getWorkoutType(it.exercisesType!!))}
+            else userWorkouts
 
         // Fill recent
         binding.workoutsLayoutRecent.removeAllViews()
@@ -126,7 +148,7 @@ class CentralActivity : AppCompatActivity() {
 
         // Fill For You
         binding.workoutsLayout.removeAllViews()
-        workouts.map { workout -> showChosenWorkout(workout) }
+        filterChosenWorkouts(workouts).map { workout -> showChosenWorkout(workout) }
 
         // Fill most popular
         binding.workoutsPopularLayout.removeAllViews()
@@ -140,29 +162,35 @@ class CentralActivity : AppCompatActivity() {
         workoutsLayout.colorTypeImage.setImageDrawable(getWorkoutColor(workout.exercisesType?.let { HelperFunctions().getWorkoutType(it) }!!))
         binding.workoutsLayoutRecent.addView(workoutsLayout.root)
 
-        // TODO change intent extras
         workoutsLayout.workoutCard.setOnClickListener {
             val intent = Intent(this, WorkoutPlayActivity::class.java)
-            intent.putExtra("workout", workout)
-            intent.putExtra("exp", 0)
+            intent.putExtra("Workout", workout)
             startActivity(intent)
         }
     }
 
     private fun filterRecentWorkouts(workouts: List<Workout>) : List<Workout> {
-        // TODO: Logic
-        return workouts
+        val workoutIdToLastDateMap = userWorkoutData.associateBy { it.workoutId }
+        // Provide a default lastDate value when workoutId is not found in the map
+        val defaultLastDate = Time.from(Instant.EPOCH).time
+        return workouts.sortedBy { workout ->
+            workoutIdToLastDateMap[workout.workoutId]?.lastDate ?: defaultLastDate }.reversed()
     }
 
     private fun showChosenWorkout(workout: Workout) {
-
         val chosenWorkoutLayout = fillWorkoutFragment(workout)
         binding.workoutsLayout.addView(chosenWorkoutLayout.root)
     }
 
+    private fun filterChosenWorkouts(workouts: List<Workout>) : List<Workout> {
+        val workoutIdToNumberPlayedMap = userWorkoutData.associateBy { it.workoutId }
+        return workouts.sortedBy { workout ->
+            workoutIdToNumberPlayedMap[workout.workoutId]?.numberOfTimesPlayed ?: 0
+        }
+    }
+
     private fun filterMostPopularWorkouts(workouts: List<Workout>) : List<Workout> {
-        // TODO: Logic
-        return workouts
+        return workouts.sortedBy {it.totalNumberOfTimesPlayed}.reversed()
     }
 
     private fun showMostPopularWorkout(workout: Workout) {
@@ -176,18 +204,16 @@ class CentralActivity : AppCompatActivity() {
 
         with(workoutLayout) {
             workoutDisplayName.text = workout.name!!.replaceFirstChar { it.uppercaseChar() }
-            exercisesValue.text = "TODO"
-            kcalValue.text = "TODO"
-            bpmValue.text = getString(R.string.null_value)
+            exercisesValue.text = workout.numberOfExercises.toString()
+            kcalValue.text = workout.caloriesBurned.toString()
+            bpmValue.text = workout.averageBpmValue.toString()
             workoutColorLayout.background =
                 getWorkoutColor(workout.exercisesType?.let { HelperFunctions().getWorkoutType(it) }!!)
         }
 
-        // TODO change intent extras
         workoutLayout.workoutCard.setOnClickListener {
             val intent = Intent(this, WorkoutPlayActivity::class.java)
-            intent.putExtra("workout", workout)
-            intent.putExtra("exp", 0)
+            intent.putExtra("Workout", workout)
             startActivity(intent)
         }
 
@@ -195,13 +221,7 @@ class CentralActivity : AppCompatActivity() {
     }
 
     private fun getWorkoutColor(workoutType: Int) : Drawable {
-        return when(workoutType) {
-            0    -> ResourcesCompat.getDrawable(resources, R.drawable.gradient_arms, applicationContext.theme)!!
-            1    -> ResourcesCompat.getDrawable(resources, R.drawable.gradient_legs, applicationContext.theme)!!
-            2    -> ResourcesCompat.getDrawable(resources, R.drawable.gradient_core, applicationContext.theme)!!
-            3    -> ResourcesCompat.getDrawable(resources, R.drawable.gradient_yoga, applicationContext.theme)!!
-            else -> ResourcesCompat.getDrawable(resources, R.drawable.gradient_default, applicationContext.theme)!!
-        }
+        return HelperFunctions().getWorkoutColor(workoutType, resources, applicationContext)
     }
 
     fun getFiltersSize() : Int {

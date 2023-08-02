@@ -3,7 +3,7 @@ package it.polimi.mobile.design.entities
 import it.polimi.mobile.design.enum.Gender
 
 data class User(
-    val uId: String? = null,
+    val uId: String? = "0",
     val username: String? = null,
     val weight: Float? = null,
     val age: Int? = null,

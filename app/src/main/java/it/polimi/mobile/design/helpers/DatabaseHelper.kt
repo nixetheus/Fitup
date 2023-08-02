@@ -19,6 +19,8 @@ class DatabaseHelper {
     val workoutsExercisesSchema = FirebaseDatabase.getInstance().getReference("WorkoutExercise")
     val workoutsSchema          = FirebaseDatabase.getInstance().getReference("Workout")
 
+    val acceptedUserIds = listOf(firebaseAuth.uid, "0")
+
     private var instance: DatabaseHelper? = null
     fun getInstance(): DatabaseHelper {
         if (instance == null) {
@@ -36,7 +38,7 @@ class DatabaseHelper {
         if (snapshot.exists()) {
             for (child in snapshot.children) {
                 val workout = child.getValue(Workout::class.java)
-                if (workout != null && workout.userId == firebaseAuth.uid)
+                if (workout != null && workout.userId in acceptedUserIds)
                         workouts.add(workout)
             }
         }
@@ -48,7 +50,7 @@ class DatabaseHelper {
         if (snapshot.exists()) {
             for (child in snapshot.children) {
                 val exercise = child.getValue(Exercise::class.java)
-                if (exercise != null) exercises.add(exercise)
+                if (exercise != null && exercise.uid in acceptedUserIds) exercises.add(exercise)
             }
         }
         return exercises
@@ -94,7 +96,7 @@ class DatabaseHelper {
         if (snapshot.exists()) {
             for (child in snapshot.children) {
                 val point = child.getValue(DataPoint::class.java)
-                if (point != null)
+                if (point != null && point.userId == firebaseAuth.uid)
                     points.add(point)
             }
         }
@@ -130,11 +132,23 @@ class DatabaseHelper {
         if (snapshot.exists()) {
             for (child in snapshot.children) {
                 val userAchievement = child.getValue(UserAchievements::class.java)
-                if (userAchievement != null)
+                if (userAchievement != null && userAchievement.userId == firebaseAuth.uid)
                     userAchievements.add(userAchievement)
             }
         }
         return userAchievements
+    }
+
+    fun getUserWorkoutDataFromSnapshot(snapshot: DataSnapshot) : List<WorkoutUserData> {
+        val workoutUserData = ArrayList<WorkoutUserData>()
+        if (snapshot.exists()) {
+            for (child in snapshot.children) {
+                val workoutData = child.getValue(WorkoutUserData::class.java)
+                if (workoutData != null && workoutData.uid in acceptedUserIds)
+                    workoutUserData.add(workoutData)
+            }
+        }
+        return workoutUserData
     }
 
     fun getFirebaseAuth() : FirebaseAuth {

@@ -79,10 +79,11 @@ class WorkoutPlayActivity : AppCompatActivity() {
         }
         startSpotify()
 
+        // TODO: add to workoutUserData
+        // TODO: add to total workout data
 
-
-        workout= intent.extras?.get("workout") as Workout
-        exp= intent.extras?.get("exp") as Float
+        workout= intent.extras?.get("Workout") as Workout
+        exp= 0f
 
         binding.expText.text=exp.toString()
         binding.playWorkoutName.text=workout.name

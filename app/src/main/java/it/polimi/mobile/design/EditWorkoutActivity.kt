@@ -135,35 +135,18 @@ class EditWorkoutActivity : AppCompatActivity() {
     }
 
     private fun showWorkoutData() {
-
-        // TODO: substitute with workout attribute
-        /*var exp = 0f
-        var kcalTot = 0F
-        for(workoutExercise in workoutExerciseList) {
-            for (exercise in exerciseArrayList.filter { ex -> ex.eid == workoutExercise.exerciseId})
-            {
-                exp += (workoutExercise.reps!! * workoutExercise.sets!!) * exercise.experiencePerReps!!
-                kcalTot += (workoutExercise.reps * exercise.caloriesPerRep!!) * workoutExercise.sets
-            }
-        }*/
-        binding.kcalOfWorkout.text = "TODO" // kcalTot.toString()
-        binding.expOfWorkout.text = "TODO" // exp.toString()
+        binding.kcalOfWorkout.text = editableWorkout.caloriesBurned.toString()
+        binding.expOfWorkout.text = editableWorkout.gainedExperience.toString()
+        binding.bpmOfWorkout.text = editableWorkout.averageBpmValue.toString()
     }
 
-    // Functionalities
-    fun onAddNewExercise() {
+    private fun onAddNewExercise() {
 
         val id              = helperDB.exercisesSchema.push().key!!
         val exercise        = binding.exercisesSpinner.selectedItem as Exercise
         val workoutExercise = createWorkoutExercise(id, editableWorkout, exercise)
 
-        // Update workout types
-        if (editableWorkout.workoutId != null) {
-            editableWorkout.exercisesType?.let { types ->
-                exercise.type?.let { types[it.ordinal] = types[it.ordinal] + 1 }
-            }
-            editableWorkout.name?.let { helperDB.workoutsSchema.child(it).setValue(editableWorkout).addOnSuccessListener {} }
-        }
+        updateWorkoutInfo(exercise, workoutExercise, true)
 
         // Add to join schema and change UI
         helperDB.workoutsExercisesSchema.child(id).setValue(workoutExercise).addOnSuccessListener {
@@ -248,10 +231,45 @@ class EditWorkoutActivity : AppCompatActivity() {
         }
     }
 
-    private fun onDeleteExerciseFromWorkout(exercise: WorkoutExercise) {
+    private fun onDeleteExerciseFromWorkout(workoutExercise: WorkoutExercise) {
         binding.execiseChangeMenuCard.visibility = View.GONE
-        helperDB.workoutsExercisesSchema.child(exercise.id!!).removeValue()
+        helperDB.workoutsExercisesSchema.child(workoutExercise.id!!).removeValue()
         Toast.makeText(this, "Exercise Eliminated", Toast.LENGTH_SHORT).show()
+
+        helperDB.exercisesSchema.child(workoutExercise.exerciseId!!).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    updateWorkoutInfo(dataSnapshot.getValue(Exercise::class.java)!!, workoutExercise, false)
+                }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
+    }
+
+    private fun updateWorkoutInfo(exercise: Exercise, workoutExercise: WorkoutExercise, add: Boolean) {
+
+        if (editableWorkout.workoutId == null) {
+            return
+        }
+
+        val caloriesPerRep = exercise.caloriesPerRep ?: 0f
+        val experiencePerRep = exercise.experiencePerReps ?: 0f
+        val reps = workoutExercise.reps ?: 0
+        val sets = workoutExercise.sets ?: 0
+
+        val multiplier = if (add) 1 else -1
+
+        editableWorkout.numberOfExercises = (editableWorkout.numberOfExercises ?: 0) + multiplier
+        editableWorkout.caloriesBurned =
+            (editableWorkout.caloriesBurned ?: 0f) + (caloriesPerRep * reps * sets * multiplier)
+        editableWorkout.gainedExperience =
+            (editableWorkout.gainedExperience ?: 0f) + (experiencePerRep * reps * sets * multiplier)
+        editableWorkout.exercisesType?.let { types ->
+            exercise.type?.let { types[it.ordinal] = types[it.ordinal] + multiplier }
+        }
+
+        editableWorkout.name?.let { helperDB.workoutsSchema.child(it).setValue(editableWorkout).addOnSuccessListener {} }
+        showWorkoutData()
     }
 
     private fun Int.toPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()

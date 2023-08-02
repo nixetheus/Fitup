@@ -9,7 +9,6 @@ enum class GraphType {
         return when(this) {
             BODY_COMP -> "Body Composition"  // TODO
             ONE_REP_MAX -> "Max Repetitions"
-            else -> "NONE"
         }
     }
 }

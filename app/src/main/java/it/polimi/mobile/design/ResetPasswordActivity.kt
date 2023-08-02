@@ -19,18 +19,20 @@ class ResetPasswordActivity : AppCompatActivity() {
 
         binding = ActivityResetPasswordBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        createBindings()
+    }
+
+    private fun createBindings() {
 
         binding.resetBtn.setOnClickListener{
-
             val sPass = binding.resetEmailField.text.toString()
             mAuth.sendPasswordResetEmail(sPass).addOnSuccessListener {
-                Toast.makeText(this, "please check your e-mail", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Please check your e-mail", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, SignInActivity::class.java)
                 startActivity(intent)
             }.addOnFailureListener {
                 Toast.makeText(this, it.toString(),Toast.LENGTH_SHORT).show()
             }
-
         }
 
         binding.loginResetBtn.setOnClickListener {

@@ -1,6 +1,6 @@
 package it.polimi.mobile.design.entities
 
-data class WorkoutExercise(
+data class WorkoutExercise (
     val id: String? = null,
     val workoutId: String? = null,
     val exerciseId: String? = null,

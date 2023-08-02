@@ -35,9 +35,7 @@ class StatsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityStatsBinding
 
     private var firebaseAuth = FirebaseAuth.getInstance()
-    private val databaseHelperInstance = DatabaseHelper().getInstance()
-    private var pointsDatabase = FirebaseDatabase.getInstance().getReference("Points")
-    private var graphsDatabase = FirebaseDatabase.getInstance().getReference("Graphs")
+    private val helperDB = DatabaseHelper().getInstance()
 
     private val myCalendar : Calendar = Calendar.getInstance()
     private var currentGraph: Graph = Graph()
@@ -63,40 +61,35 @@ class StatsActivity : AppCompatActivity() {
         }
 
         binding.addDataBtn.setOnClickListener{
-            showAddData()
+            toggleAddDataVisibility(true)
         }
 
         binding.noDataButton.setOnClickListener{
-            showAddData()
+            toggleAddDataVisibility(true)
         }
 
         binding.addDataClose.setOnClickListener{
-            val animate = TranslateAnimation(0F, 0F, 0F, binding.addDataCard.height.toFloat() + 15.toPx())
-            animate.duration = 500
-            animate.fillAfter = true
-            binding.addDataCard.startAnimation(animate)
-            binding.addDataBtn.isClickable = true
-            binding.addDataClose.isClickable = false
+            toggleAddDataVisibility(false)
         }
 
         binding.confirmAddDataBtn.setOnClickListener{ createData() }
     }
 
-    private fun showAddData() {
-        binding.addDataCard.visibility = View.VISIBLE
-        val animate = TranslateAnimation(0F, 0F, binding.addDataCard.height.toFloat(), 0F)
+    private fun toggleAddDataVisibility(show: Boolean) {
+        binding.addDataCard.visibility = if (show) View.VISIBLE else View.GONE
 
-        animate.duration = 500
-        animate.fillAfter = true
-        binding.addDataCard.startAnimation(animate)
-        binding.addDataBtn.isClickable = false
-        binding.addDataClose.isClickable = true
+        val translateY = if (show) 0F else binding.addDataCard.height.toFloat() + 15.toPx()
+        binding.addDataCard.animate().translationY(translateY).setDuration(500).start()
+
+        binding.addDataBtn.isClickable = !show
+        binding.addDataClose.isClickable = show
     }
 
-    private fun createData(){
+
+    private fun createData() {
 
         val uId = firebaseAuth.uid.toString()
-        val pId = pointsDatabase.push().key!!
+        val pId = helperDB.pointsSchema.push().key!!
         val value = HelperFunctions().parseFloatInput(binding.dataInputValue.text.toString())
         val dateValue = binding.dateInputValue.text.toString()
 
@@ -106,12 +99,12 @@ class StatsActivity : AppCompatActivity() {
         if (value > 0) {
             val dataPoint = DataPoint(uId, pId, currentGraph.graphId,
                 ChronoUnit.DAYS.between(LocalDate.ofEpochDay(0), dt) * 86400, value)
-            binding.addDataCard.visibility = View.INVISIBLE
-            pointsDatabase.child(pId).setValue(dataPoint).addOnSuccessListener {
+            helperDB.pointsSchema.child(pId).setValue(dataPoint).addOnSuccessListener {
                 val intent = Intent(this, StatsActivity::class.java)
                 startActivity(intent)
                 finish()
             }
+            binding.addDataCard.visibility = View.INVISIBLE
         }
         else Toast.makeText(this, "Fill in all fields to continue!!", Toast.LENGTH_SHORT).show()
 
@@ -122,7 +115,7 @@ class StatsActivity : AppCompatActivity() {
         binding.dataInputLabel.text = currentGraph.graphMeasure
 
         // Display Graph Data
-        graphsDatabase.get().addOnSuccessListener { graphsSnapshot ->
+        helperDB.graphsSchema.get().addOnSuccessListener { graphsSnapshot ->
             val graph =
                 DatabaseHelper().getGraphsFromSnapshot(graphsSnapshot)
                     .filter { it.graphId == currentGraph.graphId}[0]
@@ -130,9 +123,9 @@ class StatsActivity : AppCompatActivity() {
         }
 
         // Display Data Points
-        pointsDatabase.get().addOnSuccessListener { pointsSnapshot ->
-            var points = databaseHelperInstance.getPointsFromSnapshot(pointsSnapshot)
-            points = points.filter { it.graphId == currentGraph.graphId}.sortedBy { it.xcoordinate } // TODO: userId too
+        helperDB.pointsSchema.get().addOnSuccessListener { pointsSnapshot ->
+            var points = helperDB.getPointsFromSnapshot(pointsSnapshot)
+            points = points.filter { it.graphId == currentGraph.graphId}.sortedBy { it.xcoordinate }
             Log.w("Data:", points.toString())
             binding.graphVisualizer.dataPoints = points
             binding.graphVisualizer.drawDataPoints()
@@ -183,7 +176,8 @@ class StatsActivity : AppCompatActivity() {
     }
 
     private fun changeSubSpinner(index: Int) {
-        graphsDatabase.get().addOnSuccessListener { graphsSnapshot ->
+
+        helperDB.graphsSchema.get().addOnSuccessListener { graphsSnapshot ->
 
             val graphs =
                 DatabaseHelper().getGraphsFromSnapshot(graphsSnapshot).filter { it.graphType == index}

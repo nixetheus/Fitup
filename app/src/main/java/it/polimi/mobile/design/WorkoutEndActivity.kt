@@ -7,28 +7,40 @@ import android.os.SystemClock
 import androidx.appcompat.app.AppCompatActivity
 import it.polimi.mobile.design.databinding.ActivityWorkoutEndBinding
 import it.polimi.mobile.design.databinding.ActivityWorkoutPlayBinding
+import it.polimi.mobile.design.helpers.HelperFunctions
 
 class WorkoutEndActivity : AppCompatActivity() {
+
     private lateinit var binding:ActivityWorkoutEndBinding
-    @SuppressLint("SetTextI18n")
+
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
-        binding= ActivityWorkoutEndBinding.inflate(layoutInflater)
+        binding = ActivityWorkoutEndBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        var exp= intent.extras?.get("exp") as Float
-        var n= intent.extras?.get("number of exercises") as Int
-        var chronometer= intent.extras?.get("time") as Long
+        displayResults()
+    }
+
+    private fun displayResults() {
+
+        val exp         = HelperFunctions().getExtra<Float>(intent, "Exp")!!
+        val nExercises  = HelperFunctions().getExtra<Int>(intent, "N")!! + 1
+        val elapsedTime = HelperFunctions().getExtra<Long>(intent, "Time")!!
+
         binding.expRecapValue.text = exp.toString()
-        val time = SystemClock.elapsedRealtime() - chronometer
+        binding.timeRecapValue.text = formatTime(SystemClock.elapsedRealtime() - elapsedTime)
+        binding.exercisesRecapValue.text= nExercises.toString()
+
+    }
+
+    private fun formatTime(time: Long) :  String {
         val h = (time / 3600000).toInt()
         val m = (time - h * 3600000).toInt() / 60000
         val s = (time - h * 3600000 - m * 60000).toInt() / 1000
-        val t =
-            (if (h < 10) "0$h" else h).toString() + ":" + (if (m < 10) "0$m" else m) + ":" + if (s < 10) "0$s" else s
-        binding.timeRecapValue.text = t
-        binding.exercisesRecapValue.text=(n+1).toString()
+        return (if (h < 10) "0$h" else h).toString() + ":" + (if (m < 10) "0$m" else m) + ":" + if (s < 10) "0$s" else s
     }
 
+    // TODO: modernize
     override fun onBackPressed() {
         super.onBackPressed()
         val intent = Intent(this, CentralActivity::class.java)

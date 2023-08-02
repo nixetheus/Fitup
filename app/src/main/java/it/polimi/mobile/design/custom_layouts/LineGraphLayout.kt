@@ -188,8 +188,6 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
         graphPaint.color = Color.argb(0.15f, 1f, 1f, 1f)
         graphPaint.style = Paint.Style.FILL
 
-        val pointZero = dataPoints.elementAt(0)
-
         // XY COORDINATES
         graphPaint.color = Color.argb(1f, 1f, 1f, 1f)
         graphPaint.style = Paint.Style.STROKE
