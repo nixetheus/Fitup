@@ -276,6 +276,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/null_value"
+                    android:foreground="?attr/selectableItemBackground"
                     android:padding="2.5dp"
                     app:srcCompat="@drawable/spotify_icon_rgb" />
             </androidx.cardview.widget.CardView>
@@ -330,6 +331,7 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center|center_vertical"
                         android:layout_marginStart="1.5dp"
+                        android:foreground="?attr/selectableItemBackground"
                         android:padding="3.5dp"
                         app:srcCompat="@drawable/smartwatch" />
                 </androidx.cardview.widget.CardView>

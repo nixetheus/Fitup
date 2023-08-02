@@ -18,6 +18,7 @@ class DatabaseHelper {
     val usersSchema             = FirebaseDatabase.getInstance().getReference("Users")
     val workoutsExercisesSchema = FirebaseDatabase.getInstance().getReference("WorkoutExercise")
     val workoutsSchema          = FirebaseDatabase.getInstance().getReference("Workout")
+    val workoutUserDataSchema   = FirebaseDatabase.getInstance().getReference("WorkoutUserData")
 
     val acceptedUserIds = listOf(firebaseAuth.uid, "0")
 

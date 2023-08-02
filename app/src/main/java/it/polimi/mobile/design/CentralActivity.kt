@@ -75,7 +75,7 @@ class CentralActivity : AppCompatActivity() {
     }
 
     private fun getUserWorkoutData() {
-        helperDB.workoutsSchema.addValueEventListener(object : ValueEventListener {
+        helperDB.workoutUserDataSchema.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 userWorkoutData = helperDB.getUserWorkoutDataFromSnapshot(snapshot)
             }
