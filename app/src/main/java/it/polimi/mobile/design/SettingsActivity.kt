@@ -1,13 +1,17 @@
 package it.polimi.mobile.design
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.EditTextPreference
+import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.PreferenceManager
 import it.polimi.mobile.design.databinding.SettingsActivityBinding
+import java.util.Locale
 
 
 class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
@@ -19,6 +23,7 @@ class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPrefere
 
         super.onCreate(savedInstanceState)
 
+
         binding = SettingsActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -27,7 +32,24 @@ class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPrefere
                 .replace(R.id.settings, SettingsFragment()).commit()
         }
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        setupLanguages()
+
+    }
+    private fun setLocale(languageCode: String) {
+        val locale = Locale(languageCode)
+        Locale.setDefault(locale)
+
+        val resources = resources
+        val configuration = Configuration(resources.configuration)
+        configuration.setLocale(locale)
+
+        resources.updateConfiguration(configuration, resources.displayMetrics)
+
+        // Puoi salvare la lingua selezionata nelle SharedPreferences
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        sharedPreferences.edit().putString("language", languageCode).apply()
+
+        // Ricarica l'activity per applicare le modifiche della lingua
+        recreate()
     }
 
 
@@ -37,6 +59,13 @@ class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPrefere
             setPreferencesFromResource(R.xml.root_preferences, rootKey)
             val logout: EditTextPreference? = findPreference("logout")
             val nickname: EditTextPreference? = findPreference("nickname")
+            val languagePreference: ListPreference? = findPreference("language")
+
+            languagePreference?.setOnPreferenceChangeListener { preference, newValue ->
+                val languageCode = newValue as String
+                (activity as? SettingsActivity)?.setLocale(languageCode)
+                true
+            }
             if (logout != null) {
                 logout.setOnPreferenceClickListener {
                     val intent = Intent(this.context, LogoutPopUp::class.java)
@@ -45,8 +74,11 @@ class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPrefere
                 }
             }
 
+
         }
+
     }
+
 
     private fun setupLanguages() {
         /*val languagePref = applicationContext.getSharedPreferences("language", Context.MODE_PRIVATE) as DialogPreference
@@ -56,7 +88,8 @@ class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPrefere
         }*/
     }
 
-    private fun setLocale(lang: String?) {
+
+    /*private fun setLocale(lang: String?) {
 
         Toast.makeText(applicationContext, lang, Toast.LENGTH_SHORT).show()
         /*val myLocale = lang?.let { Locale(it) }
@@ -68,7 +101,7 @@ class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPrefere
 
         finish()
         startActivity(refresh)*/
-    }
+    }*/
 
     override fun onPreferenceStartFragment(
         caller: PreferenceFragmentCompat?,
@@ -93,5 +126,11 @@ class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPrefere
         }
         return true
 
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val intent = Intent(this, CentralActivity::class.java)
+        startActivity(intent)
     }
 }
