@@ -28,6 +28,7 @@ import it.polimi.mobile.design.helpers.HelperFunctions
 
 class WorkoutLayout(context: Context, attrs: AttributeSet?) : LinearLayout(context, attrs) {
 
+    private var toDraw = false
     private val distanceX = 75.toPx()
     var exercises: List<WorkoutExercise> = listOf()
     private val helperDB = DatabaseHelper().getInstance()
@@ -36,25 +37,34 @@ class WorkoutLayout(context: Context, attrs: AttributeSet?) : LinearLayout(conte
     init {
         setWillNotDraw(false)
         exercises = listOf()
-        post{drawExercises()}
     }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         drawLines(canvas)
+        drawExercises()
     }
 
     private fun drawExercises() {
-        for (exerciseIndex in exercises.indices) {
-            // Exercise view
-            val layoutInflater = LayoutInflater.from(context)
-            val exerciseView = FragmentExerciseInPlayBinding.inflate(layoutInflater)
-            exerciseView.exerciseNamePlay.text = exercises[exerciseIndex].exerciseName!!
-                .lowercase().replaceFirstChar { it.uppercaseChar() }
-            addView(exerciseView.root)
-            exerciseFragments.add(exerciseView)
-            setExerciseTypeImage(exercises[exerciseIndex], exerciseIndex)
+        if (toDraw) {
+            toDraw = false
+            for (exerciseIndex in exercises.indices) {
+                // Exercise view
+                val layoutInflater = LayoutInflater.from(context)
+                val exerciseView = FragmentExerciseInPlayBinding.inflate(layoutInflater)
+                exerciseView.exerciseNamePlay.text = exercises[exerciseIndex].exerciseName!!
+                    .lowercase().replaceFirstChar { it.uppercaseChar() }
+                addView(exerciseView.root)
+                exerciseFragments.add(exerciseView)
+                setExerciseTypeImage(exercises[exerciseIndex], exerciseIndex)
+            }
         }
+    }
+
+    fun populateExercises(workoutExercises: List<WorkoutExercise>) {
+        exercises = workoutExercises
+        toDraw = true
+        invalidate()
     }
 
     private fun drawLines(canvas: Canvas) {

@@ -134,6 +134,9 @@
     <string name="courage_text">Defeat The Monster</string>
     <string name="popup">Are you sure you want to end the workout?</string>
     <string name="congrats">Congratulations!\n You defeated the monster!</string>
+    <string name="ready">Ready</string>
+    <string name="set">Set</string>
+    <string name="go">Go!</string>
 
     <!-- FINISH -->
     <string name="congrats_main">You\'ve Done It!</string>

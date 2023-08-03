@@ -41,6 +41,8 @@
     <string name="profile_header">Profilo</string>
     <string name="change_nick">Cambia username</string>
     <string name="logout">Esci</string>
+    <string name="confirm_logout_yes">Si</string>
+    <string name="confirm_logout_no">No</string>
     <string name="language">LIngua</string>
     <string name="modify_exercise">Modifica</string>
     <string name="delete_exercise">Elimina</string>
@@ -56,6 +58,11 @@
     <string name="next_up_button">Prossimo</string>
     <string name="wearos_button_label">Sincronizza</string>
     <string name="courage_text">Sconfiggi Il Mostro</string>
+    <string name="popup">Sei sicuro di voler terminare il workout?</string>
+    <string name="congrats">Congratulazioni!\\nHai sconfitto il mostro!</string>
+    <string name="ready">Pronto</string>
+    <string name="set">Partenza</string>
+    <string name="go">Via</string>
     <string name="congrats_main">Ce L\'Hai Fatta!</string>
     <string name="congrats_sub">Riposati, rilassati e goditi il resto della giornata</string>
     <string name="recap_exp">Exp. Totale:</string>

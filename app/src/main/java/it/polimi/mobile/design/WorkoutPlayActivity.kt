@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.res.Resources
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.os.SystemClock
 import android.util.Log
 import android.util.TypedValue
@@ -61,6 +62,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
         binding = ActivityWorkoutPlayBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        beginWorkout()
         initChronometers()
         retrieveData()
 
@@ -82,7 +84,6 @@ class WorkoutPlayActivity : AppCompatActivity() {
                 Toast.makeText(
                     this, "Please add exercises to continue your training", Toast.LENGTH_SHORT).show()
             }
-            if (currentExerciseIndex == 0) startGlobalChronometer()
         }
 
         binding.nextButton.setOnClickListener {
@@ -97,6 +98,41 @@ class WorkoutPlayActivity : AppCompatActivity() {
         binding.stopButton.setOnClickListener {
             finishWorkout()
         }
+    }
+
+    private fun beginWorkout() {
+        startCountdown(4000, 1000, onTick = { millisUntilFinished ->
+            setCountdownText(millisUntilFinished)
+        }, onFinish = {
+            Thread.sleep(500)
+            binding.countDownCard.visibility = View.GONE
+            startGlobalChronometer()
+            binding.playPauseButton.performClick()
+        })
+    }
+
+    private fun setCountdownText(millisUntilFinished: Long) {
+        val missing = millisUntilFinished / 1000
+        if (missing >= 2)
+            binding.countdown.text = resources.getString(R.string.ready)
+        else if (missing >= 1)
+            binding.countdown.text = resources.getString(R.string.set)
+        else
+            binding.countdown.text = resources.getString(R.string.go)
+    }
+
+    private fun startCountdown(totalTimeMillis: Long, intervalMillis: Long, onTick: (Long) -> Unit, onFinish: () -> Unit) {
+        val countDownTimer = object : CountDownTimer(totalTimeMillis, intervalMillis) {
+            override fun onTick(millisUntilFinished: Long) {
+                onTick(millisUntilFinished)
+            }
+
+            override fun onFinish() {
+                onFinish()
+            }
+        }
+
+        countDownTimer.start()
     }
 
     private fun initChronometers() {
@@ -115,7 +151,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
                     workoutExercises = helperDB.getWorkoutsExercisesFromSnapshot(snapshot, playWorkout.workoutId!!)
 
                 if (workoutExercises.isNotEmpty()) {
-                    binding.workoutLayoutPlay.exercises = workoutExercises
+                    binding.workoutLayoutPlay.populateExercises(workoutExercises)
                     changeExercise()
                     SendThread("/exercise", workoutExercises[currentExerciseIndex].exerciseName.toString()).start()
                 }}
@@ -203,6 +239,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
     private fun startExercise() {
         startChronometerExercise()
         SendThread("/start", "start").start()
+        centerChildViewInHorizontalScrollView (binding.playWorkoutScrollView)
     }
     
     private fun changeExercise() {
@@ -211,7 +248,6 @@ class WorkoutPlayActivity : AppCompatActivity() {
             currentExerciseIndex++
             setupExerciseUI()
             SendThread("/next", "next").start()
-            centerChildViewInHorizontalScrollView (binding.playWorkoutScrollView)
         } else {
             showCongratulations()
             binding.exerciseCounter.stop()
@@ -356,7 +392,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
             
             // Start Exercise
             if (HelperFunctions().getExtra<String>(intent, "start") != null){ 
-                binding.startStopButton.performClick()
+                binding.playPauseButton.performClick()
             }
             
             // Next Exercise
