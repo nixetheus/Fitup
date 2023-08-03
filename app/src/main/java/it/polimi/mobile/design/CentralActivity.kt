@@ -226,4 +226,6 @@ class CentralActivity : AppCompatActivity() {
     fun getFiltersSize() : Int {
         return filters.size
     }
+    override fun onBackPressed() {
+    }
 }
