@@ -1,5 +1,6 @@
 package it.polimi.mobile.design
 
+import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.ContentValues.TAG
 import android.content.Context
@@ -224,8 +225,11 @@ class WorkoutPlayActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun showCongratulations() {
-        // TODO
+        binding.courageText.text = resources.getString(R.string.congrats)
+        binding.endImage.setImageDrawable(
+            resources.getDrawable(R.drawable.monster_defeated, applicationContext.theme)!!)
     }
 
     private fun centerChildViewInHorizontalScrollView(horizontalScrollView: HorizontalScrollView) {
