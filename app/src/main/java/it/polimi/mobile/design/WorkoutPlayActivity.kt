@@ -214,6 +214,8 @@ class WorkoutPlayActivity : AppCompatActivity() {
             centerChildViewInHorizontalScrollView (binding.playWorkoutScrollView)
         } else {
             showCongratulations()
+            binding.exerciseCounter.stop()
+            binding.workoutTimeValue.stop()
             binding.stopButton.visibility = View.VISIBLE
             binding.playPauseButton.visibility = View.INVISIBLE
             binding.nextButton.visibility = View.INVISIBLE
