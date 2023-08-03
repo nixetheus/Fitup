@@ -56,6 +56,7 @@ class HelperFunctions {
                 Long::class.java -> intent.getLongExtra(extraName, 0) as? T
                 Int::class.java -> intent.getIntExtra(extraName, 0) as? T
                 Float::class.java -> intent.getFloatExtra(extraName, 0f) as? T
+                String::class.java -> intent.getStringExtra(extraName) as? T
                 else -> throw NoSuchMethodException()
             }
         } else {

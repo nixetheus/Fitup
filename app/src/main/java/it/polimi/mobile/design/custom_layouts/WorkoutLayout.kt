@@ -1,24 +1,37 @@
 package it.polimi.mobile.design.custom_layouts
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.DashPathEffect
 import android.graphics.Paint
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.LinearLayout
+import androidx.core.content.res.ResourcesCompat
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import it.polimi.mobile.design.R
 import it.polimi.mobile.design.databinding.FragmentExerciseInPlayBinding
+import it.polimi.mobile.design.entities.Exercise
 import it.polimi.mobile.design.entities.WorkoutExercise
+import it.polimi.mobile.design.enum.ExerciseType
 import it.polimi.mobile.design.helpers.Constant
+import it.polimi.mobile.design.helpers.DatabaseHelper
+import it.polimi.mobile.design.helpers.HelperFunctions
 
 
 class WorkoutLayout(context: Context, attrs: AttributeSet?) : LinearLayout(context, attrs) {
 
     private val distanceX = 75.toPx()
     var exercises: List<WorkoutExercise> = listOf()
+    private val helperDB = DatabaseHelper().getInstance()
+    private val exerciseFragments = mutableListOf<FragmentExerciseInPlayBinding>()
 
     init {
         setWillNotDraw(false)
@@ -32,15 +45,15 @@ class WorkoutLayout(context: Context, attrs: AttributeSet?) : LinearLayout(conte
     }
 
     private fun drawExercises() {
-
         for (exerciseIndex in exercises.indices) {
-
             // Exercise view
             val layoutInflater = LayoutInflater.from(context)
             val exerciseView = FragmentExerciseInPlayBinding.inflate(layoutInflater)
             exerciseView.exerciseNamePlay.text = exercises[exerciseIndex].exerciseName!!
                 .lowercase().replaceFirstChar { it.uppercaseChar() }
             addView(exerciseView.root)
+            exerciseFragments.add(exerciseView)
+            setExerciseTypeImage(exercises[exerciseIndex], exerciseIndex)
         }
     }
 
@@ -68,4 +81,47 @@ class WorkoutLayout(context: Context, attrs: AttributeSet?) : LinearLayout(conte
     }
 
     private fun Int.toPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
+
+    fun completeExercise(index: Int) {
+        try {
+            exerciseFragments[index].exerciseLevel.drawInsideColor()
+        }
+        catch (_: ArrayIndexOutOfBoundsException) {}
+        catch (_: java.lang.IndexOutOfBoundsException) {}
+    }
+
+    private fun renderImageVisible(index: Int) {
+        try {
+            exerciseFragments[index].exTypeImage.visibility = VISIBLE
+        }
+        catch (_: ArrayIndexOutOfBoundsException) {}
+    }
+
+    private fun setExerciseTypeImage(workoutExercise: WorkoutExercise, index: Int) {
+        helperDB.exercisesSchema.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    val exercises = helperDB.getExercisesFromSnapshot(dataSnapshot)
+                    val type = exercises.find { it.eid == workoutExercise.exerciseId }!!.type?: ExerciseType.CHEST
+                    exerciseFragments[index].exTypeImage.setImageDrawable(getExerciseTypeImage(type))
+                    renderImageVisible(index)
+                    exerciseFragments[index].exerciseLevel.setFinishedColor(
+                        HelperFunctions().getExerciseBackground(type, resources, context)
+                    )
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {}
+        })
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun getExerciseTypeImage(type: ExerciseType) : Drawable {
+        return when(type.ordinal) {
+            0    -> resources.getDrawable(R.drawable.muscle, context.theme)!!
+            1    -> resources.getDrawable(R.drawable.leg, context.theme)!!
+            2    -> resources.getDrawable(R.drawable.body, context.theme)!!
+            3    -> resources.getDrawable(R.drawable.yoga, context.theme)!!
+            else -> resources.getDrawable(R.drawable.body, context.theme)!!
+        }
+    }
 }

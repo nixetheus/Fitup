@@ -1,25 +1,30 @@
 package it.polimi.mobile.design
 
-import android.content.*
+import android.content.BroadcastReceiver
 import android.content.ContentValues.TAG
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.content.res.Resources
 import android.os.Bundle
-import android.os.Handler
-import android.os.Message
 import android.os.SystemClock
 import android.util.Log
+import android.util.TypedValue
 import android.view.View
 import android.widget.Chronometer
 import android.widget.Chronometer.OnChronometerTickListener
+import android.widget.HorizontalScrollView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.android.gms.wearable.Node
 import com.google.android.gms.wearable.Wearable
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.*
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ServerValue
+import com.google.firebase.database.ValueEventListener
 import com.spotify.android.appremote.api.ConnectionParams
 import com.spotify.android.appremote.api.Connector
 import com.spotify.android.appremote.api.SpotifyAppRemote
@@ -27,452 +32,389 @@ import com.spotify.protocol.types.Track
 import it.polimi.mobile.design.databinding.ActivityWorkoutPlayBinding
 import it.polimi.mobile.design.entities.Workout
 import it.polimi.mobile.design.entities.WorkoutExercise
+import it.polimi.mobile.design.entities.WorkoutUserData
+import it.polimi.mobile.design.helpers.Constant
 import it.polimi.mobile.design.helpers.DatabaseHelper
 import it.polimi.mobile.design.helpers.HelperFunctions
 import java.util.concurrent.ExecutionException
-import kotlin.properties.Delegates
 
 
 class WorkoutPlayActivity : AppCompatActivity() {
-    private val FORMAT = "%02d:%02d"
-    private lateinit var binding:ActivityWorkoutPlayBinding
-    private lateinit var chrono: Chronometer
-    private lateinit var chronoExercise: Chronometer
-    private lateinit var database: DatabaseReference
-    private var db = FirebaseDatabase.getInstance()
-    private lateinit var workoutExercise: ArrayList<WorkoutExercise>
-    private lateinit var workout: Workout
-    private var timeWhenStopped by Delegates.notNull<Long>()
-    private var i=0
-    private lateinit var mGoogleApiClient:GoogleApiClient
-    private val CLIENT_ID = "8db4d298653041b4b1850c09464182a3"
-    private val REDIRECT_URI = "mobile-app-login://callback"
-    private var mSpotifyAppRemote: SpotifyAppRemote? = null
-    private var firebaseAuth = FirebaseAuth.getInstance()
-    private var userDatabase = FirebaseDatabase.getInstance().getReference("Users")
-    private val databaseHelperInstance = DatabaseHelper().getInstance()
-    private var notificationId:Int=0;
-    private var exp by Delegates.notNull<Float>()
-    protected var myHandler: Handler? = null
 
+    private val helperDB = DatabaseHelper().getInstance()
+    private lateinit var binding : ActivityWorkoutPlayBinding
+    private var mSpotifyAppRemote: SpotifyAppRemote? = null
+
+    private lateinit var playWorkout: Workout
+    private lateinit var workoutExercises: ArrayList<WorkoutExercise>
+    private lateinit var wearableList : Task<List<Node>>
+    
+    private var currentExerciseIndex = -1
+    private lateinit var globalElapsedTime: Chronometer
+    private lateinit var exerciseElapsedTime: Chronometer
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
-        binding=ActivityWorkoutPlayBinding.inflate(layoutInflater)
-        Log.d("Play Workout", "onCreate workout play mobile")
+        binding = ActivityWorkoutPlayBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        i=0
 
-        workoutExercise= arrayListOf<WorkoutExercise>()
-        workoutExercise.clear()
-        timeWhenStopped=0
-        chrono= binding.workoutTimeValue
-        chronoExercise=binding.exerciseCounter
-        chronoExercise.text = "00:00"
-        chrono.text = "00:00:00"
-        myHandler = Handler { msg ->
-            val stuff = msg.data
-            stuff.getString("messageText")?.let { messageText(it) }
-            true
-        }
+        initChronometers()
+        retrieveData()
+
+        fillUITexts()
+        updateWorkoutStats()
+
+        createBindings()
         startSpotify()
+        sendWorkoutNameToWearable()
+        ListenerThread().start()
+    }
 
-        // TODO: add to workoutUserData
-        // TODO: add to total workout data
+    private fun createBindings() {
 
-        workout= intent.extras?.get("Workout") as Workout
-        exp= 0f
+        binding.playPauseButton.setOnClickListener {
+            if (workoutExercises.isNotEmpty()) {
+                startExercise()
+            } else {
+                Toast.makeText(
+                    this, "Please add exercises to continue your training", Toast.LENGTH_SHORT).show()
+            }
+            if (currentExerciseIndex == 0) startGlobalChronometer()
+        }
 
-        binding.expText.text=exp.toString()
-        binding.playWorkoutName.text=workout.name
-        database=FirebaseDatabase.getInstance().getReference("WorkoutExercise")
-        database.addValueEventListener(object : ValueEventListener {
+        binding.nextButton.setOnClickListener {
+            if (workoutExercises.isNotEmpty()) {
+                changeExercise()
+            } else {
+                Toast.makeText(
+                    this, "Please add exercises to continue your training", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        binding.stopButton.setOnClickListener {
+            finishWorkout()
+        }
+    }
+
+    private fun initChronometers() {
+        globalElapsedTime = binding.workoutTimeValue
+        exerciseElapsedTime = binding.exerciseCounter
+    }
+
+    private fun retrieveData() {
+
+        playWorkout = HelperFunctions().getSerializableExtra(intent, "Workout")!!
+
+        helperDB.workoutsExercisesSchema.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                workoutExercise.clear()
-                if (snapshot.exists()){
-                    for (workSnap in snapshot.children) {
-                        val workData = workSnap.getValue(WorkoutExercise::class.java)
-                        if (workData != null) {
-                            if (workData.workoutId == workout.workoutId) {
 
-                                    workoutExercise.add(workData)
-                                }
-                            }
-                        }
-                    }
+                if (snapshot.exists())
+                    workoutExercises = helperDB.getWorkoutsExercisesFromSnapshot(snapshot, playWorkout.workoutId!!)
 
-                    binding.workoutLayoutPlay.exercises = workoutExercise
-                if( workoutExercise.size!=0) {
-                NewThread("/exercise", workoutExercise[i].exerciseName.toString()).start()
+                if (workoutExercises.isNotEmpty()) {
+                    binding.workoutLayoutPlay.exercises = workoutExercises
+                    changeExercise()
+                    SendThread("/exercise", workoutExercises[currentExerciseIndex].exerciseName.toString()).start()
                 }}
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+                Log.w("Firebase", "Couldn't retrieve data...")
             }
-
         })
-        sendWorkoutNameToWearable()
-        ListenerThread().start()
 
+        wearableList = Wearable.getNodeClient(applicationContext).connectedNodes
+    }
 
+    private fun startGlobalChronometer() {
+        globalElapsedTime.onChronometerTickListener =
+            OnChronometerTickListener { chronometer ->
+                chronometer.text = formatTime(SystemClock.elapsedRealtime() - chronometer.base, "HH:mm:ss")
+            }
+        globalElapsedTime.base = SystemClock.elapsedRealtime()
+        globalElapsedTime.start()
+    }
 
+    private fun startChronometerExercise() {
+        exerciseElapsedTime.onChronometerTickListener =
+            OnChronometerTickListener { chronometer ->
+                chronometer.text = formatTime(SystemClock.elapsedRealtime() - chronometer.base, "mm:ss")
+            }
+        exerciseElapsedTime.base = SystemClock.elapsedRealtime()
+        exerciseElapsedTime.start()
+    }
 
+    private fun updateWorkoutStats() {
+        updateWorkoutUserData()
+        updateWorkoutTotalPlays()
+    }
 
+    private fun updateWorkoutUserData() {
+        helperDB.workoutUserDataSchema.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
 
-        binding.playPauseButton.setOnClickListener{
-            if (i==0)
-                startChronometer()
-            playExercise()
-            NewThread("/start", "start").start()
-        }
-        binding.nextButton.setOnClickListener{
-            NewThread("/next", "next").start()
-            nextExercise(exp)
+                    val workoutUserData = helperDB.getUserWorkoutDataFromSnapshot(dataSnapshot)
+                    val playWorkoutData = workoutUserData.find { it.workoutId == playWorkout.workoutId!! }
 
-        }
-        binding.wearOsButton.setOnClickListener{
+                    val lastDate        = System.currentTimeMillis()
+                    val timesPlayed     = playWorkoutData?.numberOfTimesPlayed?.plus(1) ?: 1
 
+                    val uid   = helperDB.getFirebaseAuth().uid
+                    val wid   = playWorkout.workoutId!!
+                    val wUDid = playWorkoutData?.id ?: helperDB.workoutUserDataSchema.push().key!!
 
+                    val newWorkoutUserData = WorkoutUserData(wUDid, uid, wid, lastDate, timesPlayed)
+                    helperDB.workoutUserDataSchema.child(wUDid).setValue(newWorkoutUserData)
 
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {}
+        })
+    }
+
+    private fun updateWorkoutTotalPlays() {
+        helperDB.workoutsSchema.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    val userWorkouts = helperDB.getWorkoutsFromSnapshot(dataSnapshot)
+                    val workoutData = userWorkouts.find { it.workoutId == playWorkout.workoutId!! }
+                    if (workoutData != null) {
+                        workoutData.totalNumberOfTimesPlayed?.plus(1)
+                        helperDB.workoutUserDataSchema.child(playWorkout.workoutId!!).setValue(workoutData)
+                    } else {
+                        throw java.lang.IllegalStateException()
+                    }
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {}
+        })
+    }
+    
+    private fun fillUITexts() {
+        binding.expText.text          = "0"
+        binding.playWorkoutName.text  = playWorkout.name
+        binding.exerciseCounter.text  = resources.getString(R.string.exercise_time)
+        binding.workoutTimeValue.text = resources.getString(R.string.global_time)
+    }
+    
+    private fun startExercise() {
+        startChronometerExercise()
+        SendThread("/start", "start").start()
+    }
+    
+    private fun changeExercise() {
+        binding.workoutLayoutPlay.completeExercise(currentExerciseIndex)
+        if (currentExerciseIndex < workoutExercises.size - 1 ) {
+            currentExerciseIndex++
+            setupExerciseUI()
+            SendThread("/next", "next").start()
+            centerChildViewInHorizontalScrollView (binding.playWorkoutScrollView)
+        } else {
+            showCongratulations()
+            binding.stopButton.visibility = View.VISIBLE
+            binding.playPauseButton.visibility = View.INVISIBLE
+            binding.nextButton.visibility = View.INVISIBLE
+
+            val colorAccent = TypedValue()
+            this.theme.resolveAttribute(android.R.attr.colorAccent, colorAccent, true)
+            binding.endInside.setCardBackgroundColor(colorAccent.data)
+            setHorizontalScrollViewEnd(binding.playWorkoutScrollView)
         }
     }
-    inner class ListenerThread() : Thread(){
+
+    private fun showCongratulations() {
+        // TODO
+    }
+
+    private fun centerChildViewInHorizontalScrollView(horizontalScrollView: HorizontalScrollView) {
+        val startingOffset = 70.toPx()
+        val minimizedExerciseViewOffset = 150.toPx()
+        horizontalScrollView.post {
+            // Calculate the horizontal offset needed to center the child view in the HorizontalScrollView
+            val scrollOffset = startingOffset + (currentExerciseIndex) * minimizedExerciseViewOffset
+            // Set the calculated offset as the new scroll position of the HorizontalScrollView
+            horizontalScrollView.smoothScrollTo(scrollOffset, 0)
+        }
+    }
+
+    private fun setHorizontalScrollViewEnd(horizontalScrollView: HorizontalScrollView) {
+        horizontalScrollView.post {
+            horizontalScrollView.fullScroll(HorizontalScrollView.FOCUS_RIGHT)
+        }
+    }
+
+    private fun setupExerciseUI() {
+        with (binding) {
+            currentExerciseName.text = workoutExercises[currentExerciseIndex].exerciseName
+            currentExerciseRepsValue.text = workoutExercises[currentExerciseIndex].reps.toString()
+            currentExerciseSetsValue.text = workoutExercises[currentExerciseIndex].sets.toString()
+            currentExerciseWeightValue.text = workoutExercises[currentExerciseIndex].weight.toString()
+            currentExerciseRestValue.text = HelperFunctions().secondsToFormatString(workoutExercises[currentExerciseIndex].rest!!)
+            startCurrentExerciseLayout.visibility = View.VISIBLE
+        }
+        exerciseElapsedTime.stop()
+        exerciseElapsedTime.text = resources.getString(R.string.exercise_time)
+    }
+
+    private fun finishWorkout() {
+        SendThread("/finish", "finish").start()
+        addUserExperience()
+        disconnectSpotify()
+        startFinishActivity()
+    }
+
+    private fun addUserExperience() {
+        val userRef = helperDB.usersSchema.orderByChild("uid").equalTo(helperDB.getFirebaseAuth().uid)
+        userRef.addListenerForSingleValueEvent(object: ValueEventListener{
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (userSnapshot in dataSnapshot.children) {
+                    userSnapshot.ref.child("exp").setValue(
+                        ServerValue.increment(playWorkout.gainedExperience!!.toDouble()))
+                }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e(TAG, "onCancelled", databaseError.toException())
+            }
+        })
+    }
+
+    private fun disconnectSpotify() {
+        mSpotifyAppRemote?.playerApi?.pause()
+        mSpotifyAppRemote?.let { SpotifyAppRemote.disconnect(it) }
+    }
+
+    private fun startFinishActivity() {
+        val intent = Intent(this, WorkoutEndActivity::class.java)
+        intent.putExtra("Exp", playWorkout.gainedExperience)
+        intent.putExtra("Time", globalElapsedTime.base)
+        intent.putExtra("N", playWorkout.numberOfExercises)
+        startActivity(intent)
+        finish()
+    }
+
+    private fun startSpotify() {
+        
+        val connectionParams = ConnectionParams.Builder(Constant.CLIENT_ID)
+            .setRedirectUri(Constant.REDIRECT_URI)
+            .showAuthView(true)
+            .build()
+        
+        SpotifyAppRemote.connect(this, connectionParams, object : Connector.ConnectionListener {
+                
+            override fun onConnected(spotifyAppRemote: SpotifyAppRemote) {
+                mSpotifyAppRemote = spotifyAppRemote
+                Log.d("Play Workout", "Connected! Yay!")
+                mSpotifyAppRemote!!.playerApi.play("spotify:playlist:37i9dQZF1DX2sUQwD7tbmL")
+                spotifyAppRemote.playerApi.subscribeToPlayerState().setEventCallback {
+                    val track: Track = it.track
+                    Log.d("PlaystartSpotify() Workout", track.name + " by " + track.artist.name)
+                }
+            }
+
+            override fun onFailure(throwable: Throwable) {
+                Log.e("MainActivity", throwable.message, throwable)
+            }
+        })
+    }
+
+    private fun sendWorkoutNameToWearable() {
+        playWorkout.name?.let {
+            SendThread("/workout", it).start()
+        }
+    }
+
+    // Inner Classes for WearOs communication
+
+    // Start Thread to receive messages from WearOs
+    inner class ListenerThread : Thread() {
         override fun run() {
             try {
-
-
                 val newFilter = IntentFilter(Intent.ACTION_SEND)
                 val messageReceiver = Receiver()
                 LocalBroadcastManager.getInstance(this@WorkoutPlayActivity)
-                    .registerReceiver(messageReceiver, newFilter);
+                    .registerReceiver(messageReceiver, newFilter)
             }
-            catch (exception: ExecutionException) {
-
-//TO DO//
-            }
+            catch (_: ExecutionException) {}
         }
     }
-
-    private fun playExercise() {
-
-        if (workoutExercise.size!=0) {
-            binding.currentExerciseName.text = workoutExercise[i].exerciseName
-            binding.currentExerciseRepsValue.text=workoutExercise[i].reps.toString()
-            binding.currentExerciseRestValue.text=workoutExercise[i].rest.let {
-                it?.let { it1 -> HelperFunctions().secondsToFormatString(it1.toInt()) }
+    
+    // Receive messages from WearOs Device
+    inner class Receiver : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            
+            // Update BPM
+            val bpmValue = HelperFunctions().getExtra<String>(intent!!, "message")
+            if (bpmValue.isNullOrEmpty()) { binding.bpmText.text = bpmValue }
+            
+            // Start Exercise
+            if (HelperFunctions().getExtra<String>(intent, "start") != null){ 
+                binding.startStopButton.performClick()
             }
-            binding.currentExerciseSetsValue.text=workoutExercise[i].sets.toString()
-            binding.startCurrentExerciseLayout.visibility= View.VISIBLE
-
-            startChronometerExercise()
-
-
-            binding.playPauseButton.isClickable=false
-            binding.nextButton.isClickable=true
-
-
-
-
-        }
-        else {
-            Toast.makeText(
-                this,
-                "This workout is empty, please add exercises to continue your training",
-                Toast.LENGTH_SHORT
-            ).show()
-            chrono.stop()
-            chronoExercise.stop()
-            chronoExercise.text="00:00"
-            binding.startStopButton.text = "FINISH!!"
-            binding.startStopButton.setOnClickListener {
-                val intent = Intent(this, CentralActivity::class.java)
-                startActivity(intent)
+            
+            // Next Exercise
+            if (HelperFunctions().getExtra<String>(intent, "next") != null) {
+                binding.nextExerciseButton.performClick()
             }
-        }
-    }
-
-    fun nextExercise(exp:Float){
-        //chrono.stop()
-        chronoExercise.stop()
-        chronoExercise.text="00:00"
-        //timeWhenStopped = chrono.base - SystemClock.elapsedRealtime();
-
-        binding.nextButton.isClickable=false
-
-        binding.playPauseButton.isClickable=true
-        if(i<workoutExercise.size-1){
-            i++
-            binding.currentExerciseName.text = workoutExercise[i].exerciseName
-            binding.currentExerciseRepsValue.text=workoutExercise[i].reps.toString()
-            binding.currentExerciseRestValue.text=workoutExercise[i].rest.let {
-                it?.let { it1 -> HelperFunctions().secondsToFormatString(it1.toInt()) }
-            }
-            binding.currentExerciseSetsValue.text=workoutExercise[i].sets.toString()
-            NewThread("/exercise", workoutExercise[i].exerciseName.toString()).start()
-
-        }
-        else {
-
-            NewThread("/finish", "finish").start()
-
-
-            binding.startCurrentExerciseLayout.visibility = View.GONE
-
-
-                val workoutToRemove =
-                    db.reference.child("Workout").orderByChild("workoutId").equalTo(workout.workoutId)
-
-                workoutToRemove.addListenerForSingleValueEvent(object : ValueEventListener {
-                    override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        for (workoutSnapshot in dataSnapshot.children) {
-                            workoutSnapshot.ref.child("ranking").setValue(ServerValue.increment(-1))
-
-                            workoutSnapshot.ref.child("timestamp").setValue(ServerValue.TIMESTAMP)
-                        }
-                    }
-
-                    override fun onCancelled(databaseError: DatabaseError) {
-                        Log.e(ContentValues.TAG, "onCancelled", databaseError.toException())
-                    }
-                })
-            val userExp=db.reference.child("Users").orderByChild("uid").equalTo(firebaseAuth.uid)
-                userExp.addListenerForSingleValueEvent(object: ValueEventListener{
-                    override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        for (userSnapshot in dataSnapshot.children) {
-                            userSnapshot.ref.child("exp").setValue(ServerValue.increment(exp.toDouble()))
-                        }
-                    }
-
-                    override fun onCancelled(databaseError: DatabaseError) {
-                        Log.e(ContentValues.TAG, "onCancelled", databaseError.toException())
-                    }
-
-                })
-
-
-                mSpotifyAppRemote?.playerApi?.pause()
-                mSpotifyAppRemote?.let {
-
-                    SpotifyAppRemote.disconnect(it)
+            
+            // Info Request
+            if (HelperFunctions().getExtra<String>(intent, "request") != null) {
+                if (workoutExercises.isNotEmpty()) {
+                    SendThread("/exercise", workoutExercises[currentExerciseIndex].exerciseName.toString()).start()
                 }
-
-                val intent = Intent(this, WorkoutEndActivity::class.java)
-                intent.putExtra("exp", exp)
-                intent.putExtra("time", chrono.base)
-                intent.putExtra("number of exercises", i)
-            workoutExercise.clear()
-                startActivity(intent)
-            finish()
-                i=0
-
+            }
         }
     }
-    fun startSpotify(){
-        val connectionParams = ConnectionParams.Builder(CLIENT_ID)
-            .setRedirectUri(REDIRECT_URI)
-            .showAuthView(true)
-            .build()
-        SpotifyAppRemote.connect(this, connectionParams,
-            object : Connector.ConnectionListener {
-                override fun onConnected(spotifyAppRemote: SpotifyAppRemote) {
-                    mSpotifyAppRemote = spotifyAppRemote
-                    Log.d("Play Workout", "Connected! Yay!")
 
-                    // Now you can start interacting with App Remote
-
-                    mSpotifyAppRemote!!.playerApi.play("spotify:playlist:37i9dQZF1DX2sUQwD7tbmL");
-                    spotifyAppRemote.playerApi.subscribeToPlayerState().setEventCallback {
-                        val track: Track = it.track
-                        Log.d("PlaystartSpotify() Workout", track.name + " by " + track.artist.name)
-                    }
+    // Send data to WearOs Device
+    inner class SendThread (var path: String, private var message: String) : Thread() {
+        override fun run() {
+            try {
+                val nodes: List<Node> = Tasks.await(wearableList)
+                for (node in nodes) {
+                    // val sendMessageTask: Task<Int> = Save into variable if result needed
+                    Wearable.getMessageClient(this@WorkoutPlayActivity).sendMessage(node.id, path, message.toByteArray())
                 }
-
-                override fun onFailure(throwable: Throwable) {
-                    Log.e("MainActivity", throwable.message, throwable)
-
-
-
-                    // Something went wrong when attempting to connect! Handle errors here
-                }
-
-            })
-    }
-
-    override fun onStart() {
-        super.onStart()
-        i=0
-
-
-    }
-
-
-
-
-
-    private fun startChronometer(){
-        chrono.onChronometerTickListener =
-            OnChronometerTickListener { chronometer ->
-                val time = SystemClock.elapsedRealtime() - chronometer.base
-                val h = (time / 3600000).toInt()
-                val m = (time - h * 3600000).toInt() / 60000
-                val s = (time - h * 3600000 - m * 60000).toInt() / 1000
-                val t =
-                    (if (h < 10) "0$h" else h).toString() + ":" + (if (m < 10) "0$m" else m) + ":" + if (s < 10) "0$s" else s
-                chronometer.text = t
+                Log.d(TAG, "nodes: ${nodes.size}")
             }
-        chrono.base = SystemClock.elapsedRealtime() + timeWhenStopped;
-        chrono.start()
-
-
-    }
-    private fun startChronometerExercise(){
-        chronoExercise.onChronometerTickListener =
-            OnChronometerTickListener { chronometer ->
-                val time = SystemClock.elapsedRealtime() - chronometer.base
-                val h = (time / 3600000).toInt()
-                val m = (time - h * 3600000).toInt() / 60000
-                val s = (time - h * 3600000 - m * 60000).toInt() / 1000
-                val t =
-                    (if (m < 10) "0$m" else m.toString()) + ":" + if (s < 10) "0$s" else s
-                chronometer.text = t
-            }
-        chronoExercise.base = SystemClock.elapsedRealtime()
-        chronoExercise.start()
-
-
+            catch (_: ExecutionException) {}
+            catch (_: InterruptedException) {}
+        }
     }
 
+    // Helpers
+    private fun formatTime(time: Long, format: String): String {
+        val h = time / 3600000
+        val m = (time % 3600000) / 60000
+        val s = (time % 60000) / 1000
+
+        return when (format) {
+            "HH:mm:ss" -> String.format("%02d:%02d:%02d", h, m, s)
+            "mm:ss" -> String.format("%02d:%02d", m, s)
+            else -> throw IllegalArgumentException("Invalid format: $format")
+        }
+    }
+
+    private fun Int.toPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
+    
+    // Others
     override fun onStop() {
         super.onStop()
-        NewThread("/exit", "exit").start()
+        SendThread("/exit", "exit").start()
     }
+
+    // TODO: modernize
     override fun onBackPressed() {
         super.onBackPressed()
+        SendThread("/exit", "exit").start()
         val intent = Intent(this, CentralActivity::class.java)
         startActivity(intent)
-        NewThread("/exit", "exit").start()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        NewThread("/exit", "exit").start()
+        SendThread("/exit", "exit").start()
     }
-
-    fun messageText(newinfo: String) {
-        if (newinfo.compareTo("") != 0) {
-           /* binding.currentExerciseName
-                .append(
-                """
-                
-                $newinfo
-                """.trimIndent()
-            )*/
-        }
-    }
-
-
-    //Define a nested class that extends BroadcastReceiver//
-     inner class Receiver : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            if (intent?.extras?.get("message") != null) {
-
-                val message = intent?.extras?.get("message") as String
-
-                binding.bpmText.text = message + " bpm"
-            }
-            if (intent?.extras?.get("start")!=null){
-                if (workoutExercise.size!=0){
-                    if(i==0)
-                        startChronometer()
-                    playExercise()
-                    startExerciseAnimation()
-                    Log.d("Play Workout", "Exercise"+i+"of"+workoutExercise.size+":"+workoutExercise[i].exerciseName)
-
-                }
-
-
-
-            }
-            if (intent?.extras?.get("next")!=null) {
-                if (workoutExercise.size != 0) {
-
-                    Log.d("Next Exercise", "nextExercise"+i+"of"+workoutExercise.size+":"+workoutExercise[i].exerciseName+ Thread.currentThread().id.toString())
-
-                    nextExercise(exp)
-
-                }
-            }
-            if (intent?.extras?.get("request")!=null) {
-                if (workoutExercise.size != 0) {
-                    NewThread("/exercise", workoutExercise[i].exerciseName.toString()).start()
-
-                }
-            }
-
-        }
-    }
-    fun startExerciseAnimation(){
-        TODO()
-    }
-
-    fun sendWorkoutNameToWearable() {
-
-        workout.name?.let { NewThread("/workout", it).start() }
-       // workoutExercise[0].exerciseName?.let { NewThread("/exercise", it).start() }
-
-    }
-
-    //Use a Bundle to encapsulate our message//
-    fun sendMessage(messageText: String?) {
-        val bundle = Bundle()
-        bundle.putString("messageText", messageText)
-        val msg: Message = myHandler!!.obtainMessage()
-        msg.data = bundle
-        myHandler!!.sendMessage(msg)
-    }
-
-
-   inner class NewThread     //Constructor for sending information to the Data Layer//
-        (var path: String, var message: String) : Thread() {
-        override fun run() {
-
-//Retrieve the connected devices, known as nodes//
-            val wearableList: Task<List<Node>> =
-                Wearable.getNodeClient(applicationContext).connectedNodes
-            try {
-                val nodes: List<Node> = Tasks.await<List<Node>>(wearableList)
-                for (node in nodes) {
-                    val sendMessageTask: Task<Int> =  //Send the message//
-                        Wearable.getMessageClient(this@WorkoutPlayActivity)
-                            .sendMessage(node.id, path, message.toByteArray())
-                    try {
-
-//Block on a task and get the result synchronously//
-                       val result = Tasks.await<Int>(sendMessageTask)
-                        Log.d(TAG, "Data item set: $path")
-
-
-
-                        //if the Task fails, then…..//
-                    } catch (exception: ExecutionException) {
-
-                        //TO DO: Handle the exception//
-                    } catch (exception: InterruptedException) {
-
-                        //TO DO: Handle the exception//
-                    }
-                }
-                Log.d(TAG, "nodes: ${nodes.size}")
-            } catch (exception: ExecutionException) {
-
-                //TO DO: Handle the exception//
-            } catch (exception: InterruptedException) {
-
-                //TO DO: Handle the exception//
-            }
-        }
-    }
-
 }
 

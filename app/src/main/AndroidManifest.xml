@@ -101,10 +101,11 @@
         </activity>
         <activity
             android:name=".ComeBackPopUp"
+            android:parentActivityName=".WorkoutPlayActivity"
             android:exported="false">
             <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
+                android:name="android.support.WorkoutPlayActivity"
+                android:value="WorkoutPlayActivity.VideoListActivity" />
         </activity>
         <activity
             android:name=".LogoutPopUp"

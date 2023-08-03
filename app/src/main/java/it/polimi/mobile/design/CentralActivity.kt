@@ -21,6 +21,7 @@ import it.polimi.mobile.design.helpers.DatabaseHelper
 import it.polimi.mobile.design.helpers.HelperFunctions
 import java.sql.Time
 import java.time.Instant
+import kotlin.math.log
 
 
 class CentralActivity : AppCompatActivity() {
@@ -90,9 +91,21 @@ class CentralActivity : AppCompatActivity() {
             helperDB.usersSchema.child(userId).get().addOnSuccessListener { userSnapshot ->
                 val user = helperDB.getUserFromSnapshot(userSnapshot)
                 binding.usernameText.text = user!!.username
-                binding.userLevelValue.text = (user.exp!! / 10).toInt().toString()
+                binding.userLevelValue.text = calculateLevel(user.exp!!).toString()
             }
         }
+    }
+
+    private fun calculateLevel(experience: Float): Int {
+        // Constants for the logarithmic function
+        val base = 100.0 // Base of the logarithm, adjust to control the gap between levels
+        val scaleFactor = 1 // Scale factor to adjust the level range (0 to 100)
+
+        // Calculate the level using a logarithmic function
+        val level = (scaleFactor * (log(experience.toDouble(), base) + 1)).toInt()
+
+        // Clamp the level to be between 0 and 100
+        return level.coerceIn(0, 100)
     }
 
     @SuppressLint("Recycle")

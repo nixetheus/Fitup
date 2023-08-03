@@ -15,15 +15,14 @@ import it.polimi.mobile.design.helpers.Constant
 class MinimizedExerciseView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
 
     private val radius = Constant.EXERCISE_VIEW_R
-    private val insideColor = TypedValue()
+    private var insideColor = 0
 
     init {
-        setOnClickListener {
-            setFinishedColor()
-            invalidate()
-        }
         background = ColorDrawable(Color.TRANSPARENT)
-        context.theme.resolveAttribute (androidx.appcompat.R.attr.colorPrimary, insideColor, true)
+
+        val colorPrimary = TypedValue()
+        context.theme.resolveAttribute (androidx.appcompat.R.attr.colorPrimary, colorPrimary, true)
+        insideColor = colorPrimary.data
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -47,7 +46,7 @@ class MinimizedExerciseView(context: Context, attrs: AttributeSet? = null) : Vie
         pointPaint.strokeWidth = radius / 20f
         pointPaint.strokeCap = Paint.Cap.ROUND
 
-        pointPaint.color = insideColor.data
+        pointPaint.color = insideColor
         pointPaint.style = Paint.Style.FILL
         canvas.drawOval(RectF(pointPaint.strokeWidth, pointPaint.strokeWidth,
             radius.toFloat() - pointPaint.strokeWidth, radius / 2f - pointPaint.strokeWidth),
@@ -59,7 +58,12 @@ class MinimizedExerciseView(context: Context, attrs: AttributeSet? = null) : Vie
             radius.toFloat() - pointPaint.strokeWidth, radius / 2f - pointPaint.strokeWidth),
             pointPaint)
     }
-    private fun setFinishedColor() {
-        context.theme.resolveAttribute (androidx.appcompat.R.attr.colorAccent, insideColor, true)
+
+    fun setFinishedColor(color: Int) {
+        insideColor = color
+    }
+
+    fun drawInsideColor() {
+        invalidate()
     }
 }
