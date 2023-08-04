@@ -2,6 +2,7 @@ package it.polimi.mobile.design
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -36,10 +37,16 @@ class MainActivity : AppCompatActivity() {
         mAuth.currentUser?.let {
             val uid = mAuth.uid.toString()
             userDatabase.child(uid).get().addOnSuccessListener {
-                val intent = Intent(this, if (it.exists()) CentralActivity::class.java else HomeActivity::class.java)
-                startActivity(intent)
+                if (it.exists()) {
+                    val intent = Intent(this, CentralActivity::class.java)
+                    startActivity(intent)
+                } else {
+                    binding.loadingOverlay.visibility = View.GONE
+                }
             }
         }
+        if (mAuth.currentUser == null)
+            binding.loadingOverlay.visibility = View.GONE
     }
 }
 
