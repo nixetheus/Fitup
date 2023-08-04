@@ -63,6 +63,7 @@
     <string name="ready">Pronto</string>
     <string name="set">Partenza</string>
     <string name="go">Via</string>
+    <string name="workout_start_text">Inzia Tra</string>
     <string name="congrats_main">Ce L\'Hai Fatta!</string>
     <string name="congrats_sub">Riposati, rilassati e goditi il resto della giornata</string>
     <string name="recap_exp">Exp. Totale:</string>

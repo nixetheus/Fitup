@@ -17,23 +17,51 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/workoutStartLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="450dp"
+                android:fontFamily="@font/lato_bold"
+                android:text="@string/workout_start_text"
+                android:textColor="?colorOnPrimary"
+                android:textSize="34sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <it.polimi.mobile.design.custom_views.CircularCountdownView
+                android:id="@+id/circularCountdownView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/countdown"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|center_vertical"
+                android:elevation="10dp"
                 android:fontFamily="@font/lato_bold"
                 android:text="@string/null_value"
                 android:textAlignment="center"
                 android:textColor="?colorOnPrimary"
-                android:textSize="80sp" />
-        </LinearLayout>
+                android:textSize="80sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/circularCountdownView"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.cardview.widget.CardView>
 
     <TextView
@@ -116,6 +144,7 @@
                 android:paddingStart="75dp"
                 android:paddingTop="60dp"
                 android:paddingEnd="0dp">
+                android:layout_height="match_parent">
 
             </it.polimi.mobile.design.custom_layouts.WorkoutLayout>
 

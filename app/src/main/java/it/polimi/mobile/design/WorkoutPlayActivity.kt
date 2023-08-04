@@ -101,24 +101,20 @@ class WorkoutPlayActivity : AppCompatActivity() {
     }
 
     private fun beginWorkout() {
-        startCountdown(4000, 1000, onTick = { millisUntilFinished ->
+        startCountdown(5000, 1, onTick = { millisUntilFinished ->
             setCountdownText(millisUntilFinished)
         }, onFinish = {
-            Thread.sleep(500)
-            binding.countDownCard.visibility = View.GONE
             startGlobalChronometer()
+            binding.countDownCard.visibility = View.GONE
             binding.playPauseButton.performClick()
         })
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setCountdownText(millisUntilFinished: Long) {
-        val missing = millisUntilFinished / 1000
-        if (missing >= 2)
-            binding.countdown.text = resources.getString(R.string.ready)
-        else if (missing >= 1)
-            binding.countdown.text = resources.getString(R.string.set)
-        else
-            binding.countdown.text = resources.getString(R.string.go)
+        val perc = (millisUntilFinished / 6000f) * 100
+        binding.circularCountdownView.setProgress(perc.toInt())
+        binding.countdown.text = ((millisUntilFinished / 1000).toInt() + 1).toString()
     }
 
     private fun startCountdown(totalTimeMillis: Long, intervalMillis: Long, onTick: (Long) -> Unit, onFinish: () -> Unit) {
