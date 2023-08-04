@@ -94,7 +94,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/lato"
-                            android:text="@string/exercises_card_label"
+			    android:text="@string/recap_number_ex"
                             android:textAlignment="center"
                             android:textAllCaps="true"
                             android:textColor="@android:color/white"
