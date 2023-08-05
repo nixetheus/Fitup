@@ -92,7 +92,7 @@ class EditWorkoutActivityTest {
         // Verify that exercise was added
         Thread.sleep(2000)
         onView(allOf(withId(R.id.setsValue), withText(randomSets))).check(matches(isDisplayed()))
-        
+
         Thread.sleep(2000)
 
         // Delete Exercise

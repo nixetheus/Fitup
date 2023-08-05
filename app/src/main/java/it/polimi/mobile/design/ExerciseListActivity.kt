@@ -212,8 +212,12 @@ class ExerciseListActivity : AppCompatActivity() {
 
     private fun onDeleteExercise(exercise: Exercise) {
         binding.exerciseMenuCard.visibility = View.GONE
-        helperDB.exercisesSchema.child(exercise.eid!!).removeValue()
-        Toast.makeText(this, "Exercise Eliminated", Toast.LENGTH_SHORT).show()
+        if (exercise.uid == helperDB.getFirebaseAuth().uid) {
+            helperDB.exercisesSchema.child(exercise.eid!!).removeValue()
+            Toast.makeText(this, "Exercise Eliminated", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this, "You can't delete this exercise", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun Int.toPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()

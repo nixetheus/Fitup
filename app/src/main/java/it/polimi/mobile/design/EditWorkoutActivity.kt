@@ -233,17 +233,28 @@ class EditWorkoutActivity : AppCompatActivity() {
 
     private fun onDeleteExerciseFromWorkout(workoutExercise: WorkoutExercise) {
         binding.execiseChangeMenuCard.visibility = View.GONE
-        helperDB.workoutsExercisesSchema.child(workoutExercise.id!!).removeValue()
-        Toast.makeText(this, "Exercise Eliminated", Toast.LENGTH_SHORT).show()
 
-        helperDB.exercisesSchema.child(workoutExercise.exerciseId!!).addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    updateWorkoutInfo(dataSnapshot.getValue(Exercise::class.java)!!, workoutExercise, false)
-                }
-            }
-            override fun onCancelled(databaseError: DatabaseError) {}
-        })
+        if (editableWorkout.userId == helperDB.getFirebaseAuth().uid) {
+            helperDB.workoutsExercisesSchema.child(workoutExercise.id!!).removeValue()
+            Toast.makeText(this, "Exercise Eliminated", Toast.LENGTH_SHORT).show()
+
+            helperDB.exercisesSchema.child(workoutExercise.exerciseId!!)
+                .addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            updateWorkoutInfo(
+                                dataSnapshot.getValue(Exercise::class.java)!!,
+                                workoutExercise,
+                                false
+                            )
+                        }
+                    }
+
+                    override fun onCancelled(databaseError: DatabaseError) {}
+                })
+        } else {
+            Toast.makeText(this, "You can't modify this workout", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun updateWorkoutInfo(exercise: Exercise, workoutExercise: WorkoutExercise, add: Boolean) {

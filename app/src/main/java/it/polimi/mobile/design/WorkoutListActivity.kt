@@ -196,16 +196,20 @@ class WorkoutListActivity : AppCompatActivity() {
 
         val deleteTaskList = mutableListOf<Task<Void>>()
 
-        workoutExercisesQuery.get().addOnSuccessListener { dataSnapshot ->
-            dataSnapshot.children.forEach { exerciseSnap ->
-                deleteTaskList.add(exerciseSnap.ref.removeValue())
+        if (workout.userId == helperDB.getFirebaseAuth().uid) {
+            workoutExercisesQuery.get().addOnSuccessListener { dataSnapshot ->
+                dataSnapshot.children.forEach { exerciseSnap ->
+                    deleteTaskList.add(exerciseSnap.ref.removeValue())
+                }
             }
-        }
 
-        workoutsQuery.get().addOnSuccessListener { dataSnapshot ->
-            dataSnapshot.children.forEach { workoutSnapshot ->
-                deleteTaskList.add(workoutSnapshot.ref.removeValue())
+            workoutsQuery.get().addOnSuccessListener { dataSnapshot ->
+                dataSnapshot.children.forEach { workoutSnapshot ->
+                    deleteTaskList.add(workoutSnapshot.ref.removeValue())
+                }
             }
+        } else {
+            Toast.makeText(this, "You can't delete this workout", Toast.LENGTH_SHORT).show()
         }
     }
 
