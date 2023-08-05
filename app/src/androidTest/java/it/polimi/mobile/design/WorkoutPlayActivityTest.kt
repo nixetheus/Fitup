@@ -143,7 +143,10 @@ class WorkoutPlayActivityTest {
             "a",
             "hip hop",
             -12,
-            1690447497966,
+            0,
+            0f,
+            0f,
+            0,
             mutableListOf(2, 0, 0, 0)
         )
     }

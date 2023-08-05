@@ -133,7 +133,7 @@ class WorkoutListActivity : AppCompatActivity() {
         else Toast.makeText(this, "Fill in all fields to continue!!", Toast.LENGTH_SHORT).show()
     }
 
-    private fun showWorkouts(workouts: List<Workout>) {
+    fun showWorkouts(workouts: List<Workout>) {
 
         binding.workoutsListLayout.removeAllViews()
         for (workout in workouts) {

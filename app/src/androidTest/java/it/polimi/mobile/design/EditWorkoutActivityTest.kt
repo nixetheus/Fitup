@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers
@@ -40,14 +41,8 @@ class EditWorkoutActivityTest {
 
     private fun createFakeWorkout() : Workout {
         return Workout(
-            "-Na7Mh7plP_oDVrlVw-c",
-            "Mw19C5PhigZGoG1OtwpTt8BF1op1",
-            "Strength - Total Body 1",
-            "hip hop",
-            -4,
-            1690447497966,
-            mutableListOf(1, 1, 0, 0)
-        )
+            "-Na7Mh7plP_oDVrlVw-c", "Mw19C5PhigZGoG1OtwpTt8BF1op1", "Strength - Total Body 1",
+            "hip hop", -4, 0, 0f, 0f, 0, mutableListOf(1, 1, 0, 0))
     }
 
     @After
@@ -81,8 +76,10 @@ class EditWorkoutActivityTest {
     }
 
     @Test
-    fun addExerciseTest() {
-        /*val randomSets = (kotlin.math.abs(Random.nextInt()) + 100).toString()
+    fun addAndDeleteExerciseTest() {
+
+        // Add Exercise
+        val randomSets = (kotlin.math.abs(Random.nextInt()) + 100).toString()
         // Perform click on the plus exercise button
         onView(withId(R.id.openAddExerciseLayout)).perform(click())
         // Fill Data
@@ -94,8 +91,14 @@ class EditWorkoutActivityTest {
         onView(withId(R.id.confirmAddWorkoutBtn)).perform(click())
         // Verify that exercise was added
         Thread.sleep(2000)
-        onView(withChild(allOf(withId(R.id.setsValue), withText(randomSets)))).check(matches(isDisplayed()))*/
-        assert(true)  // TODO
+        onView(allOf(withId(R.id.setsValue), withText(randomSets))).check(matches(isDisplayed()))
+        
+        Thread.sleep(2000)
+
+        // Delete Exercise
+        onView(allOf(withId(R.id.setsValue), withText(randomSets))).perform(longClick())
+        onView(withId(R.id.deleteExerciseWorkoutButton)).perform(click())
+        onView(allOf(withId(R.id.setsValue), withText(randomSets))).check(doesNotExist())
     }
 
     // Navigation Tests

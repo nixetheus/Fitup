@@ -71,6 +71,9 @@ class WorkoutListActivityTest {
             "hip hop",
             0,
             null,
+            0f,
+            0f,
+            0,
             mutableListOf(1, 1, 0, 0)
         )
 
@@ -81,6 +84,9 @@ class WorkoutListActivityTest {
             "legs",
             0,
             null,
+            0f,
+            0f,
+            0,
             mutableListOf(0, 1, 1, 0)
         )
 
