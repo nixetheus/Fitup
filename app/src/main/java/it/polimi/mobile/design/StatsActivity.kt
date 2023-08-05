@@ -124,6 +124,7 @@ class StatsActivity : AppCompatActivity() {
             points = points.filter { it.graphId == currentGraph.graphId}.sortedBy { it.xcoordinate }
             Log.w("Data:", points.toString())
             binding.graphVisualizer.dataPoints = points
+            binding.graphVisualizer.unitOfMeasure = currentGraph.graphMeasure!!
             binding.graphVisualizer.drawDataPoints()
             binding.graphScroll.fullScroll(ScrollView.FOCUS_RIGHT)
 

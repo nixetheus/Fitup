@@ -14,15 +14,14 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.cardview.widget.CardView
-import androidx.core.graphics.blue
-import androidx.core.graphics.green
-import androidx.core.graphics.red
+import androidx.core.graphics.*
 import it.polimi.mobile.design.R
 import it.polimi.mobile.design.custom_views.LineGraphDataView
 import it.polimi.mobile.design.entities.DataPoint
 import it.polimi.mobile.design.helpers.Constant
 import java.lang.Integer.max
 import java.lang.Integer.min
+import java.text.DecimalFormat
 
 
 class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(context, attrs) {
@@ -37,6 +36,7 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
     private var maxX: Long = Long.MAX_VALUE
     private var pointViews: ArrayList<LineGraphDataView> = arrayListOf()
 
+    var unitOfMeasure: String = ""
     var dataPoints: List<DataPoint> = listOf()
 
     set(points) {
@@ -62,7 +62,8 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
             drawLines(canvas)
             drawAuxiliaryLine(canvas)
             drawIntegralArea(canvas)
-            drawMinMaxMid(canvas)
+            drawGrid(canvas)
+            drawMinMaxMidValues(canvas)
         }
     }
 
@@ -155,12 +156,12 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
     private fun drawLines(canvas: Canvas) {
 
         // Get color
-        val colorOnPrimary = TypedValue()
-        context.theme.resolveAttribute (R.attr.colorOnPrimary, colorOnPrimary, true)
+        val accentColor = TypedValue()
+        context.theme.resolveAttribute (androidx.appcompat.R.attr.colorAccent, accentColor, true)
 
         val linesPaint = Paint()
-        linesPaint.strokeWidth = 15f
-        linesPaint.color = colorOnPrimary.data
+        linesPaint.strokeWidth = 10f
+        linesPaint.color = accentColor.data
         linesPaint.style = Paint.Style.STROKE
         linesPaint.strokeCap = Paint.Cap.ROUND
         linesPaint.setARGB(200, linesPaint.color.red, linesPaint.color.green, linesPaint.color.blue)
@@ -208,10 +209,15 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
         val accentColor = TypedValue()
         context.theme.resolveAttribute (androidx.appcompat.R.attr.colorAccent, accentColor, true)
 
+        // Extract the color value and set the desired alpha
+        val originalColor = accentColor.data
+        val alphaValue = 64
+        val modifiedColor = ColorUtils.setAlphaComponent(originalColor, alphaValue)
+
         val graphPaint = Paint()
         graphPaint.strokeWidth = 7.5f
         graphPaint.style = Paint.Style.FILL
-        graphPaint.color = accentColor.data
+        graphPaint.color = modifiedColor
 
         // POLYGON
         val graphPath = Path()
@@ -244,14 +250,14 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
         canvas.drawPath(graphPath, graphPaint)
     }
 
-    private fun drawMinMaxMid(canvas: Canvas) {
+    private fun drawGrid(canvas: Canvas) {
 
         // Get color
         val colorOnPrimary = TypedValue()
         context.theme.resolveAttribute (R.attr.colorOnPrimary, colorOnPrimary, true)
 
         val graphPaint = Paint()
-        graphPaint.strokeWidth = 5f
+        graphPaint.strokeWidth = 2.5f
         graphPaint.style = Paint.Style.FILL
         graphPaint.color = colorOnPrimary.data
         graphPaint.pathEffect = DashPathEffect(floatArrayOf(10f, 20f), 0f)
@@ -259,15 +265,34 @@ class LineGraphLayout(context: Context, attrs: AttributeSet?) : RelativeLayout(c
         val pointZero = dataPoints.elementAt(0)
         val pointEnd = dataPoints.elementAt(dataPoints.size - 1)
 
-        for (y in listOf(minY, (minY + maxY) / 2, maxY)) {
+        val step = 4
+        for (y in (0..step + 1).map { it * (maxY - minY) / step }) {
             canvas.drawLine(
                 getRelativeX(pointZero.xcoordinate!!).toFloat() - 50,
-                getRelativeY(y).toFloat(),
+                getRelativeY(y + minY).toFloat(),
                 getRelativeX(pointEnd.xcoordinate!!).toFloat() + 50,
-                getRelativeY(y).toFloat(),
+                getRelativeY(y + minY).toFloat(),
                 graphPaint
             )
         }
+    }
+
+    private fun drawMinMaxMidValues(canvas: Canvas) {
+        // Get color
+        val colorOnPrimary = TypedValue()
+        context.theme.resolveAttribute (R.attr.colorOnPrimary, colorOnPrimary, true)
+
+        val graphPaint = Paint()
+        graphPaint.textSize = 40f
+        graphPaint.color = colorOnPrimary.data
+
+        val spacing = 35.toPx().toFloat()
+        canvas.drawText("${DecimalFormat("0.0").format(maxY)} $unitOfMeasure",
+            width.toFloat() - 75.toPx(), 2 * spacing, graphPaint)
+        canvas.drawText("${DecimalFormat("0.0").format((minY + maxY)/2)} $unitOfMeasure",
+            width.toFloat() - 75.toPx(), (height + spacing) / 2, graphPaint)
+        canvas.drawText("${DecimalFormat("0.0").format(minY)} $unitOfMeasure", width.toFloat() - 75.toPx(),
+            height - spacing, graphPaint)
     }
 
     private fun getRelativeX(dimensionX: Long): Int {
