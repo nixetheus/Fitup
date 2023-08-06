@@ -90,8 +90,8 @@ class WorkoutPlayActivity : AppCompatActivity() {
         }
 
         binding.nextButton.setOnClickListener {
-            binding.nextButton.visibility = View.VISIBLE
-            binding.playPauseButton.visibility = View.INVISIBLE
+            binding.nextButton.visibility = View.INVISIBLE
+            binding.playPauseButton.visibility = View.VISIBLE
             if (workoutExercises.isNotEmpty()) {
                 changeExercise()
             } else {
