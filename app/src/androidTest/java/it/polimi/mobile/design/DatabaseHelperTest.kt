@@ -95,9 +95,10 @@ class DatabaseHelperTest {
     @Test
     fun testGetExercisesFromSnapshotFull() {
 
+        val uid = helperDB.getFirebaseAuth().uid
         var exerciseSnap: DataSnapshot
         val snapshots  = mutableListOf<DataSnapshot>()
-        val exercises   = listOf(Exercise(), Exercise(), Exercise())
+        val exercises   = listOf(Exercise(uid = uid), Exercise(uid = uid), Exercise(uid = uid))
 
         for (exercise in exercises) {
             exerciseSnap = mock(DataSnapshot::class.java)
@@ -185,9 +186,10 @@ class DatabaseHelperTest {
     @Test
     fun testGetDataPointsFromSnapshotFull() {
 
+        val uid = helperDB.getFirebaseAuth().uid
         var dataPointSnap: DataSnapshot
         val snapshots  = mutableListOf<DataSnapshot>()
-        val dataPoints = listOf(DataPoint(), DataPoint(), DataPoint())
+        val dataPoints = listOf(DataPoint(userId = uid), DataPoint(userId = uid), DataPoint(userId = uid))
 
         for (dataPoint in dataPoints) {
             dataPointSnap = mock(DataSnapshot::class.java)
@@ -302,9 +304,10 @@ class DatabaseHelperTest {
     @Test
     fun testGetUserAchievementsFromSnapshotFull() {
 
+        val uid = helperDB.getFirebaseAuth().uid
         var userAchievementSnap: DataSnapshot
         val snapshots  = mutableListOf<DataSnapshot>()
-        val userAchievements = listOf(UserAchievements(), UserAchievements(), UserAchievements())
+        val userAchievements = listOf(UserAchievements(userId = uid), UserAchievements(userId = uid), UserAchievements(userId = uid))
 
         for (userAchievement in userAchievements) {
             userAchievementSnap = mock(DataSnapshot::class.java)
