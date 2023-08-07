@@ -10,14 +10,17 @@ import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import it.polimi.mobile.design.databinding.SettingsActivityBinding
+import it.polimi.mobile.design.helpers.DatabaseHelper
 import java.util.Locale
 
 
 class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
 
     private lateinit var binding: SettingsActivityBinding
-    private lateinit var username: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -44,23 +47,40 @@ class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPrefere
 
         resources.updateConfiguration(configuration, resources.displayMetrics)
 
-        // Puoi salvare la lingua selezionata nelle SharedPreferences
+
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         sharedPreferences.edit().putString("language", languageCode).apply()
 
-        // Ricarica l'activity per applicare le modifiche della lingua
+
         recreate()
     }
 
 
 
     class SettingsFragment : PreferenceFragmentCompat() {
+        private val helperDB = DatabaseHelper().getInstance()
+        private var firebaseAuth = FirebaseAuth.getInstance()
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey)
             val logout: EditTextPreference? = findPreference("logout")
-            val nickname: EditTextPreference? = findPreference("nickname")
-            val languagePreference: ListPreference? = findPreference("language")
 
+            val languagePreference: ListPreference? = findPreference("language")
+            val usernamePreference: EditTextPreference? = findPreference("username")
+            if (usernamePreference != null) {
+                firebaseAuth.uid?.let { userId ->
+                    helperDB.usersSchema.child(userId).get().addOnSuccessListener { userSnapshot ->
+                        val user = helperDB.getUserFromSnapshot(userSnapshot)
+                        if (user != null) {
+                            usernamePreference.summaryProvider =
+                                Preference.SummaryProvider<EditTextPreference> { preference ->
+                                    "${user.username}"
+                                }
+                        }
+
+                    }
+                }
+
+            }
             languagePreference?.setOnPreferenceChangeListener { preference, newValue ->
                 val languageCode = newValue as String
                 (activity as? SettingsActivity)?.setLocale(languageCode)
@@ -73,35 +93,62 @@ class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPrefere
                     true
                 }
             }
+            usernamePreference?.setOnPreferenceChangeListener { preference, newValue ->
+                val newUsername = newValue as String
+
+                saveTheNewUsername(newUsername)
+                true
+
+            }
+        }
+        private fun saveTheNewUsername(newUsername: String) {
+            val userId = getCurrentUserId()
+
+            if (userId != null) {
+
+                val usersRef: DatabaseReference =
+                    FirebaseDatabase.getInstance().getReference("Users")
+
+
+                usersRef.child(userId).child("username").setValue(newUsername)
+                    .addOnSuccessListener {
+
+                        Toast.makeText(
+                            context,
+                            "Username updated!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        val centralActivityIntent = Intent(context, CentralActivity::class.java)
+                        startActivity(centralActivityIntent)
+
+                        activity?.finish()
+                    }
+                    .addOnFailureListener { e ->
+
+                        Toast.makeText(
+                            context,
+                            "Error: ${e.message}",
+                            Toast.LENGTH_LONG
+                        ).show()
+
+                    }
+            } else {
+
+                Toast.makeText(context, "Error: User is not authenticated.", Toast.LENGTH_SHORT)
+                    .show()
+            }
+
+
 
 
         }
 
+        private fun getCurrentUserId(): String {
+            val firebaseAuth = FirebaseAuth.getInstance()
+            return firebaseAuth.uid.toString()
+
+        }
     }
-
-
-    private fun setupLanguages() {
-        /*val languagePref = applicationContext.getSharedPreferences("language", Context.MODE_PRIVATE) as DialogPreference
-        languagePref.onPreferenceClickListener = Preference.OnPreferenceClickListener { // open browser or intent here
-            setLocale("hello")
-            true
-        }*/
-    }
-
-
-    /*private fun setLocale(lang: String?) {
-
-        Toast.makeText(applicationContext, lang, Toast.LENGTH_SHORT).show()
-        /*val myLocale = lang?.let { Locale(it) }
-        val res: Resources = resources
-        val conf: Configuration = res.configuration
-        conf.setLocale(myLocale)
-
-        val refresh = Intent(this, SettingsActivity::class.java)
-
-        finish()
-        startActivity(refresh)*/
-    }*/
 
     override fun onPreferenceStartFragment(
         caller: PreferenceFragmentCompat?,

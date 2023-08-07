@@ -1,12 +1,15 @@
 package it.polimi.mobile.design
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.PreferenceManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import it.polimi.mobile.design.databinding.ActivityMainBinding
+import java.util.Locale
 
 
 class MainActivity : AppCompatActivity() {
@@ -19,11 +22,30 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
 
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        // Leggi l'impostazione della lingua salvata nelle SharedPreferences
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        val languageCode = sharedPreferences.getString("language", "")
+
+        // Se è presente una lingua salvata nelle SharedPreferences, imposta la lingua
+        if (!languageCode.isNullOrEmpty()) {
+            setLocale(languageCode)
+        }
 
         createBindings()
         checkUserSignIn()
+    }
+    private fun setLocale(languageCode: String) {
+        val locale = Locale(languageCode)
+        Locale.setDefault(locale)
+
+        val resources = resources
+        val configuration = Configuration(resources.configuration)
+        configuration.setLocale(locale)
+
+        resources.updateConfiguration(configuration, resources.displayMetrics)
     }
 
     private fun createBindings() {

@@ -5,9 +5,12 @@
     <PreferenceCategory app:title="@string/profile_header">
 
         <EditTextPreference
-            app:key="nickname"
-            app:title="@string/change_nick"
-            app:useSimpleSummaryProvider="true" />
+            android:key="username"
+            android:title="Username"
+            android:dialogTitle="Type a new Username"
+            android:summary="%s"
+            android:inputType="text"
+            android:maxLength="20" />
         <EditTextPreference
             android:defaultValue="Default value"
             android:key="logout"
