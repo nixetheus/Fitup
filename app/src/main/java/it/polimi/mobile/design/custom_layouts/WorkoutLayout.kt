@@ -29,7 +29,7 @@ import it.polimi.mobile.design.helpers.HelperFunctions
 class WorkoutLayout(context: Context, attrs: AttributeSet?) : LinearLayout(context, attrs) {
 
     private var toDraw = false
-    private val distanceX = 75.toPx()
+    private val distanceX = 90.toPx()
     var exercises: List<WorkoutExercise> = listOf()
     private val helperDB = DatabaseHelper().getInstance()
     private val exerciseFragments = mutableListOf<FragmentExerciseInPlayBinding>()
