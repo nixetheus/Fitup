@@ -9,6 +9,7 @@ import android.content.IntentFilter
 import android.content.res.Resources
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.Handler
 import android.os.SystemClock
 import android.util.Log
 import android.util.TypedValue
@@ -50,10 +51,15 @@ class WorkoutPlayActivity : AppCompatActivity() {
     private lateinit var playWorkout: Workout
     private lateinit var workoutExercises: ArrayList<WorkoutExercise>
     private lateinit var wearableList : Task<List<Node>>
-    
+
     private var currentExerciseIndex = -1
     private lateinit var globalElapsedTime: Chronometer
     private lateinit var exerciseElapsedTime: Chronometer
+
+    private val handler = Handler()
+    private var samplingBoolean = true
+    private lateinit var bpmRunnable: Runnable
+    private val bpmValues = mutableListOf<Float>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,6 +68,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
         binding = ActivityWorkoutPlayBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        initBpmTracking()
         beginWorkout()
         initChronometers()
         retrieveData()
@@ -112,7 +119,17 @@ class WorkoutPlayActivity : AppCompatActivity() {
             startGlobalChronometer()
             binding.countDownCard.visibility = View.GONE
             binding.playPauseButton.performClick()
+            handler.postDelayed(bpmRunnable, 10000)
         })
+    }
+
+    private fun initBpmTracking() {
+        bpmRunnable = object : Runnable {
+            override fun run() {
+                samplingBoolean = true
+                handler.postDelayed(this, 10000)
+            }
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -303,6 +320,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
 
     private fun finishWorkout() {
         SendThread("/finish", "finish").start()
+        setWorkoutBPM()
         addUserExperience()
         disconnectSpotify()
         startFinishActivity()
@@ -315,6 +333,23 @@ class WorkoutPlayActivity : AppCompatActivity() {
                 for (userSnapshot in dataSnapshot.children) {
                     userSnapshot.ref.child("exp").setValue(
                         ServerValue.increment(playWorkout.gainedExperience!!.toDouble()))
+                }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e(TAG, "onCancelled", databaseError.toException())
+            }
+        })
+    }
+
+    private fun setWorkoutBPM() {
+        val workoutRef = helperDB.workoutsSchema.orderByChild("workoutId").equalTo(playWorkout.workoutId!!)
+        workoutRef.addListenerForSingleValueEvent(object: ValueEventListener{
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (workoutSnapshot in dataSnapshot.children) {
+                    val newValueBPM = (-playWorkout.averageBpmValue!! +
+                            (playWorkout.averageBpmValue!! + bpmValues.average()) / 2).toInt()
+                    workoutSnapshot.ref.child("averageBpmValue").setValue(
+                        ServerValue.increment(newValueBPM.toLong()))
                 }
             }
             override fun onCancelled(databaseError: DatabaseError) {
@@ -389,7 +424,11 @@ class WorkoutPlayActivity : AppCompatActivity() {
             
             // Update BPM
             val bpmValue = HelperFunctions().getExtra<String>(intent!!, "message")
-            if (bpmValue.isNullOrEmpty()) { binding.bpmText.text = bpmValue }
+            if (bpmValue.isNullOrEmpty()) {
+                binding.bpmText.text = bpmValue
+                val bpmValueFloat = HelperFunctions().parseFloatInput(bpmValue!!)
+                if (bpmValueFloat > 0f) bpmValues.add(bpmValueFloat)
+            }
             
             // Start Exercise
             if (HelperFunctions().getExtra<String>(intent, "start") != null){ 
@@ -457,6 +496,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        handler.removeCallbacks(bpmRunnable)
         SendThread("/exit", "exit").start()
     }
 }
