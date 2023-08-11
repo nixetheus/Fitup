@@ -110,6 +110,7 @@ dependencies {
 
     // Robolectric environment
     testImplementation 'org.robolectric:robolectric:4.4'
+    testImplementation 'org.robolectric:shadows-framework:4.4'
     androidTestImplementation 'org.robolectric:shadows-framework:4.4'
 
     // Other

@@ -14,41 +14,65 @@ import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.FirebaseAuth
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.`when`
 
 @RunWith(AndroidJUnit4::class)
 class SignUpActivityTest {
 
     private lateinit var activityScenario: ActivityScenario<SignUpActivity>
+    private lateinit var mockAuth: FirebaseAuth
 
     @Before
     fun setup() {
         Intents.init()
+        mockAuth = mock(FirebaseAuth::class.java)
         activityScenario = ActivityScenario.launch(Intent(ApplicationProvider.getApplicationContext(), SignUpActivity::class.java))
     }
-
     @After
     fun cleanup() {
         Intents.release()
         activityScenario.close()
     }
+    @Test
+    fun testSignUpSuccess() {
+        // Iinsert email and password
+        onView(withId(R.id.EmailField)).perform(typeText("test3@example555.com"))
+        onView(withId(R.id.Pass)).perform(typeText("password"))
+        onView(withId(R.id.Pass2)).perform(typeText("password"))
+        onView(withId(R.id.Pass)).perform(ViewActions.closeSoftKeyboard())
+
+        onView(withId(R.id.SignUpBtn)).perform(click())
+        Thread.sleep(4000)
+
+
+        // Verify that activity starts
+        Intents.intended(IntentMatchers.hasComponent(HomeActivity::class.java.name))
+    }
 
     @Test
     fun testSignUpSuccessButEmailAlreadyUsed() {
         // insert email and password
-        onView(withId(R.id.EmailField)).perform(typeText("test@example1.com"))
+        onView(withId(R.id.EmailField)).perform(typeText("test@example111.com"))
         onView(withId(R.id.Pass)).perform(typeText("password"))
         onView(withId(R.id.Pass2)).perform(typeText("password"))
         onView(withId(R.id.Pass)).perform(ViewActions.closeSoftKeyboard())
 
         // Fai clic sul pulsante di registrazione
         onView(withId(R.id.SignUpBtn)).perform(click())
+        Thread.sleep(4000)
 
-        // Verifica che l'Activity si sia avviata correttamente
-        Intents.intended(IntentMatchers.hasComponent(SignUpActivity::class.java.name))
+
+        // Verify that activity does not change
+        assert(activityScenario.state == Lifecycle.State.RESUMED)
+        Thread.sleep(4000)
     }
 
     @Test

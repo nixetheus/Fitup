@@ -17,9 +17,14 @@ class SignUpActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
         createBindings()
+    }
+    // Setter for FirebaseAuth (for testing purposes)
+    fun setFirebaseAuth(mockFirebaseAuth: FirebaseAuth) {
+        firebaseAuth = mockFirebaseAuth
     }
 
     private fun createBindings() {

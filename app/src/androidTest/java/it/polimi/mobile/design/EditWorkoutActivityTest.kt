@@ -106,6 +106,7 @@ class EditWorkoutActivityTest {
     fun testClickOnHome() {
         // Perform click on the home button
         onView(withId(R.id.homeButton)).perform(click())
+        Thread.sleep(2000)
         // Verify that Central Activity is started
         Intents.intended(IntentMatchers.hasComponent(CentralActivity::class.java.name))
     }
