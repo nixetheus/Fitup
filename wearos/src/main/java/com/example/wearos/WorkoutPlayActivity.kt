@@ -38,8 +38,7 @@ class WorkoutPlayActivity : AppCompatActivity(), SensorEventListener{
     private var timeWhenStopped by Delegates.notNull<Long>()
     private var talkButton: ImageView? = null
     private var exercise:String?=null
-    var receivedMessageNumber = 1
-    var sentMessageNumber = 1
+
     var bpm: Float = 0.0f
     var i=0
     protected var myHandler: Handler? = null
@@ -92,7 +91,7 @@ class WorkoutPlayActivity : AppCompatActivity(), SensorEventListener{
             }
             else{
                 SendMessage("/next", "next").start()
-                //chrono.stop()
+                chrono.stop()
                 timeWhenStopped = chrono.base - SystemClock.elapsedRealtime();
                 binding.startButton.setImageResource(R.drawable.play)
                 binding.exerciseName.text= exercise
@@ -156,7 +155,7 @@ class WorkoutPlayActivity : AppCompatActivity(), SensorEventListener{
                 binding.secondsValue.text = String.format("%02d", s) + "\u00A0"
 
             }
-        chrono.base = SystemClock.elapsedRealtime() + timeWhenStopped
+        chrono.base = SystemClock.elapsedRealtime()
         chrono.start()
 
 
@@ -211,6 +210,12 @@ class WorkoutPlayActivity : AppCompatActivity(), SensorEventListener{
                 finish()
                 val intent1 = Intent(this@WorkoutPlayActivity, MainActivity::class.java)
                 startActivity(intent1)
+
+
+            }
+            if (intent?.extras?.get("stop")!=null) {
+                chrono.stop()
+                timeWhenStopped = chrono.base - SystemClock.elapsedRealtime();
 
 
             }

@@ -68,6 +68,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
         binding = ActivityWorkoutPlayBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
         initBpmTracking()
         beginWorkout()
         initChronometers()
@@ -79,6 +80,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
         createBindings()
         startSpotify()
         sendWorkoutNameToWearable()
+
         ListenerThread().start()
     }
 
@@ -93,6 +95,15 @@ class WorkoutPlayActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(
                     this, "Please add exercises to continue your training", Toast.LENGTH_SHORT).show()
+                Thread.sleep(2000)
+                SendThread("/finish", "finish").start()
+                val intent = Intent(this, EditWorkoutActivity::class.java)
+                intent.putExtra("Workout", playWorkout)
+                startActivity(intent)
+                finish()
+
+
+
             }
         }
 
@@ -268,6 +279,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
             SendThread("/next", "next").start()
         } else {
             showCongratulations()
+            SendThread("/stop", "stop").start()
             binding.exerciseCounter.stop()
             binding.workoutTimeValue.stop()
             binding.stopButton.visibility = View.VISIBLE
@@ -424,7 +436,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
             
             // Update BPM
             val bpmValue = HelperFunctions().getExtra<String>(intent!!, "message")
-            if (bpmValue.isNullOrEmpty()) {
+            if (!bpmValue.isNullOrEmpty()) {
                 binding.bpmText.text = bpmValue
                 val bpmValueFloat = HelperFunctions().parseFloatInput(bpmValue!!)
                 if (bpmValueFloat > 0f) bpmValues.add(bpmValueFloat)
@@ -437,7 +449,8 @@ class WorkoutPlayActivity : AppCompatActivity() {
             
             // Next Exercise
             if (HelperFunctions().getExtra<String>(intent, "next") != null) {
-                binding.nextExerciseButton.performClick()
+                //binding.nextExerciseButton.performClick()
+                changeExercise()
             }
             
             // Info Request
