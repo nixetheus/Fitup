@@ -29,7 +29,7 @@ import it.polimi.mobile.design.helpers.HelperFunctions
 class WorkoutLayout(context: Context, attrs: AttributeSet?) : LinearLayout(context, attrs) {
 
     private var toDraw = false
-    private val distanceX = 90.toPx()
+    private val distanceX = 95.toPx()
     var exercises: List<WorkoutExercise> = listOf()
     private val helperDB = DatabaseHelper().getInstance()
     private val exerciseFragments = mutableListOf<FragmentExerciseInPlayBinding>()
@@ -53,7 +53,8 @@ class WorkoutLayout(context: Context, attrs: AttributeSet?) : LinearLayout(conte
                 val layoutInflater = LayoutInflater.from(context)
                 val exerciseView = FragmentExerciseInPlayBinding.inflate(layoutInflater)
                 exerciseView.exerciseNamePlay.text = exercises[exerciseIndex].exerciseName!!
-                    .lowercase().replaceFirstChar { it.uppercaseChar() }
+                    .lowercase().split(' ')
+                    .joinToString(" ") { it.replaceFirstChar(Char::uppercaseChar) }
                 addView(exerciseView.root)
                 exerciseFragments.add(exerciseView)
                 setExerciseTypeImage(exercises[exerciseIndex], exerciseIndex)
