@@ -21,6 +21,7 @@ import it.polimi.mobile.design.databinding.FragmentExerciseInWorkoutBinding
 import it.polimi.mobile.design.entities.Exercise
 import it.polimi.mobile.design.entities.Workout
 import it.polimi.mobile.design.entities.WorkoutExercise
+import it.polimi.mobile.design.enum.ExerciseType.*
 import it.polimi.mobile.design.helpers.DatabaseHelper
 import it.polimi.mobile.design.helpers.HelperFunctions
 
@@ -270,13 +271,21 @@ class EditWorkoutActivity : AppCompatActivity() {
 
         val multiplier = if (add) 1 else -1
 
+        val exerciseTypeIndex = when(exercise.type!!.ordinal) {
+            in CHEST.ordinal..TRICEPS.ordinal    -> 0
+            in ABDOMINALS.ordinal..OBLIQUES.ordinal    -> 1
+            in QUADRICEPS.ordinal..CALVES.ordinal    -> 2
+            in YOGA.ordinal..YOGA.ordinal    -> 3
+            else -> 4
+        }
+
         editableWorkout.numberOfExercises = (editableWorkout.numberOfExercises ?: 0) + multiplier
         editableWorkout.caloriesBurned =
             (editableWorkout.caloriesBurned ?: 0f) + (caloriesPerRep * reps * sets * multiplier)
         editableWorkout.gainedExperience =
             (editableWorkout.gainedExperience ?: 0f) + (experiencePerRep * reps * sets * multiplier)
         editableWorkout.exercisesType?.let { types ->
-            exercise.type?.let { types[it.ordinal] = types[it.ordinal] + multiplier }
+            types[exerciseTypeIndex] = types[exerciseTypeIndex] + multiplier
         }
 
         editableWorkout.name?.let { helperDB.workoutsSchema.child(it).setValue(editableWorkout).addOnSuccessListener {} }

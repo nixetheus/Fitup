@@ -17,6 +17,7 @@ import it.polimi.mobile.design.databinding.FragmentWorkoutRecentBinding
 import it.polimi.mobile.design.entities.Workout
 import it.polimi.mobile.design.entities.WorkoutUserData
 import it.polimi.mobile.design.enum.ExerciseType
+import it.polimi.mobile.design.enum.WorkoutTypes
 import it.polimi.mobile.design.helpers.DatabaseHelper
 import it.polimi.mobile.design.helpers.HelperFunctions
 import java.sql.Time
@@ -111,7 +112,7 @@ class CentralActivity : AppCompatActivity() {
     @SuppressLint("Recycle")
     private fun showFilters() {
 
-        for (typeFilter in ExerciseType.values()) {
+        for (typeFilter in WorkoutTypes.values()) {
 
             val filterLayout = FragmentFilterBinding.inflate(layoutInflater)
             filterLayout.filterDisplayName.text = typeFilter.name.replace("_", " ").lowercase().split(' ')

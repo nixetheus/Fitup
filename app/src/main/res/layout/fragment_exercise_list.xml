@@ -29,7 +29,7 @@
             <LinearLayout
                 android:id="@+id/exercisesLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:background="@android:color/transparent"
                 android:foreground="?attr/selectableItemBackground"
@@ -38,7 +38,7 @@
                 <LinearLayout
                     android:id="@+id/exerciseNameListLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
@@ -52,9 +52,11 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
+                        android:layout_marginTop="7.5dp"
                         android:layout_weight="1"
                         android:fontFamily="@font/lato_bold"
-                        android:gravity="center_vertical"
+                        android:gravity="top"
+                        android:text="TODO"
                         android:textAlignment="textStart"
                         android:textAllCaps="true"
                         android:textColor="?colorOnSecondary"
@@ -64,65 +66,108 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:baselineAligned="false"
-                        android:gravity="end"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
                         <LinearLayout
-                            android:id="@+id/caloriesLayout"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginEnd="10dp"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
+                            android:layout_gravity="end"
+                            android:baselineAligned="false"
+                            android:gravity="end"
+                            android:orientation="horizontal">
 
-                            <TextView
-                                android:id="@+id/caloriesRepsValue"
+                            <LinearLayout
+                                android:id="@+id/caloriesLayout"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:fontFamily="@font/lato"
-                                android:textAlignment="viewEnd"
-                                android:textColor="@android:color/white"
-                                android:textSize="16sp"
-                                android:textStyle="bold" />
+                                android:layout_marginEnd="10dp"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
 
-                            <TextView
-                                android:id="@+id/caloriesRepsLabel"
+                                <TextView
+                                    android:id="@+id/caloriesRepsValue"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/lato"
+                                    android:textAlignment="viewEnd"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/caloriesRepsLabel"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/lato"
+                                    android:text="@string/calories_reps_label"
+                                    android:textAlignment="center"
+                                    android:textAllCaps="true"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="10sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/experienceLayout"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:fontFamily="@font/lato"
-                                android:text="@string/calories_reps_label"
-                                android:textAlignment="center"
-                                android:textAllCaps="true"
-                                android:textColor="@android:color/white"
-                                android:textSize="10sp"
-                                android:textStyle="bold" />
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/experienceValue"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/lato"
+                                    android:textAlignment="viewEnd"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/experienceLabel"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/lato"
+                                    android:text="@string/experience_reps_label"
+                                    android:textAlignment="center"
+                                    android:textAllCaps="true"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="10sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
                         </LinearLayout>
 
                         <LinearLayout
-                            android:id="@+id/experienceLayout"
+                            android:id="@+id/typeLayout"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_gravity="end"
+                            android:layout_marginTop="10dp"
                             android:layout_weight="1"
+                            android:gravity="end"
                             android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/experienceValue"
-                                android:layout_width="match_parent"
+                                android:id="@+id/typeValue"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="end"
                                 android:fontFamily="@font/lato"
+                                android:gravity="end"
                                 android:textAlignment="viewEnd"
                                 android:textColor="@android:color/white"
-                                android:textSize="16sp"
+                                android:textSize="14sp"
                                 android:textStyle="bold" />
 
                             <TextView
-                                android:id="@+id/experienceLabel"
-                                android:layout_width="match_parent"
+                                android:id="@+id/typeLabel"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="end"
                                 android:fontFamily="@font/lato"
-                                android:text="@string/experience_reps_label"
+                                android:gravity="end"
+                                android:text="@string/type_label"
                                 android:textAlignment="center"
                                 android:textAllCaps="true"
                                 android:textColor="@android:color/white"

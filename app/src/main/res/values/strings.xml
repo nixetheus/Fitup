@@ -11,11 +11,24 @@
     </string-array>
 
     <string-array name="type_exercise">
-
-        <item>ARMS</item>
-        <item>LEGS</item>
-        <item>ABDOMEN</item>
         <item>CHEST</item>
+        <item>BACK</item>
+        <item>SHOULDERS</item>
+        <item>BICEPS</item>
+        <item>TRICEPS</item>
+        <item>ABDOMINALS</item>
+        <item>OBLIQUES</item>
+        <item>QUADRICEPS</item>
+        <item>HAMSTRINGS</item>
+        <item>GLUTES</item>
+        <item>CALVES</item>
+        <item>YOGA</item>
+        <item>RUNNING</item>
+        <item>CYCLING</item>
+        <item>SWIMMING</item>
+        <item>DANCING</item>
+        <item>BOXING</item>
+        <item>KICKBOXING</item>
     </string-array>
 
     <string name="facebook_app_id" translatable="false">3465451120365237</string>

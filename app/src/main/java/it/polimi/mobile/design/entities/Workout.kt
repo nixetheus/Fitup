@@ -15,7 +15,7 @@ data class Workout(
     var caloriesBurned: Float? = 0.0f,
     var gainedExperience: Float? = 0.0f,
     var averageBpmValue: Int? = 0,
-    var exercisesType: MutableList<Int>? = MutableList(ExerciseType.values().size) { 0 }
+    var exercisesType: MutableList<Int>? = MutableList(5) { 0 }
 ): Serializable {
 
     override fun equals(other: Any?): Boolean {

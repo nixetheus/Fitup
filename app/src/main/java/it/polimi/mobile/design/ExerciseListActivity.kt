@@ -6,6 +6,7 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.util.Range
 import android.view.View
 import android.view.animation.TranslateAnimation
 import android.widget.*
@@ -18,6 +19,7 @@ import it.polimi.mobile.design.databinding.FragmentExerciseListBinding
 import it.polimi.mobile.design.databinding.FragmentFilterBinding
 import it.polimi.mobile.design.entities.Exercise
 import it.polimi.mobile.design.enum.ExerciseType
+import it.polimi.mobile.design.enum.WorkoutTypes
 import it.polimi.mobile.design.helpers.DatabaseHelper
 import it.polimi.mobile.design.helpers.HelperFunctions
 
@@ -99,7 +101,7 @@ class ExerciseListActivity : AppCompatActivity() {
     @SuppressLint("Recycle")
     private fun showFilters() {
 
-        for (typeFilter in ExerciseType.values()) {
+        for (typeFilter in WorkoutTypes.values()) {
 
             val filterLayout = FragmentFilterBinding.inflate(layoutInflater).apply {
                 filterDisplayName.text = typeFilter.name.replace("_", " ").lowercase()
@@ -127,8 +129,27 @@ class ExerciseListActivity : AppCompatActivity() {
     }
 
     private fun applyFilter() {
+        val ranges = mutableListOf<IntRange>()
+        for (filter in filters) {
+            when(filter) {
+                WorkoutTypes.UPPER_BODY.ordinal
+                -> ranges.add(ExerciseType.CHEST.ordinal..ExerciseType.TRICEPS.ordinal)
+                WorkoutTypes.ABDOMINALS.ordinal
+                -> ranges.add(ExerciseType.ABDOMINALS.ordinal..ExerciseType.OBLIQUES.ordinal )
+                WorkoutTypes.LOWER_BODY.ordinal
+                -> ranges.add(ExerciseType.QUADRICEPS.ordinal..ExerciseType.CALVES.ordinal)
+                WorkoutTypes.YOGA.ordinal
+                -> ranges.add(ExerciseType.YOGA.ordinal..ExerciseType.YOGA.ordinal)
+                WorkoutTypes.CARDIO.ordinal
+                -> ranges.add(ExerciseType.RUNNING.ordinal..ExerciseType.KICKBOXING.ordinal)
+            }
+        }
+
         if (filters.isEmpty()) showExercises(exerciseArrayList)
-        else showExercises(exerciseArrayList.filter { filters.contains(it.type!!.ordinal)})
+        else showExercises(exerciseArrayList.filter { exercise ->
+            val typeOrdinal = exercise.type?.ordinal
+            typeOrdinal != null && ranges.any { typeOrdinal in it }
+        })
     }
 
     private fun retrieveExercises() {
@@ -155,6 +176,7 @@ class ExerciseListActivity : AppCompatActivity() {
                 exerciseNameList.text  = exercise.name!!.replaceFirstChar { it.uppercaseChar() }
                 caloriesRepsValue.text = exercise.caloriesPerRep!!.toString()
                 experienceValue.text   = exercise.experiencePerReps!!.toString()
+                typeValue.text = exercise.type!!.toString()
 
                 exerciseCard.setCardBackgroundColor(HelperFunctions().getExerciseBackground(exercise.type!!, resources, applicationContext))
                 setDeleteMenuAnimation(exerciseCard, exercise)
@@ -203,10 +225,25 @@ class ExerciseListActivity : AppCompatActivity() {
 
     private fun exerciseTypeFromString(typeString : String) : ExerciseType {
         return when(typeString) {
-            "ARMS"  -> ExerciseType.ARMS
-            "LEGS"  -> ExerciseType.LEGS
             "CHEST" -> ExerciseType.CHEST
-            else    -> ExerciseType.ABDOMEN
+            "BACK" -> ExerciseType.BACK
+            "SHOULDERS" -> ExerciseType.SHOULDERS
+            "BICEPS" -> ExerciseType.BICEPS
+            "TRICEPS" -> ExerciseType.TRICEPS
+            "ABDOMINALS" -> ExerciseType.ABDOMINALS
+            "OBLIQUES" -> ExerciseType.OBLIQUES
+            "QUADRICEPS" -> ExerciseType.QUADRICEPS
+            "HAMSTRINGS" -> ExerciseType.HAMSTRINGS
+            "GLUTES" -> ExerciseType.GLUTES
+            "CALVES" -> ExerciseType.CALVES
+            "YOGA" -> ExerciseType.YOGA
+            "RUNNING" -> ExerciseType.RUNNING
+            "CYCLING" -> ExerciseType.CYCLING
+            "SWIMMING" -> ExerciseType.SWIMMING
+            "DANCING" -> ExerciseType.DANCING
+            "BOXING" -> ExerciseType.BOXING
+            "KICKBOXING" -> ExerciseType.KICKBOXING
+            else -> ExerciseType.CHEST
         }
     }
 

@@ -10,6 +10,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.isDigitsOnly
 import it.polimi.mobile.design.R
 import it.polimi.mobile.design.enum.ExerciseType
+import it.polimi.mobile.design.enum.WorkoutTypes
 import java.io.Serializable
 
 class HelperFunctions {
@@ -68,20 +69,21 @@ class HelperFunctions {
 
     fun getExerciseBackground(exerciseType: ExerciseType, resources: Resources, context: Context) : Int {
         return when(exerciseType.ordinal) {
-            0 -> ResourcesCompat.getColor(resources, R.color.red_arms, context.theme)
-            1 -> ResourcesCompat.getColor(resources, R.color.blue_legs, context.theme)
-            2 -> ResourcesCompat.getColor(resources, R.color.yellow_core, context.theme)
-            3 -> ResourcesCompat.getColor(resources, R.color.yellow_core, context.theme)
-            else -> ResourcesCompat.getColor(resources, R.color.green_spirit, context.theme)
+            in ExerciseType.CHEST.ordinal..ExerciseType.TRICEPS.ordinal -> ResourcesCompat.getColor(resources, R.color.red_arms, context.theme)
+            in ExerciseType.ABDOMINALS.ordinal..ExerciseType.OBLIQUES.ordinal -> ResourcesCompat.getColor(resources, R.color.yellow_core, context.theme)
+            in ExerciseType.QUADRICEPS.ordinal..ExerciseType.CALVES.ordinal -> ResourcesCompat.getColor(resources, R.color.blue_legs, context.theme)
+            in ExerciseType.YOGA.ordinal..ExerciseType.YOGA.ordinal -> ResourcesCompat.getColor(resources, R.color.green_spirit, context.theme)
+            else -> ResourcesCompat.getColor(resources, R.color.cardio, context.theme)
         }
     }
 
     fun getWorkoutColor(workoutType: Int, resources: Resources, context: Context) : Drawable {
         return when(workoutType) {
-            0    -> ResourcesCompat.getDrawable(resources, R.drawable.gradient_arms, context.theme)!!
-            1    -> ResourcesCompat.getDrawable(resources, R.drawable.gradient_legs, context.theme)!!
-            2    -> ResourcesCompat.getDrawable(resources, R.drawable.gradient_core, context.theme)!!
-            3    -> ResourcesCompat.getDrawable(resources, R.drawable.gradient_yoga, context.theme)!!
+            WorkoutTypes.UPPER_BODY.ordinal -> ResourcesCompat.getDrawable(resources, R.drawable.gradient_arms, context.theme)!!
+            WorkoutTypes.ABDOMINALS.ordinal -> ResourcesCompat.getDrawable(resources, R.drawable.gradient_core, context.theme)!!
+            WorkoutTypes.LOWER_BODY.ordinal -> ResourcesCompat.getDrawable(resources, R.drawable.gradient_legs, context.theme)!!
+            WorkoutTypes.YOGA.ordinal       -> ResourcesCompat.getDrawable(resources, R.drawable.gradient_yoga, context.theme)!!
+            WorkoutTypes.CARDIO.ordinal     -> ResourcesCompat.getDrawable(resources, R.drawable.gradient_cardio, context.theme)!!  // TODO: cardio
             else -> ResourcesCompat.getDrawable(resources, R.drawable.gradient_default, context.theme)!!
         }
     }

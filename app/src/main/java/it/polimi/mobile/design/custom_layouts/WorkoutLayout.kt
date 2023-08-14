@@ -127,11 +127,11 @@ class WorkoutLayout(context: Context, attrs: AttributeSet?) : LinearLayout(conte
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun getExerciseTypeImage(type: ExerciseType) : Drawable {
         return when(type.ordinal) {
-            0    -> resources.getDrawable(R.drawable.muscle, context.theme)!!
-            1    -> resources.getDrawable(R.drawable.leg, context.theme)!!
-            2    -> resources.getDrawable(R.drawable.body, context.theme)!!
-            3    -> resources.getDrawable(R.drawable.yoga, context.theme)!!
-            else -> resources.getDrawable(R.drawable.body, context.theme)!!
+            in ExerciseType.CHEST.ordinal..ExerciseType.TRICEPS.ordinal    -> resources.getDrawable(R.drawable.muscle, context.theme)!!
+            in ExerciseType.ABDOMINALS.ordinal..ExerciseType.OBLIQUES.ordinal    -> resources.getDrawable(R.drawable.body, context.theme)!!
+            in ExerciseType.QUADRICEPS.ordinal..ExerciseType.CALVES.ordinal    -> resources.getDrawable(R.drawable.leg, context.theme)!!
+            in ExerciseType.YOGA.ordinal..ExerciseType.YOGA.ordinal    -> resources.getDrawable(R.drawable.yoga, context.theme)!!
+            else -> resources.getDrawable(R.drawable.bpm, context.theme)!!
         }
     }
 }
