@@ -96,9 +96,8 @@ class StatsActivity : AppCompatActivity() {
             val dataPoint = DataPoint(uId, pId, currentGraph.graphId,
                 ChronoUnit.DAYS.between(LocalDate.ofEpochDay(0), dt) * 86400, value)
             helperDB.pointsSchema.child(pId).setValue(dataPoint).addOnSuccessListener {
-                val intent = Intent(this, StatsActivity::class.java)
-                startActivity(intent)
-                finish()
+                displayData()
+                binding.addDataBtn.isClickable = true
             }
             binding.addDataCard.visibility = View.INVISIBLE
         }

@@ -199,7 +199,7 @@ class CentralActivity : AppCompatActivity() {
         val workoutIdToNumberPlayedMap = userWorkoutData.associateBy { it.workoutId }
         return workouts.sortedBy { workout ->
             workoutIdToNumberPlayedMap[workout.workoutId]?.numberOfTimesPlayed ?: 0
-        }
+        }.reversed()
     }
 
     private fun filterMostPopularWorkouts(workouts: List<Workout>) : List<Workout> {
