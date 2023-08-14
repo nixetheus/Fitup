@@ -15,6 +15,8 @@ android {
         versionName "1.0"
         manifestPlaceholders = [redirectSchemeName: "spotify-sdk", redirectHostName: "auth"]
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArguments clearPackageData: 'true',
+                animation: 'off'
     }
 
     buildTypes {
@@ -83,6 +85,7 @@ dependencies {
 
     // Spotify
     implementation files('../libs/spotify-app-remote-release-0.7.2.aar')
+    implementation 'androidx.test.uiautomator:uiautomator:2.2.0'
 
     // WearOs
     wearApp project(':wearos')

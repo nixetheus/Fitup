@@ -1,18 +1,20 @@
 package it.polimi.mobile.design
 
+import android.content.res.Resources
+import android.view.KeyEvent
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.clearText
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
-import androidx.test.espresso.action.ViewActions.typeText
+import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.hamcrest.Matchers.not
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.UiDevice
 import it.polimi.mobile.design.entities.Workout
+import org.hamcrest.Matchers.*
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -28,12 +30,24 @@ class WorkoutListActivityTest {
     fun setUp() {
         Intents.init()
         activityScenario = ActivityScenario.launch(WorkoutListActivity::class.java)
+
+        // Disable animations
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        device.executeShellCommand("settings put global window_animation_scale 0")
+        device.executeShellCommand("settings put global transition_animation_scale 0")
+        device.executeShellCommand("settings put global animator_duration_scale 0")
     }
 
     @After
     fun tearDown() {
         Intents.release()
         activityScenario.close()
+
+        // Re-enable
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        device.executeShellCommand("settings put global window_animation_scale 1")
+        device.executeShellCommand("settings put global transition_animation_scale 1")
+        device.executeShellCommand("settings put global animator_duration_scale 1")
     }
 
     @Test
@@ -77,40 +91,44 @@ class WorkoutListActivityTest {
         //assertEquals("Fill in all fields to continue!!", shadowToast.getText().toString())
     }
 
-    // TODO: Add more tests for other functionalities and interactions
+    @Test
+    fun testSearch(){
 
-    // SpinnerTest
-  @Test
-  fun testSpinner(){
+        val testName1 = "Test1"
+        val testName2 = "Test2"
+
         onView(withId(R.id.addWorkoutsButton)).perform(click())
-        onView(withId(R.id.workoutNameField)).perform(typeText("test2"), closeSoftKeyboard())
+        onView(withId(R.id.workoutNameField)).perform(typeText(testName2), closeSoftKeyboard())
         onView(withId(R.id.confirmAddWorkoutBtn)).perform(click())
-        // verify that workouts are correctly visualized
-        onView(withId(R.id.workoutsListLayout)).check(matches(isDisplayed()))
         Thread.sleep(2000)
-        onView(withText("Test2")).check(matches(isDisplayed()))
 
         onView(withId(R.id.addWorkoutsButton)).perform(click())
         onView(withId(R.id.workoutNameField))
-            .perform(clearText(), typeText("1test"), closeSoftKeyboard())
+            .perform(clearText(), typeText(testName1), closeSoftKeyboard())
         onView(withId(R.id.confirmAddWorkoutBtn)).perform(click())
-        // verify that workouts are correctly visualized
-        onView(withId(R.id.workoutsListLayout)).check(matches(isDisplayed()))
         Thread.sleep(2000)
-        // Search for workouts starting with "1" (e.g., "Test1")
-        onView(withId(R.id.searchWorkout)).perform(click()).perform(typeText("1"), closeSoftKeyboard())
+        
+        // Search for workouts starting with "Test1" (e.g., "Test1")
+        onView(withContentDescription("Search")).perform(click())
+        Thread.sleep(1000)
+        onView(withId(R.id.searchWorkout)).perform(typeText(testName1), closeSoftKeyboard())
 
         // Verify that only "Test1" is displayed
-        onView(withId(R.id.workoutsListLayout)).check(matches(isDisplayed()))
-        onView(withText("Test1")).check(matches(isDisplayed()))
-        onView(withText("Test2")).check(matches(not(isDisplayed())))
+        onView(allOf(withId(R.id.workoutDisplayNameList), withText(testName1))).check(matches(isDisplayed()))
+        onView(withText(testName2)).check(ViewAssertions.doesNotExist())
 
+        // Setup search bar to delete workout
+        onView(withId(R.id.searchWorkout)).perform(click())
+        onView(withId(R.id.searchWorkout)).perform(pressKey(KeyEvent.KEYCODE_DEL))
+        onView(withId(R.id.searchWorkout)).perform(closeSoftKeyboard())
 
-
-
-
-
-    }  }
+        // Delete test workouts
+        onView(allOf(withId(R.id.workoutDisplayNameList), withText(testName1))).perform(longClick())
+        onView(withId(R.id.deleteWorkoutButton)).perform(click())
+        onView(allOf(withId(R.id.workoutDisplayNameList), withText(testName2))).perform(longClick())
+        onView(withId(R.id.deleteWorkoutButton)).perform(click())
+    }
+}
 
 
 
