@@ -8,7 +8,7 @@ enum class GraphType {
     override fun toString(): String {
         return when(this) {
             BODY_COMP -> "Body Composition"  // TODO
-            ONE_REP_MAX -> "Max Repetitions"
+            ONE_REP_MAX -> "Personal Records"
         }
     }
 }

@@ -177,6 +177,14 @@ class StatsActivity : AppCompatActivity() {
 
             val graphs =
                 DatabaseHelper().getGraphsFromSnapshot(graphsSnapshot).filter { it.graphType == index}
+                    .toMutableList()
+
+            val itemWithHighestPriority = graphs.find { it.graphName == "Body Weight" }
+            if (itemWithHighestPriority != null) {
+                graphs.remove(itemWithHighestPriority)
+                graphs.add(0, itemWithHighestPriority)
+            }
+
             val adapter = ArrayAdapter(this, R.layout.fragment_spinner_item, graphs)
             adapter.setDropDownViewResource(R.layout.fragment_spinner_dropdown_item)
             binding.secondaryGraphSpinner.adapter = adapter
