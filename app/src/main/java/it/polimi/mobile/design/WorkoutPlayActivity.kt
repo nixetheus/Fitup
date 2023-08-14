@@ -78,7 +78,6 @@ class WorkoutPlayActivity : AppCompatActivity() {
         updateWorkoutStats()
 
         createBindings()
-        startSpotify()
         sendWorkoutNameToWearable()
 
         ListenerThread().start()
@@ -94,16 +93,14 @@ class WorkoutPlayActivity : AppCompatActivity() {
                 startExercise()
             } else {
                 Toast.makeText(
-                    this, "Please add exercises to continue your training", Toast.LENGTH_SHORT).show()
+                    this, "Please add exercises to continue your training", Toast.LENGTH_SHORT
+                ).show()
                 Thread.sleep(2000)
                 SendThread("/finish", "finish").start()
                 val intent = Intent(this, EditWorkoutActivity::class.java)
                 intent.putExtra("Workout", playWorkout)
                 startActivity(intent)
                 finish()
-
-
-
             }
         }
 
@@ -114,13 +111,19 @@ class WorkoutPlayActivity : AppCompatActivity() {
                 changeExercise()
             } else {
                 Toast.makeText(
-                    this, "Please add exercises to continue your training", Toast.LENGTH_SHORT).show()
+                    this, "Please add exercises to continue your training", Toast.LENGTH_SHORT
+                ).show()
             }
         }
 
         binding.stopButton.setOnClickListener {
             finishWorkout()
         }
+
+        binding.spotifyCard.setOnClickListener {
+            startSpotify()
+        }
+
     }
 
     private fun beginWorkout() {

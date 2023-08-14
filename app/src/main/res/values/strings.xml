@@ -138,6 +138,8 @@
     <string name="set">Set</string>
     <string name="go">Go!</string>
     <string name="workout_start_text">Workout\n starts in</string>
+    <string name="play_spotify">Play</string>
+    <string name="stop_button_text">Finish Workout</string>
 
     <!-- FINISH -->
     <string name="congrats_main">You\'ve Done It!</string>

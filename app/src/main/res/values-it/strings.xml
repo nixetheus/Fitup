@@ -59,11 +59,12 @@
     <string name="wearos_button_label">Sincronizza</string>
     <string name="courage_text">Sconfiggi Il Mostro</string>
     <string name="popup">Sei sicuro di voler terminare il workout?</string>
-    <string name="congrats">Congratulazioni!\\nHai sconfitto il mostro!</string>
+    <string name="congrats">Congratulazioni!\nHai sconfitto il mostro!</string>
     <string name="ready">Pronto</string>
     <string name="set">Partenza</string>
     <string name="go">Via</string>
-    <string name="workout_start_text">Inzia Tra</string>
+    <string name="workout_start_text">Inzia Tra…</string>
+    <string name="stop_button_text">Termina Workout</string>
     <string name="congrats_main">Ce L\'Hai Fatta!</string>
     <string name="congrats_sub">Riposati, rilassati e goditi il resto della giornata</string>
     <string name="recap_exp">Exp. Totale:</string>
@@ -81,4 +82,5 @@
     <string name="confirm_label">Conferma Email</string>
     <string name="completed_label">Completato</string>
     <string name="confirm_logout">Sei sicuro di volerti disconnettere?</string>
+    <string name="play_spotify">Ascolta</string>
 </resources>
