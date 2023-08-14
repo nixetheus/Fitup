@@ -1,6 +1,6 @@
 # Fitup - Your Ultimate Workout App
 
-![Fitup Logo](link_to_logo_image.png)
+<img src="images/png/logos/app_logo.png" alt="Fitup Logo" width="200" style="margin-right: 100px;"/>
 
 Fitup is a comprehensive workout app for Android that empowers you to create personalized workouts, track your progress with timers and gamification, and keep tabs on your health and exercise data.
 
@@ -15,22 +15,27 @@ Fitup is a comprehensive workout app for Android that empowers you to create per
 
 ## Screenshots
 
-![Home Screen](link_to_home_screenshot.png)
-![Login Screen](link_to_login_screenshot.png)
-![Workout Editing Screen](link_to_workout_editing_screenshot.png)
-![Data Graphs](link_to_data_graphs_screenshot.png)
-![Workout Tracking Screen](link_to_workout_tracking_screenshot.png)
+<div align="left">
+  <img src="screenshots/central.png" alt="Home Screen" width="300" style="padding-right: 1000px;"/>
+  <img src="screenshots/login.png" alt="Login Screen" width="300" style="padding-right: 100px;"/>
+  <img src="screenshots/workout_play.png" alt="Workout Tracking Screen" width="300"style="padding-right: 100px;"/>
+  <img src="screenshots/workout_edit.png" alt="Workout Editing Screen" width="300"style="padding-right: 100px;"/>
+  <img src="screenshots/stats.png" alt="Data Graphs" width="300"/>
+</div>
+
 
 ## Installation
 
 To use Fitup, simply download the APK file [here](link_to_apk_file.apk) and install it on your Android device.
 
-## License
+## Copyright
 
-This project is licensed under the **[Choose the Most Appropriate License Here]** license. See the [LICENSE](LICENSE) file for details.
+© [2023] [nixetheus & Nicog97]. All rights reserved.
+
+Unauthorized use, reproduction, or distribution of this repository or any of its files is prohibited. This repository is a collective work that may contain confidential, proprietary, and copyrighted information. Any use of the code, text, images, design elements, or other content found in this repository without explicit permission is strictly prohibited.
 
 ## Contact
 
-For any questions or inquiries, feel free to reach out via email at luca \[dot\] cassenti \[at\] protonmail \[dot\] ch or on [GitHub](https://github.com/nixetheus). 
+For any questions or inquiries, feel free to reach out via email at luca \[dot\] cassenti \[at\] protonmail \[dot\] ch or on Github [@nixetheus](https://github.com/nixetheus) or [@Nicog97](https://github.com/Nicog97). 
 
 _This project was developed as part of a university project, and contributions are not currently accepted._
