@@ -6,7 +6,6 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import android.util.Range
 import android.view.View
 import android.view.animation.TranslateAnimation
 import android.widget.*

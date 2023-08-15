@@ -1,6 +1,5 @@
 package it.polimi.mobile.design.entities
 
-import it.polimi.mobile.design.enum.ExerciseType
 import java.io.Serializable
 
 

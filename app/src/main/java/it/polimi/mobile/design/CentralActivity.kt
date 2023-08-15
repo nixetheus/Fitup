@@ -16,7 +16,6 @@ import it.polimi.mobile.design.databinding.FragmentWorkoutBinding
 import it.polimi.mobile.design.databinding.FragmentWorkoutRecentBinding
 import it.polimi.mobile.design.entities.Workout
 import it.polimi.mobile.design.entities.WorkoutUserData
-import it.polimi.mobile.design.enum.ExerciseType
 import it.polimi.mobile.design.enum.WorkoutTypes
 import it.polimi.mobile.design.helpers.DatabaseHelper
 import it.polimi.mobile.design.helpers.HelperFunctions

@@ -2,12 +2,10 @@ package it.polimi.mobile.design.custom_views
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
-import it.polimi.mobile.design.R
 import java.lang.Float.min
 
 class CircularCountdownView(context: Context, attrs: AttributeSet) : View(context, attrs) {

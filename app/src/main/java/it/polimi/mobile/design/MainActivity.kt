@@ -9,7 +9,7 @@ import androidx.preference.PreferenceManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import it.polimi.mobile.design.databinding.ActivityMainBinding
-import java.util.Locale
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {

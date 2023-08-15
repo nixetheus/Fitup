@@ -10,15 +10,12 @@ import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.LinearLayout
-import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import it.polimi.mobile.design.R
 import it.polimi.mobile.design.databinding.FragmentExerciseInPlayBinding
-import it.polimi.mobile.design.entities.Exercise
 import it.polimi.mobile.design.entities.WorkoutExercise
 import it.polimi.mobile.design.enum.ExerciseType
 import it.polimi.mobile.design.helpers.Constant
