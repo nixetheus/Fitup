@@ -143,18 +143,22 @@ class EditWorkoutActivity : AppCompatActivity() {
 
     private fun onAddNewExercise() {
 
-        val id              = helperDB.exercisesSchema.push().key!!
-        val exercise        = binding.exercisesSpinner.selectedItem as Exercise
-        val workoutExercise = createWorkoutExercise(id, editableWorkout, exercise)
+        if (editableWorkout.userId == helperDB.getFirebaseAuth().uid) {
+            val id = helperDB.exercisesSchema.push().key!!
+            val exercise = binding.exercisesSpinner.selectedItem as Exercise
+            val workoutExercise = createWorkoutExercise(id, editableWorkout, exercise)
 
-        updateWorkoutInfo(exercise, workoutExercise, true)
+            updateWorkoutInfo(exercise, workoutExercise, true)
 
-        // Add to join schema and change UI
-        helperDB.workoutsExercisesSchema.child(id).setValue(workoutExercise).addOnSuccessListener {
-            Toast.makeText(this, "Successfully saved!!", Toast.LENGTH_SHORT).show()
-            retrieveExercises()
+            // Add to join schema and change UI
+            helperDB.workoutsExercisesSchema.child(id).setValue(workoutExercise)
+                .addOnSuccessListener {
+                    Toast.makeText(this, "Successfully saved!!", Toast.LENGTH_SHORT).show()
+                    retrieveExercises()
+                }
+        } else {
+            Toast.makeText(this, "You can't modify this workout", Toast.LENGTH_SHORT).show()
         }
-
         hideAddExercise()
     }
 

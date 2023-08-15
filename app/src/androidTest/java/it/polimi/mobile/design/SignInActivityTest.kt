@@ -41,7 +41,7 @@ class SignInActivityTest {
     fun testSignInWithEmailPassword_Failure_andThen() {
 
 
-        Thread.sleep(10000)
+        Thread.sleep(2000)
 
         // Inserisci email e password errati
         onView(withId(R.id.EmailField)).perform(replaceText("wrong@example.com"))

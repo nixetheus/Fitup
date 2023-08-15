@@ -61,21 +61,30 @@ class WorkoutListActivityTest {
     @Test
     fun testShowWorkoutsAndClickOnWorkout() {
 
+        val workoutName = "TEST WORKOUT"
+
         onView(withId(R.id.addWorkoutsButton)).perform(click())
-        onView(withId(R.id.workoutNameField)).perform(typeText("test"), closeSoftKeyboard())
+        onView(withId(R.id.workoutNameField)).perform(typeText(workoutName), closeSoftKeyboard())
         onView(withId(R.id.confirmAddWorkoutBtn)).perform(click())
         // verify that workouts are correctly visualized
         onView(withId(R.id.workoutsListLayout)).check(matches(isDisplayed()))
         Thread.sleep(2000)
-        onView(withText("Test")).check(matches(isDisplayed()))
-
+        onView(allOf(withId(R.id.workoutDisplayNameList), withText(workoutName))).check(matches(isDisplayed()))
 
         // click on a workout
-        onView(withText("Test")).perform(click())
+        onView(withText(workoutName)).perform(click())
         Thread.sleep(6000)
 
         // Verify that Workout Play Activity is started
         Intents.intended(IntentMatchers.hasComponent(WorkoutPlayActivity::class.java.name))
+
+        // Go back
+        pressBack()
+        Thread.sleep(6000)
+
+        // Delete test workouts
+        onView(allOf(withId(R.id.workoutDisplayNameList), withText(workoutName))).perform(longClick())
+        onView(withId(R.id.deleteWorkoutButton)).perform(click())
 
     }
 

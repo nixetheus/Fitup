@@ -23,6 +23,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
+import kotlin.random.Random
 
 @RunWith(AndroidJUnit4::class)
 class SignUpActivityTest {
@@ -41,17 +42,20 @@ class SignUpActivityTest {
         Intents.release()
         activityScenario.close()
     }
+
     @Test
     fun testSignUpSuccess() {
-        // Iinsert email and password
-        onView(withId(R.id.EmailField)).perform(typeText("test3@example555.com"))
+
+        val randomEmail =  "${kotlin.math.abs(Random.nextInt())}@test.com"
+
+        // Insert email and password
+        onView(withId(R.id.EmailField)).perform(typeText(randomEmail))
         onView(withId(R.id.Pass)).perform(typeText("password"))
         onView(withId(R.id.Pass2)).perform(typeText("password"))
         onView(withId(R.id.Pass)).perform(ViewActions.closeSoftKeyboard())
 
         onView(withId(R.id.SignUpBtn)).perform(click())
         Thread.sleep(4000)
-
 
         // Verify that activity starts
         Intents.intended(IntentMatchers.hasComponent(HomeActivity::class.java.name))

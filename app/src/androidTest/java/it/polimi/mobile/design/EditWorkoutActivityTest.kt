@@ -13,6 +13,7 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import it.polimi.mobile.design.entities.Workout
+import it.polimi.mobile.design.helpers.DatabaseHelper
 import kotlinx.coroutines.delay
 import org.hamcrest.Matchers.allOf
 import org.junit.After
@@ -41,7 +42,7 @@ class EditWorkoutActivityTest {
 
     private fun createFakeWorkout() : Workout {
         return Workout(
-            "-Na7Mh7plP_oDVrlVw-c", "Mw19C5PhigZGoG1OtwpTt8BF1op1", "Strength - Total Body 1",
+            "-Na7Mh7plP_oDVrlVw-c", DatabaseHelper().getFirebaseAuth().uid, "Strength - Total Body 1",
             "hip hop", -4, 0, 0f, 0f, 0, mutableListOf(1, 1, 0, 0))
     }
 

@@ -107,14 +107,14 @@ class ExerciseListActivityTest {
 
         // Normal case
         activityScenario.onActivity {
-            val type = method.invoke(it, "ARMS")
-            Assert.assertEquals(type, ExerciseType.ARMS)
+            val type = method.invoke(it, "SHOULDERS")
+            Assert.assertEquals(type, ExerciseType.SHOULDERS)
         }
 
         // Edge case
         activityScenario.onActivity {
             val type = method.invoke(it, "GIBBERISH")
-            Assert.assertEquals(type, ExerciseType.ABDOMEN)
+            Assert.assertEquals(type, ExerciseType.CHEST)
         }
     }
 

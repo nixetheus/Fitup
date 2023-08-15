@@ -4,6 +4,7 @@ package it.polimi.mobile.design
 import android.content.Intent
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import it.polimi.mobile.design.enum.ExerciseType
+import it.polimi.mobile.design.enum.WorkoutTypes
 import it.polimi.mobile.design.helpers.HelperFunctions
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -43,16 +44,16 @@ class HelperFunctionsTest {
 
     @Test
     fun testGetWorkoutType() {
-        val exercisesTypes1 = mutableListOf(1, 2, 3, 4)
+        val exercisesTypes1 = mutableListOf(1, 2, 3, 4, 0)
         assertEquals(
-            ExerciseType.CHEST.ordinal,
+            WorkoutTypes.YOGA.ordinal,
             helperFunctions.getWorkoutType(exercisesTypes1)
         )
 
-        val exercisesTypes2 = mutableListOf(1, 2, 3, 3)
+        val exercisesTypes2 = mutableListOf(1, 2, 3, 3, 0)
         assertEquals(ExerciseType.FULL_BODY.ordinal, helperFunctions.getWorkoutType(exercisesTypes2))
 
-        val exercisesTypes3 = mutableListOf(1, 1, 1, 1)
+        val exercisesTypes3 = mutableListOf(1, 1, 1, 1, 1)
         assertEquals(
             ExerciseType.FULL_BODY.ordinal,
             helperFunctions.getWorkoutType(exercisesTypes3)
