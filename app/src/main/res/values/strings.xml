@@ -99,6 +99,7 @@
     <string name="buffer_label" translatable="false">Buffer</string>
     <string name="add_exercises_please">Let\'s start building your workout</string>
     <string name="add_exercises_please_btn">Add to this workout</string>
+    <string name="owner_label">By</string>
 
     <!-- SETTINGS -->
     <string name="settings_title">Settings</string>

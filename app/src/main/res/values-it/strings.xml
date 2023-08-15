@@ -83,4 +83,5 @@
     <string name="completed_label">Completato</string>
     <string name="confirm_logout">Sei sicuro di volerti disconnettere?</string>
     <string name="play_spotify">Ascolta</string>
+    <string name="owner_label">Di</string>
 </resources>
