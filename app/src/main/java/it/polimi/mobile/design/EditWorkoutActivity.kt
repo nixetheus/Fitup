@@ -292,7 +292,8 @@ class EditWorkoutActivity : AppCompatActivity() {
             types[exerciseTypeIndex] = types[exerciseTypeIndex] + multiplier
         }
 
-        editableWorkout.name?.let { helperDB.workoutsSchema.child(it).setValue(editableWorkout).addOnSuccessListener {} }
+        editableWorkout.name?.let { helperDB.workoutsSchema
+            .child(editableWorkout.workoutId!!).setValue(editableWorkout).addOnSuccessListener {} }
         showWorkoutData()
     }
 

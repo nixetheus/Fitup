@@ -125,7 +125,7 @@ class WorkoutListActivity : AppCompatActivity() {
 
         if(name.isNotEmpty()) {
             val workout = Workout(wId, uid, name, "hip hop", 0, 0, 0.0f, 0f, 0, MutableList(5){0})
-            helperDB.workoutsSchema.child(name).setValue(workout).addOnSuccessListener {
+            helperDB.workoutsSchema.child(wId).setValue(workout).addOnSuccessListener {
                 Toast.makeText(this, "Successfully saved!!", Toast.LENGTH_SHORT).show()
                 toggleAddWorkoutVisibility(false)
             }

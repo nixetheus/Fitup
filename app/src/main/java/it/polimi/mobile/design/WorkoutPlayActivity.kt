@@ -251,7 +251,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
                     val workoutData = userWorkouts.find { it.workoutId == playWorkout.workoutId!! }
                     if (workoutData != null) {
                         workoutData.totalNumberOfTimesPlayed = workoutData.totalNumberOfTimesPlayed?.plus(1)
-                        helperDB.workoutsSchema.child(workoutData.name!!).setValue(workoutData)
+                        helperDB.workoutsSchema.child(workoutData.workoutId!!).setValue(workoutData)
                     } else {
                         throw java.lang.IllegalStateException()
                     }
