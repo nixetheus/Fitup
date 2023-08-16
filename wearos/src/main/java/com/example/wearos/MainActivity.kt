@@ -1,5 +1,5 @@
 package com.example.wearos
-
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.BroadcastReceiver
@@ -7,6 +7,7 @@ import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -20,6 +21,8 @@ import android.view.WindowManager
 import android.widget.Chronometer
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.wearos.databinding.ActivityMainBinding
 import com.google.android.gms.tasks.Task
@@ -30,18 +33,14 @@ import kotlin.properties.Delegates
 
 class MainActivity : Activity() , SensorEventListener {
 
-    private var exerciseName: TextView? = null
-    private var workoutName: TextView?= null
+
     private var sensorManager: SensorManager? = null
     private var mHeartSensor: Sensor? = null
-    private lateinit var chrono: Chronometer
-    private var timeWhenStopped by Delegates.notNull<Long>()
-    private var talkButton: ImageView? = null
-    private var exercise:String?=null
+
     private var workout:String?=null
-    var receivedMessageNumber = 1
-    var sentMessageNumber = 1
-    var bpm: Float = 0.0f
+
+    private var bpm: Float = 0.0f
+    private val PERMISSION_REQUEST_CODE = 123
 
 
 
@@ -60,11 +59,24 @@ class MainActivity : Activity() , SensorEventListener {
 
         this.sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager?;
         mHeartSensor = sensorManager?.getDefaultSensor(Sensor.TYPE_HEART_RATE)
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.BODY_SENSORS)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.BODY_SENSORS),
+                PERMISSION_REQUEST_CODE
+            )
+        } else {
+            registerHeartRateSensor()
+        }
         sensorManager?.registerListener(
             this,
             mHeartSensor,
             SensorManager.SENSOR_DELAY_FASTEST
         )
+        Log.d(TAG, "sensor initialized")
+
 
 
 
@@ -73,6 +85,19 @@ class MainActivity : Activity() , SensorEventListener {
 
 
 
+    }
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                registerHeartRateSensor()
+            } else {
+                // L'utente ha negato il permesso, gestisci di conseguenza
+            }
+        }
     }
 
 
@@ -83,7 +108,8 @@ class MainActivity : Activity() , SensorEventListener {
         if (event?.values!!.isNotEmpty()) {
             bpm = event.values[0]
             binding.bmpValue.text= "" + event.values[0].toInt()
-            SendMessage("/my_path", bpm.toString()).start()
+            SendMessage("/bpm", bpm.toString()).start()
+            Log.d(TAG, "send bpm")
 
 
         }
@@ -100,6 +126,15 @@ class MainActivity : Activity() , SensorEventListener {
     override fun onPause() {
         sensorManager?.unregisterListener(this)
         super.onPause()
+    }
+    private fun registerHeartRateSensor() {
+        mHeartSensor?.let {
+            sensorManager?.registerListener(
+                this,
+                it,
+                SensorManager.SENSOR_DELAY_NORMAL
+            )
+        }
     }
 
 
@@ -186,20 +221,6 @@ class MainActivity : Activity() , SensorEventListener {
             }
         }
     }
-    /*public override fun onResume() {
-        super.onResume()
-        Wearable.getDataClient(this).addListener(this)
-    }
-    override fun onPause() {
-        super.onPause()
-        Wearable.getDataClient(this).removeListener(this)
-    }
-
-
-
-    override fun onDataChanged(p0: DataEventBuffer) {
-        TODO("Not yet implemented")
-    }*/
 
 
 }

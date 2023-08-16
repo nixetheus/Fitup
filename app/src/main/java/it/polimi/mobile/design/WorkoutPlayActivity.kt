@@ -40,6 +40,7 @@ import it.polimi.mobile.design.helpers.Constant
 import it.polimi.mobile.design.helpers.DatabaseHelper
 import it.polimi.mobile.design.helpers.HelperFunctions
 import java.util.concurrent.ExecutionException
+import kotlin.properties.Delegates
 
 
 class WorkoutPlayActivity : AppCompatActivity() {
@@ -55,6 +56,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
     private var currentExerciseIndex = -1
     private lateinit var globalElapsedTime: Chronometer
     private lateinit var exerciseElapsedTime: Chronometer
+    private var timeWhenStopped by Delegates.notNull<Long>()
 
     private val handler = Handler()
     private var samplingBoolean = true
@@ -168,6 +170,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
     }
 
     private fun initChronometers() {
+        timeWhenStopped=0
         globalElapsedTime = binding.workoutTimeValue
         exerciseElapsedTime = binding.exerciseCounter
     }
@@ -279,6 +282,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
         if (currentExerciseIndex < workoutExercises.size - 1 ) {
             currentExerciseIndex++
             setupExerciseUI()
+            SendThread("/exercise", workoutExercises[currentExerciseIndex].exerciseName.toString()).start()
             SendThread("/next", "next").start()
         } else {
             showCongratulations()
@@ -288,6 +292,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
             binding.stopButton.visibility = View.VISIBLE
             binding.playPauseButton.visibility = View.INVISIBLE
             binding.nextButton.visibility = View.INVISIBLE
+            timeWhenStopped = globalElapsedTime.base
 
             val colorAccent = TypedValue()
             this.theme.resolveAttribute(android.R.attr.colorAccent, colorAccent, true)
@@ -338,6 +343,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
         setWorkoutBPM()
         addUserExperience()
         disconnectSpotify()
+
         startFinishActivity()
     }
 
@@ -371,6 +377,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
                 Log.e(TAG, "onCancelled", databaseError.toException())
             }
         })
+
     }
 
     private fun disconnectSpotify() {
@@ -381,8 +388,9 @@ class WorkoutPlayActivity : AppCompatActivity() {
     private fun startFinishActivity() {
         val intent = Intent(this, WorkoutEndActivity::class.java)
         intent.putExtra("Exp", playWorkout.gainedExperience)
-        intent.putExtra("Time", globalElapsedTime.base)
+        intent.putExtra("Time", timeWhenStopped)
         intent.putExtra("N", playWorkout.numberOfExercises)
+        intent.putExtra("bpm", bpmValues.average())
         startActivity(intent)
         finish()
     }
@@ -399,6 +407,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
             override fun onConnected(spotifyAppRemote: SpotifyAppRemote) {
                 mSpotifyAppRemote = spotifyAppRemote
                 Log.d("Play Workout", "Connected! Yay!")
+
                 mSpotifyAppRemote!!.playerApi.play("spotify:playlist:37i9dQZF1DX2sUQwD7tbmL")
                 spotifyAppRemote.playerApi.subscribeToPlayerState().setEventCallback {
                     val track: Track = it.track
@@ -438,11 +447,13 @@ class WorkoutPlayActivity : AppCompatActivity() {
         override fun onReceive(context: Context?, intent: Intent?) {
             
             // Update BPM
-            val bpmValue = HelperFunctions().getExtra<String>(intent!!, "message")
-            if (!bpmValue.isNullOrEmpty()) {
-                binding.bpmText.text = bpmValue
-                val bpmValueFloat = HelperFunctions().parseFloatInput(bpmValue!!)
-                if (bpmValueFloat > 0f) bpmValues.add(bpmValueFloat)
+            if (HelperFunctions().getExtra<String>(intent!!, "bpm")!=null) {
+                val bpmValue = HelperFunctions().getExtra<String>(intent!!, "bpm")
+                if (!bpmValue.isNullOrEmpty()) {
+                    binding.bpmText.text = bpmValue
+                    val bpmValueFloat = HelperFunctions().parseFloatInput(bpmValue!!)
+                    if (bpmValueFloat > 0f) bpmValues.add(bpmValueFloat)
+                }
             }
             
             // Start Exercise
@@ -453,11 +464,13 @@ class WorkoutPlayActivity : AppCompatActivity() {
             // Next Exercise
             if (HelperFunctions().getExtra<String>(intent, "next") != null) {
                 //binding.nextExerciseButton.performClick()
+                binding.nextButton.visibility = View.INVISIBLE
+                binding.playPauseButton.visibility = View.VISIBLE
                 changeExercise()
             }
             
             // Info Request
-            if (HelperFunctions().getExtra<String>(intent, "request") != null) {
+            if (HelperFunctions().getExtra<String>(intent, "requestExercise") != null) {
                 if (workoutExercises.isNotEmpty()) {
                     SendThread("/exercise", workoutExercises[currentExerciseIndex].exerciseName.toString()).start()
                 }
@@ -513,7 +526,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         handler.removeCallbacks(bpmRunnable)
-        SendThread("/exit", "exit").start()
+        SendThread("/finish", "finish").start()
     }
 }
 

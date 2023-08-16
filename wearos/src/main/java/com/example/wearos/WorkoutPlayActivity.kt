@@ -10,6 +10,7 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Message
 import android.os.SystemClock
@@ -38,7 +39,6 @@ class WorkoutPlayActivity : AppCompatActivity(), SensorEventListener{
     private var timeWhenStopped by Delegates.notNull<Long>()
     private var talkButton: ImageView? = null
     private var exercise:String?=null
-
     var bpm: Float = 0.0f
     var i=0
     protected var myHandler: Handler? = null
@@ -48,11 +48,6 @@ class WorkoutPlayActivity : AppCompatActivity(), SensorEventListener{
         super.onCreate(savedInstanceState)
         binding =ActivityWorkoutPlayBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
-
-
-
         Log.d("Play Workout", " onCreate play workout wearos"+ Thread.currentThread().id)
 
         talkButton=binding.startButton
@@ -72,7 +67,10 @@ class WorkoutPlayActivity : AppCompatActivity(), SensorEventListener{
             true
         }
 
-
+        bpmThread().start()
+        ListenerThread().start()
+        SendMessage("/requestExercise", "r").start()
+        beginWorkout()
 
 
         //Create an OnClickListener//
@@ -99,32 +97,54 @@ class WorkoutPlayActivity : AppCompatActivity(), SensorEventListener{
             }
 
         }
-        bpmThread().start()
-        ListenerThread().start()
-        SendMessage("/requestExercise", "r").start()
 
 
 
+
+
+    }
+    private fun startCountdown(totalTimeMillis: Long, intervalMillis: Long, onTick: (Long) -> Unit, onFinish: () -> Unit) {
+        val countDownTimer = object : CountDownTimer(totalTimeMillis, intervalMillis) {
+            override fun onTick(millisUntilFinished: Long) {
+                onTick(millisUntilFinished)
+            }
+
+            override fun onFinish() {
+                onFinish()
+            }
+        }
+
+        countDownTimer.start()
+    }
+
+    private fun beginWorkout() {
+        startCountdown(4999, 1, onTick = { millisUntilFinished ->
+            setCountdownText(millisUntilFinished)
+        }, onFinish = {
+            startChronometer()
+            binding.countDownCard.visibility = View.GONE
+        })
+    }
+    @SuppressLint("SetTextI18n")
+    private fun setCountdownText(millisUntilFinished: Long) {
+        val perc = (millisUntilFinished / 6000f) * 100
+        binding.circularCountdownView.setProgress(perc.toInt())
+        binding.countdown.text = ((millisUntilFinished / 1000).toInt() + 1).toString()
     }
     override fun onSensorChanged(event: SensorEvent?) {
         if (event?.values!!.isNotEmpty()) {
             bpm = event.values[0]
             binding.bmpValue.text= "" + event.values[0].toInt()
-            SendMessage("/my_path", bpm.toString()).start()
-            //SendMessage("/ciao", bpm.toString()).start()
+            SendMessage("/bpm", bpm.toString()).start()
+            Log.d(ContentValues.TAG, "bpm send to mobile device")
+
 
 
         }
     }
     fun messageText(newinfo: String) {
         if (newinfo.compareTo("") != 0) {
-            /* binding.currentExerciseName
-                 .append(
-                 """
 
-                 $newinfo
-                 """.trimIndent()
-             )*/
         }
     }
 
@@ -136,6 +156,7 @@ class WorkoutPlayActivity : AppCompatActivity(), SensorEventListener{
 
 
 
+    @SuppressLint("SetTextI18n")
     private fun startChronometer(){
         chrono.visibility= View.VISIBLE
         chrono.onChronometerTickListener =
@@ -144,12 +165,6 @@ class WorkoutPlayActivity : AppCompatActivity(), SensorEventListener{
                 val h = (time / 3600000).toInt()
                 val m = (time - h * 3600000).toInt() / 60000
                 val s = (time - h * 3600000 - m * 60000).toInt() / 1000
-                val milli = (time - h * 3600000 - m * 60000 - s * 1000).toInt()
-                val t =
-                    (if (h < 10) "0$h" else h).toString() + ":" + (if (m < 10) "0$m" else m) + ":" + if (s < 10) "0$s" else s
-                chronometer.text = "" // t
-
-                // UI TESTING TODO
                 binding.hoursValue.text =  String.format("%02d", h) + "\u00A0"
                 binding.minutesValue.text = String.format("%02d", m) + "\u00A0"
                 binding.secondsValue.text = String.format("%02d", s) + "\u00A0"
@@ -200,7 +215,7 @@ class WorkoutPlayActivity : AppCompatActivity(), SensorEventListener{
             }
             if (intent?.extras?.get("next")!=null) {
 
-                //chrono.stop()
+                chrono.stop()
                 //timeWhenStopped = chrono.base - SystemClock.elapsedRealtime();
                 binding.startButton.setImageResource(R.drawable.play)
             }
@@ -216,6 +231,9 @@ class WorkoutPlayActivity : AppCompatActivity(), SensorEventListener{
             if (intent?.extras?.get("stop")!=null) {
                 chrono.stop()
                 timeWhenStopped = chrono.base - SystemClock.elapsedRealtime();
+                binding.startButton.visibility=View.GONE
+                binding.exerciseName.text = "FINISH!"
+
 
 
             }
@@ -230,37 +248,36 @@ class WorkoutPlayActivity : AppCompatActivity(), SensorEventListener{
             }
         }
     }
-    inner class bpmThread() :Thread(), SensorEventListener{
+    inner class bpmThread : Thread(), SensorEventListener {
         override fun run() {
             try {
-                this@WorkoutPlayActivity.sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager?;
+                this@WorkoutPlayActivity.sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
                 mHeartSensor = sensorManager?.getDefaultSensor(Sensor.TYPE_HEART_RATE)
                 sensorManager?.registerListener(
                     this,
                     mHeartSensor,
                     SensorManager.SENSOR_DELAY_FASTEST
                 )
-
-            }
-            catch (exception: ExecutionException) {
-
-//TO DO//
+            } catch (exception: ExecutionException) {
+                // exception
             }
         }
 
         override fun onSensorChanged(event: SensorEvent?) {
             if (event?.values!!.isNotEmpty()) {
-                bpm = event.values[0]
-                binding.bmpValue.text= "" + event.values[0].toInt()
-                SendMessage("/my_path", bpm.toString()).start()
-                //SendMessage("/ciao", bpm.toString()).start()
+                val bpm = event.values[0].toInt()
+                runOnUiThread {
+                    binding.bmpValue.text = "$bpm"
+                }
+                SendMessage("/bpm", bpm.toString()).start()
+                Log.d(ContentValues.TAG, "bpm send to mobile device")
 
 
             }
         }
 
         override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-            Log.d(ContentValues.TAG, "onAccuracyChanged - accuracy: $accuracy");
+            Log.d(ContentValues.TAG, "onAccuracyChanged - accuracy: $accuracy")
         }
     }
     fun sendMessage(messageText: String?) {
@@ -310,7 +327,7 @@ class WorkoutPlayActivity : AppCompatActivity(), SensorEventListener{
                     val sendMessageTask: Task<Int> = Wearable.getMessageClient(this@WorkoutPlayActivity)
                         .sendMessage(node.id, path, message.toByteArray())
                     try {
-                        val result = Tasks.await<Int>(sendMessageTask)
+                        Log.d(ContentValues.TAG, "sending message to mobile device")
                         sendMessage(message)
 
 
