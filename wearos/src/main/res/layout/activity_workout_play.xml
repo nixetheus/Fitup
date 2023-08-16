@@ -183,7 +183,7 @@
             android:layout_height="48sp"
             android:contentDescription="@string/hello_world"
             android:padding="16dp"
-            android:src="@drawable/play" />
+            android:src="@drawable/next" />
 
 
 

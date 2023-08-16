@@ -77,9 +77,9 @@ class WorkoutPlayActivity : AppCompatActivity(), SensorEventListener{
         talkButton!!.setOnClickListener {
             if (binding.startButton.drawable.constantState==resources.getDrawable(R.drawable.play).constantState) {
 
-                if(i==0){
-                    i++
-                    startChronometer()}
+
+
+
 
                 SendMessage("/start", "start").start()
 
@@ -92,7 +92,9 @@ class WorkoutPlayActivity : AppCompatActivity(), SensorEventListener{
                 chrono.stop()
                 timeWhenStopped = chrono.base - SystemClock.elapsedRealtime();
                 binding.startButton.setImageResource(R.drawable.play)
-                binding.exerciseName.text= exercise
+                binding.exerciseName.text= "Rest, next:$exercise"
+                chrono.base = SystemClock.elapsedRealtime()
+                startChronometer()
 
             }
 
@@ -123,6 +125,7 @@ class WorkoutPlayActivity : AppCompatActivity(), SensorEventListener{
         }, onFinish = {
             startChronometer()
             binding.countDownCard.visibility = View.GONE
+            binding.startButton.setImageResource(R.drawable.next)
         })
     }
     @SuppressLint("SetTextI18n")
@@ -204,20 +207,22 @@ class WorkoutPlayActivity : AppCompatActivity(), SensorEventListener{
             if (intent?.extras?.get("exercise")!=null) {
                 exercise =
                     intent?.extras?.get("exercise") as String
-                binding.exerciseName.text=  exercise
+                binding.exerciseName.text=exercise
             }
             if (intent?.extras?.get("start")!=null) {
 
                 startChronometer()
-                binding.exerciseName.text=exercise
                 binding.startButton.setImageResource(R.drawable.next)
 
             }
             if (intent?.extras?.get("next")!=null) {
 
                 chrono.stop()
-                //timeWhenStopped = chrono.base - SystemClock.elapsedRealtime();
+
                 binding.startButton.setImageResource(R.drawable.play)
+                binding.exerciseName.text= "Rest, next:$exercise"
+                chrono.base = SystemClock.elapsedRealtime()
+                startChronometer()
             }
             if (intent?.extras?.get("finish")!=null) {
                 chrono.stop()
@@ -225,6 +230,7 @@ class WorkoutPlayActivity : AppCompatActivity(), SensorEventListener{
                 finish()
                 val intent1 = Intent(this@WorkoutPlayActivity, MainActivity::class.java)
                 startActivity(intent1)
+                finish()
 
 
             }

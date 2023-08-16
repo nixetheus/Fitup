@@ -84,26 +84,32 @@ class WorkoutPlayActivity : AppCompatActivity() {
 
         ListenerThread().start()
     }
+    private fun playPauseButtonClick(){
+        binding.nextButton.visibility = View.VISIBLE
+        binding.playPauseButton.visibility = View.INVISIBLE
+        if (workoutExercises.isNotEmpty()) {
+            if (currentExerciseIndex!=-1){
+                SendThread("/start", "start").start()
+            }
+            startExercise()
+        } else {
+            Toast.makeText(
+                this, "Please add exercises to continue your training", Toast.LENGTH_SHORT
+            ).show()
+            Thread.sleep(2000)
+            SendThread("/finish", "finish").start()
+            val intent = Intent(this, EditWorkoutActivity::class.java)
+            intent.putExtra("Workout", playWorkout)
+            startActivity(intent)
+            finish()
+        }
+    }
 
     private fun createBindings() {
 
         binding.playPauseButton.visibility = View.INVISIBLE
         binding.playPauseButton.setOnClickListener {
-            binding.nextButton.visibility = View.VISIBLE
-            binding.playPauseButton.visibility = View.INVISIBLE
-            if (workoutExercises.isNotEmpty()) {
-                startExercise()
-            } else {
-                Toast.makeText(
-                    this, "Please add exercises to continue your training", Toast.LENGTH_SHORT
-                ).show()
-                Thread.sleep(2000)
-                SendThread("/finish", "finish").start()
-                val intent = Intent(this, EditWorkoutActivity::class.java)
-                intent.putExtra("Workout", playWorkout)
-                startActivity(intent)
-                finish()
-            }
+            playPauseButtonClick()
         }
 
         binding.nextButton.setOnClickListener {
@@ -134,7 +140,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
         }, onFinish = {
             startGlobalChronometer()
             binding.countDownCard.visibility = View.GONE
-            binding.playPauseButton.performClick()
+            playPauseButtonClick()
             handler.postDelayed(bpmRunnable, 10000)
         })
     }
@@ -200,15 +206,18 @@ class WorkoutPlayActivity : AppCompatActivity() {
     }
 
     private fun startGlobalChronometer() {
+
         globalElapsedTime.onChronometerTickListener =
             OnChronometerTickListener { chronometer ->
                 chronometer.text = formatTime(SystemClock.elapsedRealtime() - chronometer.base, "HH:mm:ss")
             }
         globalElapsedTime.base = SystemClock.elapsedRealtime()
+
         globalElapsedTime.start()
     }
 
     private fun startChronometerExercise() {
+
         exerciseElapsedTime.onChronometerTickListener =
             OnChronometerTickListener { chronometer ->
                 chronometer.text = formatTime(SystemClock.elapsedRealtime() - chronometer.base, "mm:ss")
@@ -273,7 +282,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
     
     private fun startExercise() {
         startChronometerExercise()
-        SendThread("/start", "start").start()
+
         centerChildViewInHorizontalScrollView (binding.playWorkoutScrollView)
     }
     
@@ -287,12 +296,13 @@ class WorkoutPlayActivity : AppCompatActivity() {
         } else {
             showCongratulations()
             SendThread("/stop", "stop").start()
+
             binding.exerciseCounter.stop()
-            binding.workoutTimeValue.stop()
+
             binding.stopButton.visibility = View.VISIBLE
             binding.playPauseButton.visibility = View.INVISIBLE
             binding.nextButton.visibility = View.INVISIBLE
-            timeWhenStopped = globalElapsedTime.base
+            timeWhenStopped = globalElapsedTime.base - SystemClock.elapsedRealtime();
 
             val colorAccent = TypedValue()
             this.theme.resolveAttribute(android.R.attr.colorAccent, colorAccent, true)
@@ -388,7 +398,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
     private fun startFinishActivity() {
         val intent = Intent(this, WorkoutEndActivity::class.java)
         intent.putExtra("Exp", playWorkout.gainedExperience)
-        intent.putExtra("Time", timeWhenStopped)
+        intent.putExtra("Time", globalElapsedTime.base)
         intent.putExtra("N", playWorkout.numberOfExercises)
         intent.putExtra("bpm", bpmValues.average())
         startActivity(intent)
@@ -458,7 +468,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
             
             // Start Exercise
             if (HelperFunctions().getExtra<String>(intent, "start") != null){ 
-                binding.playPauseButton.performClick()
+                playPauseButtonClick()
             }
             
             // Next Exercise
@@ -512,21 +522,23 @@ class WorkoutPlayActivity : AppCompatActivity() {
     // Others
     override fun onStop() {
         super.onStop()
-        SendThread("/exit", "exit").start()
+        SendThread("/finish", "finish").start()
     }
 
     // TODO: modernize
     override fun onBackPressed() {
         super.onBackPressed()
-        SendThread("/exit", "exit").start()
+        SendThread("/finish", "finish").start()
         val intent = Intent(this, CentralActivity::class.java)
         startActivity(intent)
+        finish()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         handler.removeCallbacks(bpmRunnable)
         SendThread("/finish", "finish").start()
+        finish()
     }
 }
 
