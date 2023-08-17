@@ -1,4 +1,4 @@
-package com.example.wearos
+package it.polimi.mobile.design.wearos
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -13,14 +13,9 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Bundle
-import android.os.SystemClock
 import android.util.Log
 
-import android.view.View
 import android.view.WindowManager
-import android.widget.Chronometer
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -29,7 +24,6 @@ import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.android.gms.wearable.*
 import java.util.concurrent.ExecutionException
-import kotlin.properties.Delegates
 
 class MainActivity : Activity() , SensorEventListener {
 

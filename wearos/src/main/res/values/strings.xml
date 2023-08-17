@@ -7,4 +7,6 @@
     <string name="bpm">Bpm</string>
     <string name="time_placeholder">00\u00A0</string>
     <string name="null_value">--</string>
+    <!-- MAIN -->
+    <string name="wait_message">Start a workout from the app</string>
 </resources>

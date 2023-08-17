@@ -1,7 +1,6 @@
-package com.example.wearos
+package it.polimi.mobile.design.wearos
 
 import android.annotation.SuppressLint
-import android.app.Application
 import android.content.*
 import android.content.ContentValues.TAG
 import android.hardware.Sensor
@@ -21,6 +20,7 @@ import android.widget.Chronometer
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.example.wearos.R
 
 import com.example.wearos.databinding.ActivityWorkoutPlayBinding
 import com.google.android.gms.tasks.Task

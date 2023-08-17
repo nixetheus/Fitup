@@ -1,15 +1,12 @@
-package com.example.wearos
+package it.polimi.mobile.design.wearos
 
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.hardware.SensorEventListener
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.SystemClock
-import android.view.View
+import com.example.wearos.R
 
 class EndWorkoutActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,4 +1,4 @@
-package com.example.wearos
+package it.polimi.mobile.design.wearos
 
 import android.content.Intent
 import androidx.localbroadcastmanager.content.LocalBroadcastManager

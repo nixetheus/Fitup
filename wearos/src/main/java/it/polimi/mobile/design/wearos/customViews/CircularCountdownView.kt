@@ -1,4 +1,4 @@
-package com.example.wearos.customViews
+package it.polimi.mobile.design.wearos.customViews
 
 import android.content.Context
 import android.graphics.Canvas

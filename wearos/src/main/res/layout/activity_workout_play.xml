@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?colorPrimary"
-    tools:context=".WorkoutPlayActivity"
+    tools:context="it.polimi.mobile.design.wearos.WorkoutPlayActivity"
     tools:deviceIds="wear">
 
     <TextView
@@ -46,6 +46,7 @@
         android:textColor="?colorOnPrimary"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -216,7 +217,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.example.wearos.customViews.CircularCountdownView
+            <it.polimi.mobile.design.wearos.customViews.CircularCountdownView
                 android:id="@+id/circularCountdownView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
