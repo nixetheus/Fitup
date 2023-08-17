@@ -52,11 +52,4 @@ class ThreeDotsLoadingView(context: Context, attrs: AttributeSet?) : View(contex
         direction = 1
         postInvalidate()
     }
-
-    fun stopAnimation() {
-        animationRunning = false
-        currentDot = 0
-        direction = 1
-        invalidate()
-    }
 }
