@@ -25,10 +25,16 @@
     <TextView
 
         android:id="@+id/exerciseName"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:layout_marginEnd="48dp"
+        android:autoSizeMaxTextSize="18sp"
+        android:autoSizeMinTextSize="8sp"
+        android:autoSizeTextType="uniform"
         android:fontFamily="@font/lato_bold"
-        android:text=""
+        android:maxLines="1"
+        android:textAlignment="center"
         android:textColor="?colorOnPrimary"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -43,14 +49,12 @@
         android:gravity="center_vertical"
         android:text="00:00:00"
         android:textAllCaps="true"
-        android:textColor="?colorOnPrimary"
-        android:textSize="20sp"
+        android:textColor="?colorPrimary"
+        android:textSize="1sp"
         android:textStyle="bold"
-        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="invisible" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/timeLayout"
