@@ -14,8 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MobileProject">
         <activity
-            android:name="it.polimi.mobile.design.wearos.WorkoutPlayActivity"
-            android:exported="false"
+            android:name="it.polimi.mobile.design.wearos.WorkoutPlayActivityWearOs"
+            android:exported="true"
             android:launchMode="singleInstance">
             <meta-data
                 android:name="android.app.lib_name"

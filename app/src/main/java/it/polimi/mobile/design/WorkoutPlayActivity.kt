@@ -53,7 +53,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
     private lateinit var workoutExercises: ArrayList<WorkoutExercise>
     private lateinit var wearableList : Task<List<Node>>
 
-    private var currentExerciseIndex = -1
+    private var currentExerciseIndex = 0
     private lateinit var globalElapsedTime: Chronometer
     private lateinit var exerciseElapsedTime: Chronometer
     private var timeWhenStopped by Delegates.notNull<Long>()
@@ -62,25 +62,30 @@ class WorkoutPlayActivity : AppCompatActivity() {
     private var samplingBoolean = true
     private lateinit var bpmRunnable: Runnable
     private val bpmValues = mutableListOf<Float>()
+    private val threads = mutableListOf<Thread>()
+    private val nextThread= SendThread("/start", "start")
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
+        //currentExerciseIndex=0
         super.onCreate(savedInstanceState)
         binding = ActivityWorkoutPlayBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
 
+
+        retrieveData()
+
         initBpmTracking()
         beginWorkout()
         initChronometers()
-        retrieveData()
 
         fillUITexts()
         updateWorkoutStats()
 
         createBindings()
-        sendWorkoutNameToWearable()
+
 
         ListenerThread().start()
     }
@@ -88,21 +93,22 @@ class WorkoutPlayActivity : AppCompatActivity() {
         binding.nextButton.visibility = View.VISIBLE
         binding.playPauseButton.visibility = View.INVISIBLE
         if (workoutExercises.isNotEmpty()) {
-            if (currentExerciseIndex!=-1){
-                SendThread("/start", "start").start()
+            if (currentExerciseIndex!=0){
+                nextThread.start()
             }
             startExercise()
         } else {
             Toast.makeText(
                 this, "Please add exercises to continue your training", Toast.LENGTH_SHORT
             ).show()
-            Thread.sleep(2000)
+            Thread.sleep(500)
             SendThread("/finish", "finish").start()
             val intent = Intent(this, EditWorkoutActivity::class.java)
             intent.putExtra("Workout", playWorkout)
             startActivity(intent)
             finish()
         }
+        nextThread.interrupt()
     }
 
     private fun createBindings() {
@@ -113,7 +119,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
         }
 
         binding.nextButton.setOnClickListener {
-            binding.nextButton.visibility = View.INVISIBLE
+            binding.nextButton.visibility = View.GONE
             binding.playPauseButton.visibility = View.VISIBLE
             if (workoutExercises.isNotEmpty()) {
                 changeExercise()
@@ -182,8 +188,14 @@ class WorkoutPlayActivity : AppCompatActivity() {
     }
 
     private fun retrieveData() {
+        wearableList = Wearable.getNodeClient(applicationContext).connectedNodes
+
 
         playWorkout = HelperFunctions().getSerializableExtra(intent, "Workout")!!
+        playWorkout.name?.let {
+            SendThread("/workout", it).start()
+        }
+
 
         helperDB.workoutsExercisesSchema.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -193,16 +205,19 @@ class WorkoutPlayActivity : AppCompatActivity() {
 
                 if (workoutExercises.isNotEmpty()) {
                     binding.workoutLayoutPlay.populateExercises(workoutExercises)
-                    changeExercise()
-                    SendThread("/exercise", workoutExercises[currentExerciseIndex].exerciseName.toString()).start()
-                }}
+                    setupExerciseUI()
+
+
+
+                }
+            else Log.d("workoutExercise from firebase ", "empty")}
 
             override fun onCancelled(error: DatabaseError) {
                 Log.w("Firebase", "Couldn't retrieve data...")
             }
         })
 
-        wearableList = Wearable.getNodeClient(applicationContext).connectedNodes
+
     }
 
     private fun startGlobalChronometer() {
@@ -292,10 +307,15 @@ class WorkoutPlayActivity : AppCompatActivity() {
             currentExerciseIndex++
             setupExerciseUI()
             SendThread("/exercise", workoutExercises[currentExerciseIndex].exerciseName.toString()).start()
+            Log.d("send exercise from changeExercise, Thread:"+ Thread.currentThread().id.toString(), "Exercise:"+workoutExercises[currentExerciseIndex].exerciseName.toString())
             SendThread("/next", "next").start()
+            Log.d("index of workoutExercises", currentExerciseIndex.toString())
         } else {
             showCongratulations()
             SendThread("/stop", "stop").start()
+            Log.d("send stop from changeExercise, Thread:"+ Thread.currentThread().id.toString(), "empty workoutExercises")
+            Log.d("index of workoutExercises", currentExerciseIndex.toString())
+
 
             binding.exerciseCounter.stop()
 
@@ -402,7 +422,16 @@ class WorkoutPlayActivity : AppCompatActivity() {
         intent.putExtra("N", playWorkout.numberOfExercises)
         intent.putExtra("bpm", bpmValues.average())
         startActivity(intent)
-        finish()
+        workoutExercises.clear()
+        finishAffinity()
+    }
+    fun getSpotifyPlaylistByBPM(bpm: Int): String {
+        return when {
+            bpm < 100 -> "spotify:playlist:5JpANhLlGcgZcLFcrNhL7j?si=954d51a1b05b4ed1"
+            bpm < 130 -> "spotify:playlist:2rzL3ZFSz87245ljAic93z?si=d50606cc7e7043e8"
+            bpm < 160 -> "spotify:playlist:37i9dQZF1DX0hWmn8d5pRe?si=4589da39252747dc"
+            else -> "spotify:playlist:3Nyx7CzEMuS9jJZJUmURS1?si=18d9f59a912a4c5b" //
+        }
     }
 
     private fun startSpotify() {
@@ -418,7 +447,12 @@ class WorkoutPlayActivity : AppCompatActivity() {
                 mSpotifyAppRemote = spotifyAppRemote
                 Log.d("Play Workout", "Connected! Yay!")
 
-                mSpotifyAppRemote!!.playerApi.play("spotify:playlist:37i9dQZF1DX2sUQwD7tbmL")
+
+                mSpotifyAppRemote!!.playerApi.play(playWorkout.averageBpmValue?.let {
+                    getSpotifyPlaylistByBPM(
+                        it
+                    )
+                })
                 spotifyAppRemote.playerApi.subscribeToPlayerState().setEventCallback {
                     val track: Track = it.track
                     Log.d("PlaystartSpotify() Workout", track.name + " by " + track.artist.name)
@@ -432,9 +466,9 @@ class WorkoutPlayActivity : AppCompatActivity() {
     }
 
     private fun sendWorkoutNameToWearable() {
-        playWorkout.name?.let {
+       /* playWorkout.name?.let {
             SendThread("/workout", it).start()
-        }
+        }*/
     }
 
     // Inner Classes for WearOs communication
@@ -468,21 +502,26 @@ class WorkoutPlayActivity : AppCompatActivity() {
             
             // Start Exercise
             if (HelperFunctions().getExtra<String>(intent, "start") != null){ 
-                playPauseButtonClick()
+                binding.playPauseButton.performClick()
             }
             
             // Next Exercise
             if (HelperFunctions().getExtra<String>(intent, "next") != null) {
-                //binding.nextExerciseButton.performClick()
                 binding.nextButton.visibility = View.INVISIBLE
                 binding.playPauseButton.visibility = View.VISIBLE
-                changeExercise()
+                Log.d("size before change exercise", "Exercise:"+workoutExercises.size.toString())
+
+                binding.nextButton.performClick()
+                Log.d("size after change exercise", "Exercise:"+workoutExercises.size.toString())
+
+
             }
             
             // Info Request
             if (HelperFunctions().getExtra<String>(intent, "requestExercise") != null) {
                 if (workoutExercises.isNotEmpty()) {
                     SendThread("/exercise", workoutExercises[currentExerciseIndex].exerciseName.toString()).start()
+                    Log.d("send exercise from requestExercise", "Exercise:"+workoutExercises[currentExerciseIndex].exerciseName.toString())
                 }
             }
         }
@@ -531,14 +570,25 @@ class WorkoutPlayActivity : AppCompatActivity() {
         SendThread("/finish", "finish").start()
         val intent = Intent(this, CentralActivity::class.java)
         startActivity(intent)
-        finish()
+        workoutExercises.clear()
+        finishAffinity()
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        ListenerThread().interrupt()
+        SendThread("/next", "next").interrupt()
+        SendThread("/stop", "stop").interrupt()
+        SendThread("/start", "start").interrupt()
+
+
         handler.removeCallbacks(bpmRunnable)
+        handler.removeCallbacksAndMessages(null)
         SendThread("/finish", "finish").start()
-        finish()
+        workoutExercises.clear()
+
+        finishAffinity()
+        SendThread("/finish", "finish").interrupt()
     }
 }
 

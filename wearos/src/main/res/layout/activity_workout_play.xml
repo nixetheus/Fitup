@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?colorPrimary"
-    tools:context="it.polimi.mobile.design.wearos.WorkoutPlayActivity"
+    tools:context="it.polimi.mobile.design.wearos.WorkoutPlayActivityWearOs"
     tools:deviceIds="wear">
 
     <TextView

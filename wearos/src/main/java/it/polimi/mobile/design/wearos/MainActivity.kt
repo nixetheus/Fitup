@@ -138,7 +138,7 @@ class MainActivity : Activity() , SensorEventListener {
     inner class Receiver : BroadcastReceiver() {
         @SuppressLint("SetTextI18n")
         override fun onReceive(context: Context?, intent: Intent?) {
-            val intent1 = Intent(this@MainActivity, WorkoutPlayActivity::class.java)
+            val intent1 = Intent(this@MainActivity, WorkoutPlayActivityWearOs::class.java)
 
             if (intent?.extras?.get("workout") != null) {
                 workout= intent?.extras?.get("workout") as String

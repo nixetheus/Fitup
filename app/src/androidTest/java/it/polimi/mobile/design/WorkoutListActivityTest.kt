@@ -4,6 +4,7 @@ import android.content.res.Resources
 import android.view.KeyEvent
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -66,6 +67,7 @@ class WorkoutListActivityTest {
         onView(withId(R.id.addWorkoutsButton)).perform(click())
         onView(withId(R.id.workoutNameField)).perform(typeText(workoutName), closeSoftKeyboard())
         onView(withId(R.id.confirmAddWorkoutBtn)).perform(click())
+        onView(withId(R.id.workoutsListLayout)).perform(ViewActions.swipeUp())
         // verify that workouts are correctly visualized
         onView(withId(R.id.workoutsListLayout)).check(matches(isDisplayed()))
         Thread.sleep(2000)

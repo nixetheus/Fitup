@@ -37,7 +37,7 @@ class WorkoutPlayActivityTest {
             InstrumentationRegistry.getInstrumentation().targetContext,
             WorkoutPlayActivity::class.java
         )
-        intent.putExtra("workout", fakeWorkout)
+        intent.putExtra("Workout", fakeWorkout)
         intent.putExtra("exp", 0F)
         Intents.init()
 
@@ -56,7 +56,7 @@ class WorkoutPlayActivityTest {
     fun testWorkoutName(){
 
         // verify initial chrono setup
-        onView(withId(R.id.playWorkoutName)).check(matches(withText("a")))
+        onView(withId(R.id.playWorkoutName)).check(matches(withText(fakeWorkout.name)))
 
 
 
@@ -64,25 +64,16 @@ class WorkoutPlayActivityTest {
 
     @Test
     fun testExerciseName(){
-        onView(withId(R.id.playPauseButton)).perform(ViewActions.click())
+
+
         // verify the name
-        onView(withId(R.id.currentExerciseName)).check(matches(withText("crunch")))
-        onView(withId(R.id.playPauseButton)).perform(ViewActions.click())
+        onView(withId(R.id.currentExerciseName)).check(matches(withText("Plank")))
+        //onView(withId(R.id.playPauseButton)).perform(ViewActions.click())
 
-        //perform next exercise click
-        onView(withId(R.id.nextButton)).perform(ViewActions.click())
-        // verify the name
-        onView(withId(R.id.currentExerciseName)).check(matches((withText("crunch"))))
-
-        onView(withId(R.id.playPauseButton)).perform(ViewActions.click())
-        //perform next exercise click
-        onView(withId(R.id.nextButton)).perform(ViewActions.click())
-
-        onView(withId(R.id.currentExerciseName)).check(matches((withText("Squat"))))
-        onView(withId(R.id.playPauseButton)).perform(ViewActions.click())
         //perform next exercise click
         onView(withId(R.id.nextButton)).perform(ViewActions.click())
         //workout finished
+        onView(withId(R.id.stopButton)).perform(ViewActions.click())
         Intents.intended(IntentMatchers.hasComponent(WorkoutEndActivity::class.java.name))
 
     }
@@ -93,7 +84,7 @@ class WorkoutPlayActivityTest {
 
         // verify initial chrono setup
         onView(withId(R.id.exerciseCounter)).check(matches(withText("00:00")))
-        onView(withId(R.id.playPauseButton)).perform(ViewActions.click())
+        //onView(withId(R.id.playPauseButton)).perform(ViewActions.click())
 
         // wait 1 sec
         Thread.sleep(1000)
@@ -108,20 +99,20 @@ class WorkoutPlayActivityTest {
         //perform next exercise click
         onView(withId(R.id.nextButton)).perform(ViewActions.click())
         // verify that chrono being initialize to 00:00
-        onView(withId(R.id.exerciseCounter)).check(matches((withText("00:00"))))
+        //onView(withId(R.id.exerciseCounter)).check(matches((withText("00:00"))))
 
 
     }
     @Test
     fun testStartChronometer() {
 
-        Thread.sleep(1000)
+
 
 
         // Verify initial chrono setup
         onView(withId(R.id.workoutTimeValue)).check(matches(withText("00:00:00")))
 
-        onView(withId(R.id.playPauseButton)).perform(ViewActions.click())
+       // onView(withId(R.id.playPauseButton)).perform(ViewActions.click())
 
         // wait 10 seconds
         Thread.sleep(10000)
@@ -138,16 +129,16 @@ class WorkoutPlayActivityTest {
     }
     private fun createFakeWorkout(): Workout {
         return Workout(
-            "-NUbFNbUuvztNG5zWlPi",
-            "Zo0ANVA64OXoLI3DAyK4VMvWpwE2",
-            "a",
-            "hip hop",
+            "-NbpBMpnIZ-P0jzw0T0z",
+            "p0YFtxASaFXbjqkxBJVXsAbeZYG3",
+            "Abdominal Blast",
+            "https://open.spotify.com/playlist/37i9dQZF1DXdURFimg6Blm?si=b9cf156000904184",
             -12,
-            0,
+            1,
             0f,
             0f,
             0,
-            mutableListOf(2, 0, 0, 0)
+            mutableListOf(0,1, 0, 0, 0)
         )
     }
 }

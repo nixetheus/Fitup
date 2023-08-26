@@ -30,7 +30,7 @@ import com.google.android.gms.wearable.Wearable
 import java.util.concurrent.ExecutionException
 import kotlin.properties.Delegates
 
-class WorkoutPlayActivity : AppCompatActivity(), SensorEventListener{
+class WorkoutPlayActivityWearOs : AppCompatActivity(), SensorEventListener{
     private var exerciseName: TextView? = null
     private var workoutName: TextView?= null
     private var sensorManager: SensorManager? = null
@@ -39,13 +39,16 @@ class WorkoutPlayActivity : AppCompatActivity(), SensorEventListener{
     private var timeWhenStopped by Delegates.notNull<Long>()
     private var talkButton: ImageView? = null
     private var exercise:String?=null
+
     var bpm: Float = 0.0f
     var i=0
     protected var myHandler: Handler? = null
     private lateinit var binding: ActivityWorkoutPlayBinding
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "UseCompatLoadingForDrawables")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        bpmThread().start()
+        ListenerThread().start()
         binding =ActivityWorkoutPlayBinding.inflate(layoutInflater)
         setContentView(binding.root)
         Log.d("Play Workout", " onCreate play workout wearos"+ Thread.currentThread().id)
@@ -67,37 +70,24 @@ class WorkoutPlayActivity : AppCompatActivity(), SensorEventListener{
             true
         }
 
-        bpmThread().start()
-        ListenerThread().start()
+
         SendMessage("/requestExercise", "r").start()
         beginWorkout()
 
 
-        //Create an OnClickListener//
+
         talkButton!!.setOnClickListener {
             if (binding.startButton.drawable.constantState==resources.getDrawable(R.drawable.play).constantState) {
 
-
-
-
-
                 SendMessage("/start", "start").start()
-
-                binding.startButton.setImageResource(R.drawable.next)
-                binding.exerciseName.text=exercise
 
             }
             else{
                 SendMessage("/next", "next").start()
-                chrono.stop()
-                timeWhenStopped = chrono.base - SystemClock.elapsedRealtime();
-                binding.startButton.setImageResource(R.drawable.play)
-                binding.exerciseName.text= "Rest, next:$exercise"
-                chrono.base = SystemClock.elapsedRealtime()
-                startChronometer()
+                Log.d("from wearOs", "next exercise request")
+
 
             }
-
         }
 
 
@@ -209,36 +199,43 @@ class WorkoutPlayActivity : AppCompatActivity(), SensorEventListener{
                     intent?.extras?.get("exercise") as String
                 binding.exerciseName.text=exercise
             }
+            else
             if (intent?.extras?.get("start")!=null) {
 
-                startChronometer()
+                //startChronometer()
                 binding.startButton.setImageResource(R.drawable.next)
+                binding.exerciseName.text= "$exercise"
 
             }
             if (intent?.extras?.get("next")!=null) {
-
-                chrono.stop()
-
                 binding.startButton.setImageResource(R.drawable.play)
-                binding.exerciseName.text= "Rest, next:$exercise"
-                chrono.base = SystemClock.elapsedRealtime()
-                startChronometer()
+
+                binding.exerciseName.text= "next:$exercise"
+                Log.d("from mobile:", "receive next request")
+
+
+
+
+
+
             }
             if (intent?.extras?.get("finish")!=null) {
-                chrono.stop()
+
                 timeWhenStopped = chrono.base - SystemClock.elapsedRealtime();
                 finish()
-                val intent1 = Intent(this@WorkoutPlayActivity, MainActivity::class.java)
+                val intent1 = Intent(this@WorkoutPlayActivityWearOs, MainActivity::class.java)
                 startActivity(intent1)
                 finish()
 
 
             }
             if (intent?.extras?.get("stop")!=null) {
-                chrono.stop()
+
                 timeWhenStopped = chrono.base - SystemClock.elapsedRealtime();
                 binding.startButton.visibility=View.GONE
                 binding.exerciseName.text = "FINISH!"
+                Log.d("from mobile:", "receive stop request")
+
 
 
 
@@ -248,7 +245,7 @@ class WorkoutPlayActivity : AppCompatActivity(), SensorEventListener{
                 timeWhenStopped = chrono.base - SystemClock.elapsedRealtime();
                 chrono.text="00:00:00"
 
-                val intent1 = Intent(this@WorkoutPlayActivity, MainActivity::class.java)
+                val intent1 = Intent(this@WorkoutPlayActivityWearOs, MainActivity::class.java)
                 startActivity(intent1)
                 finish()
             }
@@ -257,7 +254,7 @@ class WorkoutPlayActivity : AppCompatActivity(), SensorEventListener{
     inner class bpmThread : Thread(), SensorEventListener {
         override fun run() {
             try {
-                this@WorkoutPlayActivity.sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
+                this@WorkoutPlayActivityWearOs.sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
                 mHeartSensor = sensorManager?.getDefaultSensor(Sensor.TYPE_HEART_RATE)
                 sensorManager?.registerListener(
                     this,
@@ -301,7 +298,7 @@ class WorkoutPlayActivity : AppCompatActivity(), SensorEventListener{
 
                 val newFilter = IntentFilter(Intent.ACTION_SEND)
                 val messageReceiver = Receiver()
-                LocalBroadcastManager.getInstance(this@WorkoutPlayActivity)
+                LocalBroadcastManager.getInstance(this@WorkoutPlayActivityWearOs)
                     .registerReceiver(messageReceiver, newFilter);
 
             }
@@ -330,11 +327,11 @@ class WorkoutPlayActivity : AppCompatActivity(), SensorEventListener{
                 for (node in nodes) {
 
 //Send the message///
-                    val sendMessageTask: Task<Int> = Wearable.getMessageClient(this@WorkoutPlayActivity)
+                    val sendMessageTask: Task<Int> = Wearable.getMessageClient(this@WorkoutPlayActivityWearOs)
                         .sendMessage(node.id, path, message.toByteArray())
                     try {
                         Log.d(ContentValues.TAG, "sending message to mobile device")
-                        sendMessage(message)
+                        //sendMessage(message)
 
 
 //Handle the errors//
