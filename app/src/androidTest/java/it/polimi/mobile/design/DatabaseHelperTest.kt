@@ -322,6 +322,45 @@ class DatabaseHelperTest {
 
         assertEquals(userAchievements, helperDB.getUserAchievementsFromSnapshot(dataSnapshot))
     }
+    @Test
+    fun testGetUserWorkoutDataFromSnapshotEmpty() {
+
+        val snapshots = mutableListOf<DataSnapshot>()
+        val workoutUserData = listOf<WorkoutUserData>()
+
+        val workoutUserDataSnap: DataSnapshot = mock(DataSnapshot::class.java)
+        `when`(workoutUserDataSnap.exists()).thenReturn(true)
+        `when`(workoutUserDataSnap.getValue(WorkoutUserData::class.java)).thenReturn(null)
+        snapshots.add(workoutUserDataSnap)
+
+        val dataSnapshot = mock(DataSnapshot::class.java)
+        `when`(dataSnapshot.exists()).thenReturn(true)
+        `when`(dataSnapshot.children).thenReturn(snapshots)
+
+        assertEquals(workoutUserData, helperDB.getUserWorkoutDataFromSnapshot(dataSnapshot))
+    }
+
+    @Test
+    fun testGetUserWorkoutDataFromSnapshotFull() {
+
+        val uid = helperDB.getFirebaseAuth().uid
+        var workoutUserDataSnap: DataSnapshot
+        val snapshots = mutableListOf<DataSnapshot>()
+        val workoutUserData = listOf(WorkoutUserData(uid = uid), WorkoutUserData(uid = uid), WorkoutUserData(uid = uid))
+
+        for (data in workoutUserData) {
+            workoutUserDataSnap = mock(DataSnapshot::class.java)
+            `when`(workoutUserDataSnap.exists()).thenReturn(true)
+            `when`(workoutUserDataSnap.getValue(WorkoutUserData::class.java)).thenReturn(data)
+            snapshots.add(workoutUserDataSnap)
+        }
+
+        val dataSnapshot = mock(DataSnapshot::class.java)
+        `when`(dataSnapshot.exists()).thenReturn(true)
+        `when`(dataSnapshot.children).thenReturn(snapshots)
+
+        assertEquals(workoutUserData, helperDB.getUserWorkoutDataFromSnapshot(dataSnapshot))
+    }
 
 
 }
