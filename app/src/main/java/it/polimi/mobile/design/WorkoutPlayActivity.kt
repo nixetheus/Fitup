@@ -372,8 +372,8 @@ class WorkoutPlayActivity : AppCompatActivity() {
         SendThread("/finish", "finish").start()
         setWorkoutBPM()
         addUserExperience()
+        setWorkoutNewPlaylist()
         disconnectSpotify()
-
         startFinishActivity()
     }
 
@@ -410,6 +410,23 @@ class WorkoutPlayActivity : AppCompatActivity() {
 
     }
 
+    private fun setWorkoutNewPlaylist() {
+        val workoutRef = helperDB.workoutsSchema.orderByChild("workoutId").equalTo(playWorkout.workoutId!!)
+        workoutRef.addListenerForSingleValueEvent(object: ValueEventListener{
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (workoutSnapshot in dataSnapshot.children) {
+                    val newValueBPM = (-playWorkout.averageBpmValue!! +
+                            (playWorkout.averageBpmValue!! + bpmValues.average()) / 2).toInt()
+                    workoutSnapshot.ref.child("spotifyPlaylistLink").setValue(getSpotifyPlaylistByBPM(newValueBPM))
+                }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e(TAG, "onCancelled", databaseError.toException())
+            }
+        })
+
+    }
+
     private fun disconnectSpotify() {
         mSpotifyAppRemote?.playerApi?.pause()
         mSpotifyAppRemote?.let { SpotifyAppRemote.disconnect(it) }
@@ -425,12 +442,20 @@ class WorkoutPlayActivity : AppCompatActivity() {
         workoutExercises.clear()
         finishAffinity()
     }
+
     fun getSpotifyPlaylistByBPM(bpm: Int): String {
         return when {
+            bpm < 90  -> "spotify:playlist:1bS8K4F9XwIdYaaTM9Ljk6?si=d1ce6b04942d44ea"
             bpm < 100 -> "spotify:playlist:5JpANhLlGcgZcLFcrNhL7j?si=954d51a1b05b4ed1"
+            bpm < 110 -> "spotify:playlist:2pX7htNxQUGZSObonznRyn?si=d27186a687ff4b20"
+            bpm < 120 -> "spotify:playlist:2rzL3ZFSz87245ljAic93z?si=304dd1dda73e452c"
             bpm < 130 -> "spotify:playlist:2rzL3ZFSz87245ljAic93z?si=d50606cc7e7043e8"
+            bpm < 140 -> "spotify:playlist:37i9dQZF1EIgOKtiospcqN?si=3152d927d92c4d64"
+            bpm < 150 -> "spotify:playlist:37i9dQZF1EIgrZKdA44WQK?si=a15fd5fd6aec4230"
             bpm < 160 -> "spotify:playlist:37i9dQZF1DX0hWmn8d5pRe?si=4589da39252747dc"
-            else -> "spotify:playlist:3Nyx7CzEMuS9jJZJUmURS1?si=18d9f59a912a4c5b" //
+            bpm < 170 -> "spotify:playlist:37i9dQZF1EIgfIackHptHl?si=b1c373a8d2644734"
+            bpm < 180 -> "spotify:playlist:37i9dQZF1EIgUYhklBpeMG?si=36358560059b4fb0"
+            else -> "spotify:playlist:37i9dQZF1EIcID9rq1OAoH?si=469b7b19873a47d9"
         }
     }
 
@@ -449,9 +474,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
 
 
                 mSpotifyAppRemote!!.playerApi.play(playWorkout.averageBpmValue?.let {
-                    getSpotifyPlaylistByBPM(
-                        it
-                    )
+                    playWorkout.spotifyPlaylistLink
                 })
                 spotifyAppRemote.playerApi.subscribeToPlayerState().setEventCallback {
                     val track: Track = it.track

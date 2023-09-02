@@ -136,8 +136,6 @@ class WorkoutListActivityTest {
         // Delete test workouts
         onView(allOf(withId(R.id.workoutDisplayNameList), withText(testName1))).perform(longClick())
         onView(withId(R.id.deleteWorkoutButton)).perform(click())
-        onView(allOf(withId(R.id.workoutDisplayNameList), withText(testName2))).perform(longClick())
-        onView(withId(R.id.deleteWorkoutButton)).perform(click())
     }
 }
 

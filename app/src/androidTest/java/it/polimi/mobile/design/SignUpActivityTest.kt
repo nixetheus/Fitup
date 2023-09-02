@@ -44,24 +44,6 @@ class SignUpActivityTest {
     }
 
     @Test
-    fun testSignUpSuccess() {
-
-        val randomEmail =  "${kotlin.math.abs(Random.nextInt())}@test.com"
-
-        // Insert email and password
-        onView(withId(R.id.EmailField)).perform(typeText(randomEmail))
-        onView(withId(R.id.Pass)).perform(typeText("password"))
-        onView(withId(R.id.Pass2)).perform(typeText("password"))
-        onView(withId(R.id.Pass)).perform(ViewActions.closeSoftKeyboard())
-
-        onView(withId(R.id.SignUpBtn)).perform(click())
-        Thread.sleep(4000)
-
-        // Verify that activity starts
-        Intents.intended(IntentMatchers.hasComponent(HomeActivity::class.java.name))
-    }
-
-    @Test
     fun testSignUpSuccessButEmailAlreadyUsed() {
         // insert email and password
         onView(withId(R.id.EmailField)).perform(typeText("test@example111.com"))

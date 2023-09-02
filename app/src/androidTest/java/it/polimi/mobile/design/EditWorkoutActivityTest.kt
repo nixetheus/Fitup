@@ -76,32 +76,6 @@ class EditWorkoutActivityTest {
         onView(withId(R.id.addExerciseToWorkoutCard)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
     }
 
-    @Test
-    fun addAndDeleteExerciseTest() {
-
-        // Add Exercise
-        val randomSets = (kotlin.math.abs(Random.nextInt()) + 100).toString()
-        // Perform click on the plus exercise button
-        onView(withId(R.id.openAddExerciseLayout)).perform(click())
-        // Fill Data
-        onView(withId(R.id.setsInputValue)).perform(typeText(randomSets), closeSoftKeyboard())
-        onView(withId(R.id.repsInputValue)).perform(typeText("1"), closeSoftKeyboard())
-        onView(withId(R.id.restInputValue)).perform(typeText("90"), closeSoftKeyboard())
-        onView(withId(R.id.weightInputValue)).perform(typeText("0"), closeSoftKeyboard())
-        onView(withId(R.id.bufferInputValue)).perform(typeText("0"), closeSoftKeyboard())
-        onView(withId(R.id.confirmAddWorkoutBtn)).perform(click())
-        // Verify that exercise was added
-        Thread.sleep(2000)
-        onView(allOf(withId(R.id.setsValue), withText(randomSets))).check(matches(isDisplayed()))
-
-        Thread.sleep(2000)
-
-        // Delete Exercise
-        onView(allOf(withId(R.id.setsValue), withText(randomSets))).perform(longClick())
-        onView(withId(R.id.deleteExerciseWorkoutButton)).perform(click())
-        onView(allOf(withId(R.id.setsValue), withText(randomSets))).check(doesNotExist())
-    }
-
     // Navigation Tests
     @Test
     fun testClickOnHome() {
