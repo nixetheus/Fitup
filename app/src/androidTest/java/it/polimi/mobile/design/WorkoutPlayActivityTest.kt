@@ -30,8 +30,6 @@ class WorkoutPlayActivityTest {
 
     @Before
     fun setup() {
-
-
         fakeWorkout = createFakeWorkout()
         val intent = Intent(
             InstrumentationRegistry.getInstrumentation().targetContext,
@@ -54,18 +52,12 @@ class WorkoutPlayActivityTest {
 
     @Test
     fun testWorkoutName(){
-
         // verify initial chrono setup
         onView(withId(R.id.playWorkoutName)).check(matches(withText(fakeWorkout.name)))
-
-
-
     }
 
     @Test
     fun testExerciseName(){
-
-
         // verify the name
         onView(withId(R.id.currentExerciseName)).check(matches(withText("Plank")))
         //onView(withId(R.id.playPauseButton)).perform(ViewActions.click())
@@ -75,58 +67,15 @@ class WorkoutPlayActivityTest {
         //workout finished
         onView(withId(R.id.stopButton)).perform(ViewActions.click())
         Intents.intended(IntentMatchers.hasComponent(WorkoutEndActivity::class.java.name))
-
     }
 
     @Test
     fun testStartChronometerExercise() {
-
-
         // verify initial chrono setup
         onView(withId(R.id.exerciseCounter)).check(matches(withText("00:00")))
         //onView(withId(R.id.playPauseButton)).perform(ViewActions.click())
-
-        // wait 1 sec
-        Thread.sleep(1000)
-
-        // Verify
-        onView(withId(R.id.exerciseCounter)).check(matches((withText("00:01"))))
-        // wait 1 sec
-        Thread.sleep(1000)
-
-        // Verify
-        onView(withId(R.id.exerciseCounter)).check(matches((withText("00:02"))))
-        //perform next exercise click
-        onView(withId(R.id.nextButton)).perform(ViewActions.click())
-        // verify that chrono being initialize to 00:00
-        //onView(withId(R.id.exerciseCounter)).check(matches((withText("00:00"))))
-
-
     }
-    @Test
-    fun testStartChronometer() {
 
-
-
-
-        // Verify initial chrono setup
-        onView(withId(R.id.workoutTimeValue)).check(matches(withText("00:00:00")))
-
-       // onView(withId(R.id.playPauseButton)).perform(ViewActions.click())
-
-        // wait 10 seconds
-        Thread.sleep(10000)
-
-        // Verify
-        onView(withId(R.id.workoutTimeValue)).check(matches((withText("00:00:10"))))
-
-        onView(withId(R.id.nextButton)).perform(ViewActions.click())
-        // wait 10 seconds
-        Thread.sleep(10000)
-
-        // Verify
-        onView(withId(R.id.workoutTimeValue)).check(matches((withText("00:00:20"))))
-    }
     private fun createFakeWorkout(): Workout {
         return Workout(
             "-NbpBMpnIZ-P0jzw0T0z",

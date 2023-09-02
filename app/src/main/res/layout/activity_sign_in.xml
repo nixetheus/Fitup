@@ -45,7 +45,7 @@
 
 
         <EditText
-            android:id="@+id/EmailField"
+            android:id="@+id/EmailFieldLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 

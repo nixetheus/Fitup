@@ -48,7 +48,7 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun signUp() {
-        val email = binding.EmailField.text.toString()
+        val email = binding.EmailFieldSignUp.text.toString()
         val pass = binding.Pass.text.toString()
         val confirmPass = binding.Pass2.text.toString()
 

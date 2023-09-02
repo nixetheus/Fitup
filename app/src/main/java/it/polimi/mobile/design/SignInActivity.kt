@@ -78,7 +78,7 @@ class SignInActivity : AppCompatActivity() {
 
         binding.emailLoginButton.setOnClickListener {
             val pass = binding.Pass.text.toString()
-            val email = binding.EmailField.text.toString()
+            val email = binding.EmailFieldLogin.text.toString()
             logIn(pass, email)
         }
 

@@ -46,7 +46,7 @@ class SignUpActivityTest {
     @Test
     fun testSignUpSuccessButEmailAlreadyUsed() {
         // insert email and password
-        onView(withId(R.id.EmailField)).perform(typeText("test@example111.com"))
+        onView(withId(R.id.EmailFieldSignUp)).perform(typeText("test@example111.com"))
         onView(withId(R.id.Pass)).perform(typeText("password"))
         onView(withId(R.id.Pass2)).perform(typeText("password"))
         onView(withId(R.id.Pass)).perform(ViewActions.closeSoftKeyboard())
@@ -64,7 +64,7 @@ class SignUpActivityTest {
     @Test
     fun testSignUpPasswordMismatch() {
         // Iinsert email and password
-        onView(withId(R.id.EmailField)).perform(typeText("test@example.com"))
+        onView(withId(R.id.EmailFieldSignUp)).perform(typeText("test@example.com"))
         onView(withId(R.id.Pass)).perform(typeText("password"))
         onView(withId(R.id.Pass2)).perform(typeText("differentPassword"))
         onView(withId(R.id.Pass)).perform(ViewActions.closeSoftKeyboard())
