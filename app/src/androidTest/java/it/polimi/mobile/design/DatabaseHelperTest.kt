@@ -9,6 +9,7 @@ import it.polimi.mobile.design.entities.*
 import it.polimi.mobile.design.helpers.DatabaseHelper
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -360,6 +361,17 @@ class DatabaseHelperTest {
         `when`(dataSnapshot.children).thenReturn(snapshots)
 
         assertEquals(workoutUserData, helperDB.getUserWorkoutDataFromSnapshot(dataSnapshot))
+    }
+    @Test
+    fun testGetFirebaseAuth() {
+
+        val databaseHelper = DatabaseHelper()
+
+
+        val firebaseAuth = databaseHelper.getFirebaseAuth()
+
+
+        assertNotNull(firebaseAuth)
     }
 
 
