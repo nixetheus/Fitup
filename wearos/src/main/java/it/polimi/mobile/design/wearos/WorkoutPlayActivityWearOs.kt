@@ -210,7 +210,9 @@ class WorkoutPlayActivityWearOs : AppCompatActivity(), SensorEventListener{
             if (intent?.extras?.get("next")!=null) {
                 binding.startButton.setImageResource(R.drawable.play)
 
-                binding.exerciseName.text= "next:$exercise"
+                exercise =
+                    intent?.extras?.get("next") as String
+                binding.exerciseName.text=exercise
                 Log.d("from mobile:", "receive next request")
 
 
