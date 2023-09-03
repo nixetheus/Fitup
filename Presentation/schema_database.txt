@@ -1,0 +1,68 @@
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+
+Table Users {
+  uid varchar [primary key]
+  username varchar
+  age int
+  initial_weight float
+  sex bool
+  experience int
+}
+
+Table Workouts {
+  workoutId varchar [primary key]
+  userId varchar [ref: > Users.uid]
+  name varchar
+  spotifyPlaylistLink varchar
+  totalNumberOfTimesPlayed int
+  numberOfExercises int
+  caloriesBurned fFloat
+  gainedExperience float
+  averageBpmValue int
+  exercisesType int[]
+}
+
+Table Exercise {
+  eid varchar [primary key]
+  uid varchar  [ref: > Users.uid]
+  name varchar
+  caloriesPerRep float
+  type ExerciseType
+  experiencePerReps float
+}
+
+Table WorkoutExercise {
+  id varchar [primary key]
+  workoutId varchar [ref: > Workouts.workoutId]
+  exerciseId varchar  [ref: > Exercise.eid]
+  exerciseName varchar 
+  sets int
+  reps int
+  rest int
+  weight float
+  buffer int
+}
+
+Table WorkoutUserData {
+  id varchar [primary key]
+  uid varchar  [ref: > Users.uid]
+  workoutId varchar 
+  lastDate long
+  numberOfTimesPlayed int
+}
+
+Table Graphs {
+  graphId varchar [primary key]
+  graphName varchar 
+  graphMeasure varchar 
+  graphType int
+}
+
+Table Points {
+  pointId varchar [primary key]
+  graphId varchar [ref: > Graphs.graphId]
+  userId varchar  [ref: > Users.uid]
+  xcoordinate long
+  ycoordinate float
+}
