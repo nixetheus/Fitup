@@ -24,12 +24,15 @@ class WorkoutEndActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     private fun displayResults() {
 
+
         val exp         = HelperFunctions().getExtra<Float>(intent, "Exp")!!
+
+
         val nExercises  = HelperFunctions().getExtra<Int>(intent, "N")!!
         val elapsedTime = HelperFunctions().getExtra<Long>(intent, "Time")!!
         val bpm = HelperFunctions().getExtra<Double>(intent, "bpm")!!
 
-        binding.expRecapValue.text = exp.toString()
+        binding.expRecapValue.text = String.format("%.3f", exp)
         binding.timeRecapValue.text = formatTime(SystemClock.elapsedRealtime() - elapsedTime)
         binding.exercisesRecapValue.text= nExercises.toString()
         if (!bpm.isNaN())
