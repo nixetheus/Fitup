@@ -121,6 +121,7 @@ class ExerciseListActivityTest {
     // Navigation Tests
     @Test
     fun testClickOnHome() {
+        Thread.sleep(2000)
         // Perform click on the home button
         onView(withId(R.id.homeButton)).perform(click())
         // Verify that Central Activity is started

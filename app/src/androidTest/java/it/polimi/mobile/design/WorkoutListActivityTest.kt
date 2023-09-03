@@ -76,6 +76,7 @@ class WorkoutListActivityTest {
         val testName1 = "Test1"
         val testName2 = "Test2"
 
+        Thread.sleep(2000)
         onView(withId(R.id.addWorkoutsButton)).perform(click())
         onView(withId(R.id.workoutNameField)).perform(typeText(testName2), closeSoftKeyboard())
         onView(withId(R.id.confirmAddWorkoutBtn)).perform(click())
