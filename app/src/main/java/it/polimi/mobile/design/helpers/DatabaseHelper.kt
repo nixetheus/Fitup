@@ -145,7 +145,7 @@ class DatabaseHelper {
         if (snapshot.exists()) {
             for (child in snapshot.children) {
                 val workoutData = child.getValue(WorkoutUserData::class.java)
-                if (workoutData != null && workoutData.uid in acceptedUserIds)
+                if (workoutData != null && workoutData.uid == firebaseAuth.uid)
                     workoutUserData.add(workoutData)
             }
         }
