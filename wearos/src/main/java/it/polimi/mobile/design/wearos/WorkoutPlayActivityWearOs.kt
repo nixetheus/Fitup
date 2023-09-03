@@ -222,7 +222,7 @@ class WorkoutPlayActivityWearOs : AppCompatActivity(), SensorEventListener{
             if (intent?.extras?.get("finish")!=null) {
 
                 timeWhenStopped = chrono.base - SystemClock.elapsedRealtime();
-                finish()
+
                 val intent1 = Intent(this@WorkoutPlayActivityWearOs, MainActivity::class.java)
                 startActivity(intent1)
                 finish()

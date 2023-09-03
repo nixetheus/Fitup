@@ -1,24 +1,48 @@
 package it.polimi.mobile.design
 
 
+import android.content.Context
 import android.content.Intent
+
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.red
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import it.polimi.mobile.design.enum.ExerciseType
 import it.polimi.mobile.design.enum.WorkoutTypes
 import it.polimi.mobile.design.helpers.HelperFunctions
+
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mock
+import org.mockito.Mockito
+import org.mockito.Mockito.mock
+import org.mockito.MockitoAnnotations
+import org.mockito.junit.MockitoJUnitRunner
+import android.content.res.Resources
+import androidx.core.content.res.ResourcesCompat
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(MockitoJUnitRunner::class)
 class HelperFunctionsTest {
 
     private lateinit var helperFunctions: HelperFunctions
+    private lateinit var resources: Resources
+    private lateinit var context: Context
+
+
 
     @Before
     fun setup() {
+
         helperFunctions = HelperFunctions()
+        resources = mock(Resources::class.java)
+        context = mock(Context::class.java)
+        Mockito.`when`(context.resources).thenReturn(resources)
+
+
+
     }
 
     @Test
@@ -68,4 +92,32 @@ class HelperFunctionsTest {
         val value: Int? = helperFunctions.getSerializableExtra(intent, "testExtra")
         assertEquals(5, value)
     }
+
+    @Test
+    fun testGetExerciseBackground_Chest() {
+        val exerciseType = ExerciseType.CHEST
+        val expectedColor = ResourcesCompat.getColor(resources, R.color.red_arms, context.theme)
+        println("exerciseType: $exerciseType")
+
+        val actualColor = helperFunctions.getExerciseBackground(exerciseType, resources, context)
+
+        assertEquals(expectedColor, actualColor)
+    }
+
+    @Test
+    fun testGetExerciseBackground_Abdominals() {
+
+        val exerciseType = ExerciseType.ABDOMINALS
+        val expectedColor = ResourcesCompat.getColor(resources, R.color.yellow_core, context.theme)
+
+        val actualColor = helperFunctions.getExerciseBackground(exerciseType, resources, context)
+        println("expected color: $actualColor")
+
+
+        assertEquals(expectedColor, actualColor)
+    }
+
+
+
+
 }

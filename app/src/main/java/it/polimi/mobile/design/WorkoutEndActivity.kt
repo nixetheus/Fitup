@@ -25,7 +25,7 @@ class WorkoutEndActivity : AppCompatActivity() {
     private fun displayResults() {
 
         val exp         = HelperFunctions().getExtra<Float>(intent, "Exp")!!
-        val nExercises  = HelperFunctions().getExtra<Int>(intent, "N")!! + 1
+        val nExercises  = HelperFunctions().getExtra<Int>(intent, "N")!!
         val elapsedTime = HelperFunctions().getExtra<Long>(intent, "Time")!!
         val bpm = HelperFunctions().getExtra<Double>(intent, "bpm")!!
 

@@ -75,6 +75,8 @@ class WorkoutPlayActivity : AppCompatActivity() {
 
 
 
+
+
         retrieveData()
 
         initBpmTracking()
@@ -94,7 +96,8 @@ class WorkoutPlayActivity : AppCompatActivity() {
         binding.playPauseButton.visibility = View.INVISIBLE
         if (workoutExercises.isNotEmpty()) {
             if (currentExerciseIndex!=0){
-                nextThread.start()
+                val newStartThread = SendThread("/start", "start")
+                newStartThread.start()
             }
             startExercise()
         } else {
@@ -102,7 +105,9 @@ class WorkoutPlayActivity : AppCompatActivity() {
                 this, "Please add exercises to continue your training", Toast.LENGTH_SHORT
             ).show()
             Thread.sleep(500)
-            SendThread("/finish", "finish").start()
+            val newFinishThread = SendThread("/finish", "finish")
+
+            newFinishThread.start()
             val intent = Intent(this, EditWorkoutActivity::class.java)
             intent.putExtra("Workout", playWorkout)
             startActivity(intent)
@@ -192,9 +197,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
 
 
         playWorkout = HelperFunctions().getSerializableExtra(intent, "Workout")!!
-        playWorkout.name?.let {
-            SendThread("/workout", it).start()
-        }
+
 
 
         helperDB.workoutsExercisesSchema.addValueEventListener(object : ValueEventListener {
@@ -202,8 +205,12 @@ class WorkoutPlayActivity : AppCompatActivity() {
 
                 if (snapshot.exists())
                     workoutExercises = helperDB.getWorkoutsExercisesFromSnapshot(snapshot, playWorkout.workoutId!!)
-
+                    helperDB.workoutsExercisesSchema.keepSynced(false)
                 if (workoutExercises.isNotEmpty()) {
+                    playWorkout.name?.let {val newWorkoutThread = SendThread("/workout", it)
+                        newWorkoutThread.start()
+
+                    }
                     binding.workoutLayoutPlay.populateExercises(workoutExercises)
                     setupExerciseUI()
 
@@ -306,13 +313,17 @@ class WorkoutPlayActivity : AppCompatActivity() {
         if (currentExerciseIndex < workoutExercises.size - 1 ) {
             currentExerciseIndex++
             setupExerciseUI()
-            SendThread("/exercise", workoutExercises[currentExerciseIndex].exerciseName.toString()).start()
-            Log.d("send exercise from changeExercise, Thread:"+ Thread.currentThread().id.toString(), "Exercise:"+workoutExercises[currentExerciseIndex].exerciseName.toString())
-            SendThread("/next", "next").start()
+            val newExerciseThread =
+                SendThread("/exercise", workoutExercises[currentExerciseIndex].exerciseName.toString())
+
+            newExerciseThread.start()
+            val newNextThread=SendThread("/next", "next")
+            newNextThread.start()
             Log.d("index of workoutExercises", currentExerciseIndex.toString())
         } else {
             showCongratulations()
-            SendThread("/stop", "stop").start()
+            val newStopThread=SendThread("/stop", "stop")
+            newStopThread.start()
             Log.d("send stop from changeExercise, Thread:"+ Thread.currentThread().id.toString(), "empty workoutExercises")
             Log.d("index of workoutExercises", currentExerciseIndex.toString())
 
@@ -369,7 +380,8 @@ class WorkoutPlayActivity : AppCompatActivity() {
     }
 
     private fun finishWorkout() {
-        SendThread("/finish", "finish").start()
+        val newFinishThread=SendThread("/finish", "finish")
+        newFinishThread.start()
         setWorkoutBPM()
         addUserExperience()
         setWorkoutNewPlaylist()
@@ -543,7 +555,10 @@ class WorkoutPlayActivity : AppCompatActivity() {
             // Info Request
             if (HelperFunctions().getExtra<String>(intent, "requestExercise") != null) {
                 if (workoutExercises.isNotEmpty()) {
-                    SendThread("/exercise", workoutExercises[currentExerciseIndex].exerciseName.toString()).start()
+                    val newExerciseThread =
+                        SendThread("/exercise", workoutExercises[currentExerciseIndex].exerciseName.toString())
+
+                    newExerciseThread.start()
                     Log.d("send exercise from requestExercise", "Exercise:"+workoutExercises[currentExerciseIndex].exerciseName.toString())
                 }
             }
@@ -584,13 +599,17 @@ class WorkoutPlayActivity : AppCompatActivity() {
     // Others
     override fun onStop() {
         super.onStop()
-        SendThread("/finish", "finish").start()
+        val newFinishThread=SendThread("/finish", "finish")
+        newFinishThread.start()
+        disconnectSpotify()
     }
 
     // TODO: modernize
     override fun onBackPressed() {
         super.onBackPressed()
-        SendThread("/finish", "finish").start()
+        val newFinishThread=SendThread("/finish", "finish")
+        newFinishThread.start()
+        disconnectSpotify()
         val intent = Intent(this, CentralActivity::class.java)
         startActivity(intent)
         workoutExercises.clear()
@@ -600,18 +619,26 @@ class WorkoutPlayActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         ListenerThread().interrupt()
-        SendThread("/next", "next").interrupt()
-        SendThread("/stop", "stop").interrupt()
-        SendThread("/start", "start").interrupt()
+        disconnectSpotify()
+
 
 
         handler.removeCallbacks(bpmRunnable)
         handler.removeCallbacksAndMessages(null)
-        SendThread("/finish", "finish").start()
+        val newFinishThread=SendThread("/finish", "finish")
+        newFinishThread.start()
         workoutExercises.clear()
 
-        finishAffinity()
-        SendThread("/finish", "finish").interrupt()
+        finish()
+
+    }
+    override fun onResume() {
+        super.onResume()
+        helperDB.workoutsExercisesSchema.keepSynced(true)
+    }
+    override fun onPause() {
+        super.onPause()
+        helperDB.workoutsExercisesSchema.keepSynced(false)
     }
 }
 
