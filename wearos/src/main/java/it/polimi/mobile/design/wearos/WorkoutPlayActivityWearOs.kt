@@ -40,6 +40,8 @@ class WorkoutPlayActivityWearOs : AppCompatActivity(), SensorEventListener{
     private var talkButton: ImageView? = null
     private var exercise:String?=null
 
+    private val messageReceiver = Receiver()
+
     var bpm: Float = 0.0f
     var i=0
     protected var myHandler: Handler? = null
@@ -48,7 +50,10 @@ class WorkoutPlayActivityWearOs : AppCompatActivity(), SensorEventListener{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bpmThread().start()
-        ListenerThread().start()
+        val newFilter = IntentFilter(Intent.ACTION_SEND)
+
+        LocalBroadcastManager.getInstance(this@WorkoutPlayActivityWearOs)
+            .registerReceiver(messageReceiver, newFilter);
         binding =ActivityWorkoutPlayBinding.inflate(layoutInflater)
         setContentView(binding.root)
         Log.d("Play Workout", " onCreate play workout wearos"+ Thread.currentThread().id)
@@ -354,6 +359,11 @@ class WorkoutPlayActivityWearOs : AppCompatActivity(), SensorEventListener{
 //TO DO//
             }
         }
+    }
+    override fun onDestroy() {
+
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(messageReceiver)
+        super.onDestroy()
     }
 
 

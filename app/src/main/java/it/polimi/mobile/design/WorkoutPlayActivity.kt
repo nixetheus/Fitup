@@ -63,6 +63,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
     private lateinit var bpmRunnable: Runnable
     private val bpmValues = mutableListOf<Float>()
     private val threads = mutableListOf<Thread>()
+    private val messageReceiver = Receiver()
 
 
 
@@ -84,13 +85,14 @@ class WorkoutPlayActivity : AppCompatActivity() {
         initChronometers()
 
         fillUITexts()
-        updateWorkoutStats()
+
 
         createBindings()
 
-        val listener= ListenerThread()
-        listener.start()
-        threads.add(listener)
+        val newFilter = IntentFilter(Intent.ACTION_SEND)
+
+        LocalBroadcastManager.getInstance(this@WorkoutPlayActivity)
+            .registerReceiver(messageReceiver, newFilter)
     }
     private fun playPauseButtonClick(){
         binding.nextButton.visibility = View.VISIBLE
@@ -317,6 +319,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
         if (currentExerciseIndex < workoutExercises.size - 1 ) {
             currentExerciseIndex++
             setupExerciseUI()
+            Log.d("size before change exercise", "Exercise:"+workoutExercises.size.toString())
 
             val newNextThread=SendThread("/next", workoutExercises[currentExerciseIndex].exerciseName.toString())
             newNextThread.start()
@@ -390,7 +393,12 @@ class WorkoutPlayActivity : AppCompatActivity() {
         addUserExperience()
         setWorkoutNewPlaylist()
         disconnectSpotify()
+        updateWorkoutStats()
+        for(threads in threads){
+            threads.interrupt()
+        }
         startFinishActivity()
+
     }
 
     private fun addUserExperience() {
@@ -454,12 +462,11 @@ class WorkoutPlayActivity : AppCompatActivity() {
         intent.putExtra("Time", globalElapsedTime.base)
         intent.putExtra("N", playWorkout.numberOfExercises)
         intent.putExtra("bpm", bpmValues.average())
-        startActivity(intent)
-        for(threads in threads){
-            threads.interrupt()
-        }
-        workoutExercises.clear()
         finish()
+        startActivity(intent)
+
+        workoutExercises.clear()
+
     }
 
     fun getSpotifyPlaylistByBPM(bpm: Int): String {
@@ -520,7 +527,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
         override fun run() {
             try {
                 val newFilter = IntentFilter(Intent.ACTION_SEND)
-                val messageReceiver = Receiver()
+
                 LocalBroadcastManager.getInstance(this@WorkoutPlayActivity)
                     .registerReceiver(messageReceiver, newFilter)
             }
@@ -627,6 +634,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(messageReceiver)
         super.onDestroy()
         ListenerThread().interrupt()
         disconnectSpotify()
