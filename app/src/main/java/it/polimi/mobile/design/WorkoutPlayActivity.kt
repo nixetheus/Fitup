@@ -63,7 +63,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
     private lateinit var bpmRunnable: Runnable
     private val bpmValues = mutableListOf<Float>()
     private val threads = mutableListOf<Thread>()
-    private val nextThread= SendThread("/start", "start")
+
 
 
 
@@ -88,8 +88,9 @@ class WorkoutPlayActivity : AppCompatActivity() {
 
         createBindings()
 
-
-        ListenerThread().start()
+        val listener= ListenerThread()
+        listener.start()
+        threads.add(listener)
     }
     private fun playPauseButtonClick(){
         binding.nextButton.visibility = View.VISIBLE
@@ -98,6 +99,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
             if (currentExerciseIndex!=0){
                 val newStartThread = SendThread("/start", "start")
                 newStartThread.start()
+                threads.add(newStartThread)
             }
             startExercise()
         } else {
@@ -108,12 +110,13 @@ class WorkoutPlayActivity : AppCompatActivity() {
             val newFinishThread = SendThread("/finish", "finish")
 
             newFinishThread.start()
+            threads.add(newFinishThread)
             val intent = Intent(this, EditWorkoutActivity::class.java)
             intent.putExtra("Workout", playWorkout)
             startActivity(intent)
             finish()
         }
-        nextThread.interrupt()
+
     }
 
     private fun createBindings() {
@@ -209,6 +212,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
                 if (workoutExercises.isNotEmpty()) {
                     playWorkout.name?.let {val newWorkoutThread = SendThread("/workout", it)
                         newWorkoutThread.start()
+                        threads.add(newWorkoutThread)
 
                     }
                     binding.workoutLayoutPlay.populateExercises(workoutExercises)
@@ -313,17 +317,16 @@ class WorkoutPlayActivity : AppCompatActivity() {
         if (currentExerciseIndex < workoutExercises.size - 1 ) {
             currentExerciseIndex++
             setupExerciseUI()
-            val newExerciseThread =
-                SendThread("/exercise", workoutExercises[currentExerciseIndex].exerciseName.toString())
 
-            newExerciseThread.start()
-            val newNextThread=SendThread("/next", "next")
+            val newNextThread=SendThread("/next", workoutExercises[currentExerciseIndex].exerciseName.toString())
             newNextThread.start()
+            threads.add(newNextThread)
             Log.d("index of workoutExercises", currentExerciseIndex.toString())
         } else {
             showCongratulations()
             val newStopThread=SendThread("/stop", "stop")
             newStopThread.start()
+            threads.add(newStopThread)
             Log.d("send stop from changeExercise, Thread:"+ Thread.currentThread().id.toString(), "empty workoutExercises")
             Log.d("index of workoutExercises", currentExerciseIndex.toString())
 
@@ -382,6 +385,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
     private fun finishWorkout() {
         val newFinishThread=SendThread("/finish", "finish")
         newFinishThread.start()
+        threads.add(newFinishThread)
         setWorkoutBPM()
         addUserExperience()
         setWorkoutNewPlaylist()
@@ -451,8 +455,11 @@ class WorkoutPlayActivity : AppCompatActivity() {
         intent.putExtra("N", playWorkout.numberOfExercises)
         intent.putExtra("bpm", bpmValues.average())
         startActivity(intent)
+        for(threads in threads){
+            threads.interrupt()
+        }
         workoutExercises.clear()
-        finishAffinity()
+        finish()
     }
 
     fun getSpotifyPlaylistByBPM(bpm: Int): String {
@@ -559,6 +566,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
                         SendThread("/exercise", workoutExercises[currentExerciseIndex].exerciseName.toString())
 
                     newExerciseThread.start()
+                    threads.add(newExerciseThread)
                     Log.d("send exercise from requestExercise", "Exercise:"+workoutExercises[currentExerciseIndex].exerciseName.toString())
                 }
             }
@@ -601,6 +609,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
         super.onStop()
         val newFinishThread=SendThread("/finish", "finish")
         newFinishThread.start()
+        threads.add(newFinishThread)
         disconnectSpotify()
     }
 
@@ -609,6 +618,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
         super.onBackPressed()
         val newFinishThread=SendThread("/finish", "finish")
         newFinishThread.start()
+        threads.add(newFinishThread)
         disconnectSpotify()
         val intent = Intent(this, CentralActivity::class.java)
         startActivity(intent)
@@ -627,8 +637,11 @@ class WorkoutPlayActivity : AppCompatActivity() {
         handler.removeCallbacksAndMessages(null)
         val newFinishThread=SendThread("/finish", "finish")
         newFinishThread.start()
+        threads.add(newFinishThread)
         workoutExercises.clear()
-
+        for (threads in threads) {
+            threads.interrupt()
+        }
         finish()
 
     }
