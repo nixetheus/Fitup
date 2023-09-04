@@ -421,10 +421,9 @@ class WorkoutPlayActivity : AppCompatActivity() {
         workoutRef.addListenerForSingleValueEvent(object: ValueEventListener{
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (workoutSnapshot in dataSnapshot.children) {
-                    val newValueBPM = (-playWorkout.averageBpmValue!! +
-                            (playWorkout.averageBpmValue!! + bpmValues.average()) / 2).toInt()
-                    workoutSnapshot.ref.child("averageBpmValue").setValue(
-                        ServerValue.increment(newValueBPM.toLong()))
+                    val newWorkoutData = playWorkout
+                    newWorkoutData.averageBpmValue = ((playWorkout.averageBpmValue!! + bpmValues.average()) / 2f).toInt()
+                    helperDB.workoutUserDataSchema.child(playWorkout.workoutId!!).setValue(newWorkoutData)
                 }
             }
             override fun onCancelled(databaseError: DatabaseError) {
@@ -439,9 +438,10 @@ class WorkoutPlayActivity : AppCompatActivity() {
         workoutRef.addListenerForSingleValueEvent(object: ValueEventListener{
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (workoutSnapshot in dataSnapshot.children) {
-                    val newValueBPM = (-playWorkout.averageBpmValue!! +
-                            (playWorkout.averageBpmValue!! + bpmValues.average()) / 2).toInt()
-                    workoutSnapshot.ref.child("spotifyPlaylistLink").setValue(getSpotifyPlaylistByBPM(newValueBPM))
+                    val newWorkoutData = playWorkout
+                    val newValueBPM = ((playWorkout.averageBpmValue!! + bpmValues.average()) / 2f).toInt()
+                    newWorkoutData.spotifyPlaylistLink = getSpotifyPlaylistByBPM(newValueBPM)
+                    helperDB.workoutUserDataSchema.child(playWorkout.workoutId!!).setValue(newWorkoutData)
                 }
             }
             override fun onCancelled(databaseError: DatabaseError) {

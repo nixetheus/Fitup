@@ -8,7 +8,7 @@ data class Workout(
     val workoutId: String? = null,
     val userId: String? = null,
     val name: String? = null,
-    val spotifyPlaylistLink: String? = null,
+    var spotifyPlaylistLink: String? = null,
     var totalNumberOfTimesPlayed: Int? = 0,
     var numberOfExercises: Int? = 0,
     var caloriesBurned: Float? = 0.0f,
