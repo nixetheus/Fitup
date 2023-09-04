@@ -86,6 +86,7 @@ class ExerciseListActivity : AppCompatActivity() {
         openAddExerciseMenuAnimation.duration = 500
         openAddExerciseMenuAnimation.fillAfter = true
         binding.addExerciseCard.startAnimation(openAddExerciseMenuAnimation)
+        binding.addExerciseCard.clearAnimation()
     }
 
     private fun hideAddExercise() {
@@ -95,6 +96,7 @@ class ExerciseListActivity : AppCompatActivity() {
         closeAddExerciseMenuAnimation.duration = 500
         closeAddExerciseMenuAnimation.fillAfter = true
         binding.addExerciseCard.startAnimation(closeAddExerciseMenuAnimation)
+        binding.addExerciseCard.clearAnimation()
     }
 
     @SuppressLint("Recycle")

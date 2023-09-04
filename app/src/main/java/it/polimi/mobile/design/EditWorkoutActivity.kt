@@ -109,6 +109,7 @@ class EditWorkoutActivity : AppCompatActivity() {
         openAddExerciseMenuAnimation.duration = 500
         openAddExerciseMenuAnimation.fillAfter = true
         binding.addExerciseToWorkoutCard.startAnimation(openAddExerciseMenuAnimation)
+        binding.addExerciseToWorkoutCard.clearAnimation()
     }
 
     private fun hideAddExercise() {
@@ -119,6 +120,7 @@ class EditWorkoutActivity : AppCompatActivity() {
         closeAddExerciseMenuAnimation.duration = 500
         closeAddExerciseMenuAnimation.fillAfter = true
         binding.addExerciseToWorkoutCard.startAnimation(closeAddExerciseMenuAnimation)
+        binding.addExerciseToWorkoutCard.clearAnimation()
     }
 
     private fun setupExercisesSpinner() {
