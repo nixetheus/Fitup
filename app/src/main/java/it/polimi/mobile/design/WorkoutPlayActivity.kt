@@ -210,7 +210,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
 
                 if (snapshot.exists())
                     workoutExercises = helperDB.getWorkoutsExercisesFromSnapshot(snapshot, playWorkout.workoutId!!)
-                    helperDB.workoutsExercisesSchema.keepSynced(false)
+
                 if (workoutExercises.isNotEmpty()) {
                     playWorkout.name?.let {val newWorkoutThread = SendThread("/workout", it)
                         newWorkoutThread.start()
