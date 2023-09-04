@@ -391,7 +391,6 @@ class WorkoutPlayActivity : AppCompatActivity() {
         threads.add(newFinishThread)
         setWorkoutBPM()
         addUserExperience()
-        setWorkoutNewPlaylist()
         disconnectSpotify()
         updateWorkoutStats()
         for(threads in threads){
@@ -422,24 +421,8 @@ class WorkoutPlayActivity : AppCompatActivity() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (workoutSnapshot in dataSnapshot.children) {
                     val newWorkoutData = playWorkout
-                    newWorkoutData.averageBpmValue = ((playWorkout.averageBpmValue!! + bpmValues.average()) / 2f).toInt()
-                    helperDB.workoutsSchema.child(playWorkout.workoutId!!).setValue(newWorkoutData)
-                }
-            }
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.e(TAG, "onCancelled", databaseError.toException())
-            }
-        })
-
-    }
-
-    private fun setWorkoutNewPlaylist() {
-        val workoutRef = helperDB.workoutsSchema.orderByChild("workoutId").equalTo(playWorkout.workoutId!!)
-        workoutRef.addListenerForSingleValueEvent(object: ValueEventListener{
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for (workoutSnapshot in dataSnapshot.children) {
-                    val newWorkoutData = playWorkout
                     val newValueBPM = ((playWorkout.averageBpmValue!! + bpmValues.average()) / 2f).toInt()
+                    newWorkoutData.averageBpmValue = newValueBPM
                     newWorkoutData.spotifyPlaylistLink = getSpotifyPlaylistByBPM(newValueBPM)
                     helperDB.workoutsSchema.child(playWorkout.workoutId!!).setValue(newWorkoutData)
                 }
