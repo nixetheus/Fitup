@@ -572,6 +572,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:backgroundTint="@android:color/transparent"
+                android:clickable="true"
                 android:fontFamily="@font/lato"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"

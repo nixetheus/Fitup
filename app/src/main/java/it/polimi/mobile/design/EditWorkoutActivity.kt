@@ -102,6 +102,7 @@ class EditWorkoutActivity : AppCompatActivity() {
     }
 
     private fun showAddExercise() {
+        binding.confirmAddWorkoutBtn.isClickable = true
         binding.addExerciseToWorkoutCard.visibility = View.VISIBLE
         val openAddExerciseMenuAnimation = TranslateAnimation(
             0F, 0F, binding.addExerciseToWorkoutCard.height.toFloat(), 0F)
@@ -111,6 +112,7 @@ class EditWorkoutActivity : AppCompatActivity() {
     }
 
     private fun hideAddExercise() {
+        binding.confirmAddWorkoutBtn.isClickable = false
         binding.addExerciseToWorkoutCard.visibility = View.GONE
         val closeAddExerciseMenuAnimation = TranslateAnimation(
             0F, 0F, 0F, binding.addExerciseToWorkoutCard.height.toFloat() + 15.toPx())
