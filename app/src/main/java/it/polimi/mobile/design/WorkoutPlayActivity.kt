@@ -423,7 +423,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
                 for (workoutSnapshot in dataSnapshot.children) {
                     val newWorkoutData = playWorkout
                     newWorkoutData.averageBpmValue = ((playWorkout.averageBpmValue!! + bpmValues.average()) / 2f).toInt()
-                    helperDB.workoutUserDataSchema.child(playWorkout.workoutId!!).setValue(newWorkoutData)
+                    helperDB.workoutsSchema.child(playWorkout.workoutId!!).setValue(newWorkoutData)
                 }
             }
             override fun onCancelled(databaseError: DatabaseError) {
@@ -441,7 +441,7 @@ class WorkoutPlayActivity : AppCompatActivity() {
                     val newWorkoutData = playWorkout
                     val newValueBPM = ((playWorkout.averageBpmValue!! + bpmValues.average()) / 2f).toInt()
                     newWorkoutData.spotifyPlaylistLink = getSpotifyPlaylistByBPM(newValueBPM)
-                    helperDB.workoutUserDataSchema.child(playWorkout.workoutId!!).setValue(newWorkoutData)
+                    helperDB.workoutsSchema.child(playWorkout.workoutId!!).setValue(newWorkoutData)
                 }
             }
             override fun onCancelled(databaseError: DatabaseError) {
