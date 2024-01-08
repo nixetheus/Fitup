@@ -24,9 +24,9 @@ Fitup is a comprehensive workout app for Android that empowers you to create per
 </div>
 
 
-## Installation
+## Documentation
 
-To use Fitup, simply download the APK file [here](link_to_apk_file.apk) and install it on your Android device.
+[Here](<Presentation/DIMA - DD - Cassenti - Giannini - FITUP.pdf>) you can find the official documentation, including all the features and how to use the app.
 
 ## Copyright
 
