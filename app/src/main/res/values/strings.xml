@@ -31,9 +31,9 @@
         <item>KICKBOXING</item>
     </string-array>
 
-    <string name="facebook_app_id" translatable="false">3465451120365237</string>
-    <string name="fb_login_protocol_scheme" translatable="false">fb1234</string>
-    <string name="facebook_client_token" translatable="false">3693b90df68dbe71408081b07cb74f44</string>
+    <string name="facebook_app_id" translatable="false">None</string>
+    <string name="fb_login_protocol_scheme" translatable="false">None</string>
+    <string name="facebook_client_token" translatable="false">None</string>
 
 
     <!-- LOGIN -->
